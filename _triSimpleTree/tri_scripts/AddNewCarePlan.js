@@ -13,9 +13,14 @@ var CarePlanDataPersonalize = [
             "type": "guid",
             "value": "faf34939-a624-e611-80d1-005056810c7c"
         },
+        "tri_lastgoaldate": {
+            "type": "dateTime",
+            "value": "2015-03-23T20:33:02.000Z",
+            "formattedValue": "5/23/2016 4:33 PM"
+        },
         "tri_targetmetricoperator": {
             "value": 167410001,
-            "formattedValue": "<",
+            "formattedValue": "=",
             "type": "OptionSetValue"
         },
         "tri_patientfactor": {
@@ -55,7 +60,7 @@ var CarePlanDataPersonalize = [
         },
         "new_goalstate": {
             "value": 167410000,
-            "formattedValue": "Open",
+            "formattedValue": "Scheduled",
             "type": "OptionSetValue"
         },
         "tri_measuredetails": {

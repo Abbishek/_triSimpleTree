@@ -24,7 +24,7 @@
     <!-- remove this and popup works but no data displayed-->
     <!--<script src="../tri_script/jquery_1.11.3.min.js"></script>-->
     <script src="../tri_scripts/jquery_ui_192.custom.js"></script>
-    <script src="../tri_script/bootstrap.js"></script>
+    <script src="../tri_scripts/bootstrap.js"></script>
     <script src="../tri_scripts/kendo.js"></script>
     <script src="../tri_scripts/kendo.all.min.js"></script>
     <script src="../tri_scripts/linq.min.js"></script>
@@ -48,7 +48,6 @@
             <div class="personalizeCarePlans"></div>
             <script id="PersonalizeCarePlanTemplate" type="text/x-kendo-template">
                 <div class="indicator-wrapper" style="display: inline;">
-
                     <!--<div class="flag-box-big green" style=""></div>-->
                     # if(data.attributes.new_goalstate.formattedValue === "Open") { #
                     <div class="flag-box-big orange" style="">
@@ -56,7 +55,15 @@
                         <div class="flag-box-big green" style="">
                             # } else if(data.attributes.new_goalstate.formattedValue === "Not Met") { #
                             <div class="flag-box-big red" style="">
-                                # } else if(data.attributes.new_goalstate.formattedValue === "Scheduled") { #
+                                # } else if(data.attributes.new_goalstate.formattedValue === "Scheduled") {
+                                alert((new Date()).getTime());
+                                alert((new Date(data.attributes.tri_lastgoaldate.formattedValue)).getTime());
+
+                                alert((new Date("12/15/2010")).getTime() );
+                                alert((new Date("7/13/2010")).getTime());
+
+                                alert(Math.ceil(Math.abs((new Date(data.attributes.tri_lastgoaldate.formattedValue)).getTime() - (new Date()).getTime()) / (1000 * 3600 * 24)));
+                                 #
                                 <div class="flag-box-big grey" style="">
                                     # } #
                                     SET<br>
@@ -96,10 +103,9 @@
                                                         <td class="result-1 greytxt">
                                                             # } #
                                                             <!--<td class="result-1 greentxt">-->
-                                                            # if(data.attributes.tri_measuredetails)
-                                                            {
-                                                            data.attributes.tri_measuredetails.value;
-                                                            } #
+                                                            # if(data.attributes.tri_measuredetails){ #
+                                                               #= data.attributes.tri_measuredetails.value #
+                                                            # } #
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -119,13 +125,13 @@
                                                     <tr>
                                                         <td class="label-name"> Last Result Date:</td>
                                                         # if(data.attributes.tri_lastgoaldate !== undefined) { #
-                                                        <td class="result-1">#= data.attributes.tri_lastgoaldate.value #</td>
+                                                        <td class="result-1">#= data.attributes.tri_lastgoaldate.formattedValue #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
                                                         <td class="label-name"> Next Due Date:</td>
                                                         # if(data.attributes.tri_NextDueDate !== undefined) { #
-                                                        <td class="result-1">#= data.attributes.tri_NextDueDate.value #</td>
+                                                        <td class="result-1">#= data.attributes.tri_NextDueDate.formattedValue #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
@@ -167,22 +173,16 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                &lt; &nbsp; &nbsp;<span class="caret">
-                                                                                    #
-                                                                                    if(data.attributes.tri_targetmetricoperator !== undefined)
-                                                                                    {
-                                                                                    data.attributes.tri_targetmetricoperator.formattedValue;
-                                                                                    }
-                                                                                    else if(data.attributes.tri_metricoperatortwo !== undefined)
-                                                                                    {
-                                                                                    data.attributes.tri_metricoperatortwo.formattedValue;
-                                                                                    }
-                                                                                    #
-                                                                                </span>
+                                                                                # if(data.attributes.tri_targetmetricoperator !== undefined) {#
+                                                                                #= data.attributes.tri_targetmetricoperator.formattedValue #
+                                                                                # } else if(data.attributes.tri_metricoperatortwo !== undefined) { #
+                                                                                #= data.attributes.tri_metricoperatortwo.formattedValue #
+                                                                                # } #
+                                                                                <span class="caret"></span>
                                                                             </button>
                                                                             <ul class="dropdown-menu">
-                                                                                <li><a href="\\#" data-value="167410000">></a></li>
                                                                                 <li><a href="\\#" data-value="167410002">=</a></li>
+                                                                                <li><a href="\\#" data-value="167410000">></a></li>
                                                                                 <li><a href="\\#" data-value="167410001"><</a></li>
                                                                                 <li><a href="\\#" data-value="167410004">% Decrease</a></li>
                                                                                 <li><a href="\\#" data-value="167410003">% Increase</a></li>
@@ -283,11 +283,6 @@
                                                 </table>
                                             </div>
                                         </div>
-
-
-
-
-
             </script>
             <div class="center-wrapper" style="padding-left:200px;">
                 <div class="bluebtn">SAVE CHANGES</div>

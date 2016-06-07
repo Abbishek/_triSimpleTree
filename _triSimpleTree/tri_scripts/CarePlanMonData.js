@@ -34,7 +34,7 @@ Object.merge2 = function (obj1, obj2) {
 var CarePlanMonData =
 [
 {
-    "id": "1bebea61-b01e-e611-80d1-005056810c7c",
+    "id": "1bebea61-b01e-e611-80d1-005056810c7c", 
     "logicalName": "tri_careplanjoin",
     "attributes": {
         "tri_goalname": {
@@ -170,7 +170,7 @@ var CarePlanMonData =
             "formattedValue": "Yes"
         },
         "tri_careplanid": {
-            "id": "02ebea61-b01e-e611-80d1-005056810c7c",
+            "id": "02ebea61-b01e-e611-80d1-005056810c7c", 
             "logicalName": "",
             "name": "tri_cccareplan",
             "type": "EntityReference"

@@ -114,9 +114,9 @@
                         alert("The Patient record changes were saved");
                         // get the newly added CarePlan Data
                         // Recheck this logic
-                        var addedCarePlan =
+                        var addedCarePlan1 = GetCarePlanfromPatitentId(contactId)
                             // Enumerable.From(GetCarePlanfromPatitentIdandCarePlanName(contactId, carePlan))
-                        Enumerable.From(GetCarePlanfromPatitentId(contactId))
+                        var addedCarePlan = Enumerable.From(addedCarePlan1)
                             .Where(function (x) { return x.attributes.tri_planname.value === selectedCarePath })
                             .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id }; })
                             .ToArray();
@@ -178,7 +178,7 @@
 <body style="width:80%;">
     <div id="newCarePlan" class="" style="width:100%;margin-left:6%;background-color:#fff;">
         <p style="display:inline-block;width:100%;">
-            <a href="stiersolution.html" data-rel="back" class="btnClose">X</a>
+            <a href="KMmonitormode.html" data-rel="back" class="btnClose">X</a>
         </p>
         <div style="margin-top:-30px;">
             <span style="color: #333333; font-size: 18px; text-align: left;"><h4>Select the Care Plan you want to add:</h4></span>
@@ -200,7 +200,7 @@
     <div class="window-wrapper" style="width:99%;">
         <!-- X-CLOSE -->
         <div style="width: 100%; margin-bottom: 20px;">
-            <div style="float:right;" class="x-close"><a style="text-decoration:none;" href=" stiersolution.html">X</a></div>
+            <div style="float:right;" class="x-close"><a style="text-decoration:none;" href="stiersolution.html">X</a></div>
         </div>
         <!-- FLAG + Title -->
         <div class="personalizeCarePlans"></div>
@@ -255,10 +255,9 @@
                                                     <td class="result-1 greytxt">
                                                         # } #
                                                         <!--<td class="result-1 greentxt">-->
-                                                        # if(data.attributes.tri_measuredetails)
-                                                        {
-                                                        data.attributes.tri_measuredetails.value;
-                                                        } #
+                                                        # if(data.attributes.tri_measuredetails){ #
+                                                        #= data.attributes.tri_measuredetails.value #
+                                                        # } #
                                                     </td>
                                                 </tr>
                                             </table>
@@ -278,13 +277,13 @@
                                                 <tr>
                                                     <td class="label-name"> Last Result Date:</td>
                                                     # if(data.attributes.tri_lastgoaldate !== undefined) { #
-                                                    <td class="result-1">#= data.attributes.tri_lastgoaldate.value #</td>
+                                                    <td class="result-1">#= data.attributes.tri_lastgoaldate.formattedValue #</td>
                                                     # } else { #
                                                     <td class="result-1"></td>
                                                     # } #
                                                     <td class="label-name"> Next Due Date:</td>
                                                     # if(data.attributes.tri_NextDueDate !== undefined) { #
-                                                    <td class="result-1">#= data.attributes.tri_NextDueDate.value #</td>
+                                                    <td class="result-1">#= data.attributes.tri_NextDueDate.formattedValue #</td>
                                                     # } else { #
                                                     <td class="result-1"></td>
                                                     # } #
@@ -326,18 +325,12 @@
                                                                     <!-- MODIFIER DROP-DOWN -->
                                                                     <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                            &lt; &nbsp; &nbsp;<span class="caret">
-                                                                                #
-                                                                                if(data.attributes.tri_targetmetricoperator !== undefined)
-                                                                                {
-                                                                                data.attributes.tri_targetmetricoperator.formattedValue;
-                                                                                }
-                                                                                else if(data.attributes.tri_metricoperatortwo !== undefined)
-                                                                                {
-                                                                                data.attributes.tri_metricoperatortwo.formattedValue;
-                                                                                }
-                                                                                #
-                                                                            </span>
+                                                                            # if(data.attributes.tri_targetmetricoperator !== undefined) {#
+                                                                            #= data.attributes.tri_targetmetricoperator.formattedValue #
+                                                                            # } else if(data.attributes.tri_metricoperatortwo !== undefined) { #
+                                                                            #= data.attributes.tri_metricoperatortwo.formattedValue #
+                                                                            # } #
+                                                                            <span class="caret"></span>
                                                                         </button>
                                                                         <ul class="dropdown-menu">
                                                                             <li><a href="\\#" data-value="167410000">></a></li>

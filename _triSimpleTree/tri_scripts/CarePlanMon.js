@@ -42,8 +42,8 @@ function OpenPersonalizeWindow(CarePlanId) {
     var myWindow = $(".window-wrapper");
 
     //////////////////////////////////
-    var popupPlans = GetCarePlanfromCarePlanId(CarePlanId);
-    //var popupPlans = CarePlanDataPersonalize;
+    //var popupPlans = GetCarePlanfromCarePlanId(CarePlanId);
+    var popupPlans = CarePlanDataPersonalize;
 
     var CarPlans = Enumerable.From(popupPlans)
                                .Where(function (x) { return x.attributes.tri_careplanid.id })

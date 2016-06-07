@@ -270,10 +270,9 @@
                                                         <td class="result-1 greytxt">
                                                             # } #
                                                             <!--<td class="result-1 greentxt">-->
-                                                            # if(data.attributes.tri_measuredetails)
-                                                            {
-                                                            data.attributes.tri_measuredetails.value;
-                                                            } #
+                                                            # if(data.attributes.tri_measuredetails){ #
+                                                            #= data.attributes.tri_measuredetails.value #
+                                                            # } #
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -293,13 +292,13 @@
                                                     <tr>
                                                         <td class="label-name"> Last Result Date:</td>
                                                         # if(data.attributes.tri_lastgoaldate !== undefined) { #
-                                                        <td class="result-1">#= data.attributes.tri_lastgoaldate.value #</td>
+                                                        <td class="result-1">#= data.attributes.tri_lastgoaldate.formattedValue #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
                                                         <td class="label-name"> Next Due Date:</td>
                                                         # if(data.attributes.tri_NextDueDate !== undefined) { #
-                                                        <td class="result-1">#= data.attributes.tri_NextDueDate.value #</td>
+                                                        <td class="result-1">#= data.attributes.tri_NextDueDate.formattedValue #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
@@ -341,18 +340,12 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                &lt; &nbsp; &nbsp;<span class="caret">
-                                                                                    #
-                                                                                    if(data.attributes.tri_targetmetricoperator !== undefined)
-                                                                                    {
-                                                                                    data.attributes.tri_targetmetricoperator.formattedValue;
-                                                                                    }
-                                                                                    else if(data.attributes.tri_metricoperatortwo !== undefined)
-                                                                                    {
-                                                                                    data.attributes.tri_metricoperatortwo.formattedValue;
-                                                                                    }
-                                                                                    #
-                                                                                </span>
+                                                                                # if(data.attributes.tri_targetmetricoperator !== undefined) {#
+                                                                                #= data.attributes.tri_targetmetricoperator.formattedValue #
+                                                                                # } else if(data.attributes.tri_metricoperatortwo !== undefined) { #
+                                                                                #= data.attributes.tri_metricoperatortwo.formattedValue #
+                                                                                # } #
+                                                                                <span class="caret"></span>
                                                                             </button>
                                                                             <ul class="dropdown-menu">
                                                                                 <li><a href="\\#" data-value="167410000">></a></li>
