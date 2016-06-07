@@ -94,12 +94,12 @@
                 visible: false,
                 modal: true,
                 //content: "",
-                actions: [
-                        "Pin",
-                        "Minimize",
-                        "Maximize",
-                        "Close"
-                ]
+                //actions: [
+                //        "Pin",
+                //        "Minimize",
+                //        "Maximize",
+                //        "Close"
+                //]
             }).data("kendoWindow");
         });
     </script>
@@ -428,7 +428,6 @@
 
                     <!--<div class="flag-box-big green" style=""></div>-->
                     # 
-                    debugger;
                     if(data.tri_CarePlanGoalState.Value == 167410000) { #
                     <div class="flag-box-big orange" style="">
                         # } else if(data.tri_CarePlanGoalState.Value == 167410001) { #
@@ -442,7 +441,8 @@
                                     FLAG
                                 </div>
 
-                                # if(data.tri_vitalsvaluetype.Name !== undefined) { #
+                                # 
+                                if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null) { #
                                 <div class="sectiontitle" style="">#= data.tri_vitalsvaluetype.Name #</div>
                                 # } else { #
                                 <div class="sectiontitle" style=""></div>
@@ -466,7 +466,7 @@
                                                         <td class="label-name">
                                                             Last Result:
                                                         </td>
-                                                        # if(data.tri_CarePlanGoalState.Value == 167410000) { #
+                                                        #  if(data.tri_CarePlanGoalState.Value == 167410000) { #
                                                         <td class="result-1 orangetxt">
                                                             # } else if(data.tri_CarePlanGoalState.Value == 167410001) { #
                                                         <td class="result-1 greentxt">
@@ -476,7 +476,7 @@
                                                         <td class="result-1 greytxt">
                                                             # } #
                                                             <!--<td class="result-1 greentxt">-->
-                                                            # if(data.tri_measuredetails){ #
+                                                            # if(data.tri_measuredetails !== undefined && data.tri_measuredetails !== null){ #
                                                             #= data.tri_measuredetails #
                                                             # } #
                                                         </td>
@@ -486,7 +486,7 @@
                                                 <table class="maintable" align="center">
                                                     <tr>
                                                         <td class="label-name">Result Source:</td>
-                                                        # if(data.tri_LastTargetValue !== undefined) { #
+                                                        #  if(data.tri_LastTargetValue !== undefined && data.tri_LastTargetValue !== null) { #
                                                         <td class="result-1">#= data.tri_LastTargetValue #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
@@ -497,13 +497,13 @@
                                                 <table class="maintable" align="center">
                                                     <tr>
                                                         <td class="label-name"> Last Result Date:</td>
-                                                        # if(data.tri_LastResultDate !== undefined) { #
+                                                        # if(data.tri_LastResultDate !== undefined && data.tri_LastResultDate !== null) { #
                                                         <td class="result-1">#= data.tri_LastResultDate #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
                                                         <td class="label-name"> Next Due Date:</td>
-                                                        # if(data.tri_NextDueDate !== undefined) { #
+                                                        # if(data.tri_NextDueDate !== undefined && data.tri_NextDueDate !== null) { #
                                                         <td class="result-1">#= data.tri_NextDueDate #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
@@ -524,9 +524,9 @@
                                                     <tr>
                                                         <td class="labelcenter" style="width:90px; padding-right:20px;">
                                                             <!-- FACTOR DROP-DOWN -->
-                                                            <div id="#= data.id#_ddFactorModifier" class="dropdown" style="width: 60px;">
+                                                            <div class="dropdown" style="width: 60px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    #= GetTargetMetricOperator(data.tri_patientfactor.Value) # <span class="caret"></span>
+                                                                    # GetFactorModifier(data.tri_patientfactor.Value) # <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
                                                                     <li><a href="\\#" data-value="100000000">Most Patients</a></li>
@@ -546,10 +546,10 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                # if(data.tri_targetmetricoperator !== undefined) {#
-                                                                                #= data.tri_targetmetricoperator #
-                                                                                # } else if(data.tri_metricoperatortwo !== undefined) { #
-                                                                                #= data.tri_metricoperatortwo #
+                                                                                # if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null) {#
+                                                                                # GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
+                                                                                # } else if(data.tri_metricoperatortwo !== undefined && data.tri_targetmetricoperator !== null) { #
+                                                                                # GetTargetMetricOperator(data.tri_metricoperatortwo.Value) #
                                                                                 # } #
                                                                                 <span class="caret"></span>
                                                                             </button>
@@ -563,9 +563,9 @@
                                                                         </div>
                                                                     </td>
                                                                     <td>
-                                                                        # if(data.tri_metric !== undefined){#
+                                                                        # if(data.tri_metric !== undefined && data.tri_metric !== null){#
                                                                         <input type="text" class="txtfield" value="#= data.tri_metric #">
-                                                                        #} else if(data.tri_targetvaluetwo !== undefined){#
+                                                                        #} else if(data.tri_targetvaluetwo !== undefined && data.tri_targetvaluetwo !== null){#
                                                                         <input type="text" class="txtfield" value="#= data.tri_targetvaluetwo #">
                                                                         #} else {#
                                                                         <input type="text" class="txtfield" value="">
@@ -602,7 +602,7 @@
                                                         <td class="labelcenter" width="120px" style="padding-right:30px;">
                                                             <input type="text" class="txtfield" style="width:30px;">
                                                             <!-- MODIFIER DROP-DOWN -->
-                                                            <div class="dropdown" style="width:60px;float:right;" id="#= data.id#_ddOutRangeFeq">
+                                                            <div class="dropdown" style="width:60px;float:right;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">months <span class="caret"></span></button>
                                                                 <ul class="dropdown-menu">
                                                                     <li><a href="\\#" data-value="months">months</a></li>
@@ -627,7 +627,7 @@
                                                 <table class="factors" align="center">
                                                     <tr>
                                                         <td style="width:450px; padding-left:10px; padding-right: 0px;">
-                                                            # if(data.tri_activitydescription !== undefined) { #
+                                                            # if(data.tri_activitydescription !== undefined && data.tri_activitydescription !== null) { #
                                                             <input type="text" class="txtfield" value="#= data.tri_activitydescription #" style="width:450px;text-align: left; padding-left: 10px;">
                                                             #} else { #
                                                             <input type="text" class="txtfield" value="" style="width:450px;text-align: left; padding-left: 10px;">
@@ -635,9 +635,11 @@
                                                         </td>
                                                         <td class="label-name" style="width:150px; text-align:left;">
                                                             <!-- ASSIGNMENT ROLE DROP-DOWN -->
-                                                            <div class="dropdown" style="width: 120px;" id="#= data.id#_ddAssignmentRole">
+                                                            <div class="dropdown" style="width: 120px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    #= data.tri_activityassignmentrole #
+                                                                    # if(data.tri_activityassignmentrole !== undefined && data.tri_activityassignmentrole !== null)
+                                                                         GetActivityAssignmentRole(data.tri_activityassignmentrole.Value)
+                                                                    #
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
@@ -646,9 +648,9 @@
                                                                     <li><a href="\\#" data-value="167410001">Nurse</a></li>
                                                                     <li><a href="\\#" data-value="167410002">Dietician</a></li>
                                                                     <li><a href="\\#" data-value="167410003">Care Navigator</a></li>
-                                                                    <li><a href="\\#" data-value="167410003">Physiatrist</a></li>
-                                                                    <li><a href="\\#" data-value="167410003">Cardiologist</a></li>
-                                                                    <li><a href="\\#" data-value="167410003">Physician</a></li>
+                                                                    <li><a href="\\#" data-value="167410004">Physiatrist</a></li>
+                                                                    <li><a href="\\#" data-value="167410005">Cardiologist</a></li>
+                                                                    <li><a href="\\#" data-value="167410006">Physician</a></li>
                                                                 </ul>
                                                             </div>
                                                         </td>

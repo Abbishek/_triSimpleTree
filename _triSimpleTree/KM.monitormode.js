@@ -221,8 +221,56 @@ $(document).ready(function () {
             operator = "% Decrease";
         else if (operatorValue === 167410003) // % Increase
             operator = "% Increase";
+        else if (operatorValue === -1)
+            operator = "";
 
         return operator;
+    }
+
+    GetFactorModifier = function (factorValue) {
+        var modifier;
+
+        if (factorValue === 100000000) // >
+            modifier = "Most Patients";
+        else if (factorValue === 100000001) // <
+            modifier = "Elderly Frail";
+        else if (factorValue === 100000002) // =
+            modifier = "Comorbid";
+        else if (factorValue === 100000003)//% Decrease
+            modifier = "Stage 2-3";
+        else if (factorValue === 100000004) // % Increase
+            modifier = "All";
+        else if (factorValue === 100000005) // % Increase
+            modifier = "Normal";
+        else if (factorValue === 100000006) // % Increase
+            modifier = "Abnormal";
+        else if (factorValue === -1)
+            modifier = "";
+
+        return modifier;
+    }
+
+    GetActivityAssignmentRole = function (roleValue) {
+        var role;
+
+        if (roleValue === 167410000) // >
+            role = "Care Manager";
+        else if (roleValue === 167410001) // <
+            role = "Nurse";
+        else if (roleValue === 167410002) // =
+            role = "Dietician";
+        else if (roleValue === 167410003)//% Decrease
+            role = "Care Navigator";
+        else if (roleValue === 167410004) // % Increase
+            role = "Physiatrist";
+        else if (roleValue === 167410005) // % Increase
+            role = "Cardiologist";
+        else if (roleValue === 167410006) // % Increase
+            role = "Physician";
+        else if (roleValue === -1)
+            role = "";
+
+        return role;
     }
 
     $('.indicator-box-big_symptoms_all').click(function () {
