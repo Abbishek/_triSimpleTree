@@ -413,8 +413,6 @@
             <!-- END ITEM 8 (Wrap Up) -->
         </div>
 
-        <div class="personalizeCarePlans1"></div>
-
         <!-- window wrapper -->
         <div class="window-wrapper" style="width:99%;">
             <!-- X-CLOSE -->
@@ -427,12 +425,18 @@
                 <div class="indicator-wrapper" style="display: inline;">
 
                     <!--<div class="flag-box-big green" style=""></div>-->
-                    # 
-                    if(data.tri_CarePlanGoalState.Value == 167410000) { #
+                    # debugger;
+                    var goalState;
+                    if(data.tri_CarePlanGoalState != undefined)
+                        goalState = data.tri_CarePlanGoalState.Value
+                    else if(data.new_GoalState != undefined)
+                        goalState = data.new_GoalState.Value
+                        
+                    if(goalState == 167410000) { #
                     <div class="flag-box-big orange" style="">
-                        # } else if(data.tri_CarePlanGoalState.Value == 167410001) { #
+                        # } else if(goalState == 167410001) { #
                         <div class="flag-box-big green" style="">
-                            # } else if(data.tri_CarePlanGoalState.Value == 167410002) { #
+                            # } else if(goalState == 167410002) { #
                             <div class="flag-box-big red" style="">
                                 # } else { #
                                 <div class="flag-box-big grey" style="">
@@ -442,17 +446,23 @@
                                 </div>
 
                                 # 
-                                if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null) { #
-                                <div class="sectiontitle" style="">#= data.tri_vitalsvaluetype.Name #</div>
+                                var vitaltype;
+                                if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null)
+                                    vitaltype = data.tri_vitalsvaluetype.Name;
+                                else if(tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined)
+                                    vitaltype = tri_VitalValueTypeName;
+
+                                if(vitaltype !== undefined && vitaltype !== null) { #
+                                <div class="sectiontitle" style="">#= vitaltype #</div>
                                 # } else { #
                                 <div class="sectiontitle" style=""></div>
                                 # } #
                                 <!--<div class="indicator-line green"></div>-->
-                                # if(data.tri_CarePlanGoalState.Value == 167410000) { #
+                                # if(goalState == 167410000) { #
                                 <div class="indicator-line orange" style="">
-                                    # } else if(data.tri_CarePlanGoalState.Value == 167410001) { #
+                                    # } else if(goalState == 167410001) { #
                                     <div class="indicator-line green" style="">
-                                        # } else if(data.tri_CarePlanGoalState.Value == 167410002) { #
+                                        # } else if(goalState == 167410002) { #
                                         <div class="indicator-line red" style="">
                                             # } else { #
                                             <div class="indicator-line grey" style="">
@@ -466,11 +476,11 @@
                                                         <td class="label-name">
                                                             Last Result:
                                                         </td>
-                                                        #  if(data.tri_CarePlanGoalState.Value == 167410000) { #
+                                                        #  if(goalState == 167410000) { #
                                                         <td class="result-1 orangetxt">
-                                                            # } else if(data.tri_CarePlanGoalState.Value == 167410001) { #
+                                                            # } else if(goalState == 167410001) { #
                                                         <td class="result-1 greentxt">
-                                                            # } else if(data.tri_CarePlanGoalState.Value == 167410002) { #
+                                                            # } else if(goalState == 167410002) { #
                                                         <td class="result-1 redtxt">
                                                             # } else { #
                                                         <td class="result-1 greytxt">

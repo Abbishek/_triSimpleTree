@@ -68,7 +68,7 @@
     <Content Include="Demo\PersonalizeHTMLCSS\js\jquery-1.11.3.min.js" />
     <Content Include="Demo\PersonalizeHTMLCSS\personalizepopup.html" />
     <Content Include="Demo\PersonalizeHTMLCSS\personalize.html" />
-    <Content Include="KM.monitormode.js" />
+    <Content Include="tri_scripts\KM.monitormode.js" />
     <Content Include="monitormode.html" />
     <Content Include="MonitorModev2_files\u456" />
     <Content Include="temp.html" />

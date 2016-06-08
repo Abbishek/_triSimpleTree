@@ -3635,38 +3635,106 @@ function getCPGoalwrapupOverDue(PatientId) {
 }
 function gotoAddCarePlan() {
     //alert("hello");
+    // var currentId = 'dbf34939-a624-e611-80d1-005056810c7c';
+    var contactId = parent.Xrm.Page.data.entity.getId();
     $('.monitor-wrapper').hide('slow');
-    $(location).attr('href', 'StierSolution.html');
-}
 
-function OpenPersonalizeWindow(CarePlanId) {
+   // $('.window-wrapper').show('slow');
+    // $(location).attr('href', 'StierSolution.html');
     debugger;
-    var myWindow = $(".window-wrapper");
+    SDK.JQuery.retrieveMultipleRecords(
+        "tri_careplanjoin",
+    "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection," +
+    "tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate,"+
+    "tri_patientfactor,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName"+
+    "&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_GoalSelected eq true",
+   function (results) {
+       for (var i = 0; i < results.length; i++) {
+           var new_GoalState = results[i].new_GoalState;
+           var tri_activityassignmentrole = results[i].tri_activityassignmentrole;
+           var tri_CarePlanGoalID = results[i].tri_CarePlanGoalID;
+           var tri_CarePlanID = results[i].tri_CarePlanID;
+           var tri_careplanjoinId = results[i].tri_careplanjoinId;
+           var tri_GoalName = results[i].tri_GoalName;
+           var tri_GoalSection = results[i].tri_GoalSection;
+           var tri_GoalSelected = results[i].tri_GoalSelected;
+           var tri_LastGoalDate = results[i].tri_LastGoalDate;
+           var tri_LastTargetValue = results[i].tri_LastTargetValue;
+           var tri_measuredetails = results[i].tri_measuredetails;
+           var tri_metric = results[i].tri_metric;
+           var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
+           var tri_name = results[i].tri_name;
+           var tri_NextDueDate = results[i].tri_NextDueDate;
+           var tri_patientfactor = results[i].tri_patientfactor;
+           var tri_qualitativetarget = results[i].tri_qualitativetarget;
+           var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+           var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+           var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
+           var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
+       }
 
-    //////////////////////////////////
-    var popupPlans = GetCarePlanfromCarePlanId(CarePlanId);
-    // var popupPlans = CarePlanDataPersonalize;
+       $('.monitor-wrapper').hide();
+       $('.sectiontitle_personalize').text(tri_name);
+       // $('.window-wrapper').show('slow')
+       debugger;
+       var myWindow = $(".window-wrapper");
+       var temp = $("#PersonalizeCarePlanTemplate").html();
+       var PersonalizeCarePlanTemplate = kendo.template(temp);
+       var dataSource = new kendo.data.DataSource({
+           data: results,
+           change: function () { // subscribe to the CHANGE event of the data source
+               $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
+           }
+       });
+       dataSource.read();
 
-    var CarPlans = Enumerable.From(popupPlans)
-                               .Where(function (x) { return x.attributes.tri_careplanid.id })
-                               .ToArray();
+       /// Drop down Selection
+       $(".dropdown-menu li a").click(function () {
+           $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+           $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+       });
 
-    // create a template using the above definition
-    var temp = $("#PersonalizeCarePlanTemplate").html();
-    var PersonalizeCarePlanTemplate = kendo.template(temp);
-    var dataSource = new kendo.data.DataSource({
-        data: CarPlans,
-        change: function () { // subscribe to the CHANGE event of the data source
-            $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
-        }
-    });
-    dataSource.read();
+       myWindow.data("kendoWindow").center().open();
+   }
+   ,
+ function (error) {
+     alert(error.message);
+ },
+  function () {
+      //On Complete - Do Something
+  }
+ );
 
-    /// Drop down Selection
-    $(".dropdown-menu li a").click(function () {
-        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-    });
-
-    myWindow.data("kendoWindow").center().open();
 }
+
+//function OpenPersonalizeWindow(CarePlanId) {
+//    debugger;
+//    var myWindow = $(".window-wrapper");
+
+//    //////////////////////////////////
+//    var popupPlans = GetCarePlanfromCarePlanId(CarePlanId);
+//    // var popupPlans = CarePlanDataPersonalize;
+
+//    var CarPlans = Enumerable.From(popupPlans)
+//                               .Where(function (x) { return x.attributes.tri_careplanid.id })
+//                               .ToArray();
+
+//    // create a template using the above definition
+//    var temp = $("#PersonalizeCarePlanTemplate").html();
+//    var PersonalizeCarePlanTemplate = kendo.template(temp);
+//    var dataSource = new kendo.data.DataSource({
+//        data: CarPlans,
+//        change: function () { // subscribe to the CHANGE event of the data source
+//            $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
+//        }
+//    });
+//    dataSource.read();
+
+//    /// Drop down Selection
+//    $(".dropdown-menu li a").click(function () {
+//        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+//        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+//    });
+
+//    myWindow.data("kendoWindow").center().open();
+//}
