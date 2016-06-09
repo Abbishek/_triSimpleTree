@@ -17,6 +17,10 @@
     <!-- added by Abhishek -->
     <script src="../tri_scripts/kendo.js"></script>
     <script src="../tri_scripts/linq.js"></script>
+    <script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>
+    <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../tri_scripts/PatientMonitorMode.js"></script>
+    <link href="../tri_css/CarePlanMonitor.css" rel="stylesheet" />
 
     <!-- styling just for the table header-->
     <style type="text/css">
@@ -88,11 +92,11 @@
 
             // Set up the kendo window
             $(".window-wrapper").kendoWindow({
-                width: "55%",
-                height: "55%",
-                title: "Personalize View",
+                width: "60%",
+                height: "60%",
+               // title: "Personalize View",
                 visible: false,
-                modal: true,
+               // modal: true,
                 //content: "",
                 //actions: [
                 //        "Pin",
@@ -101,6 +105,81 @@
                 //        "Close"
                 //]
             }).data("kendoWindow");
+
+            // Select the dropdown
+            if (parent.Xrm !== undefined) {
+                debugger;
+                var contactId = parent.Xrm.Page.data.entity.getId();
+                var newPlans = GetCarePlanfromPatitentId(contactId);
+                var newPaths = GetAllCarePath();
+                debugger;
+
+                var selectedCarePath;
+                var selectedCarePathId;
+
+                // Get All CarePaths for DropDown
+                var ddCarePath = Enumerable.From(newPaths)
+                .Select(function (x) { return { 'text': x.attributes.tri_name.value, 'value': x.attributes.tri_cccarepathid.value }; })
+                .ToArray();
+
+                // Get All CarePlan to display on Page
+                var ddCarePlans = Enumerable.From(newPlans)
+                .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id }; })
+                .ToArray();
+
+                // Get Distinct CarePlans
+                var distinctCarePlansTextArray = Enumerable.From(ddCarePlans)
+                                                  .Select(function (x) { return x.text; })
+                                                  .Distinct(function (y) { return y; })
+                                                  .ToArray();
+
+                // Get data to display on dropdown
+                // ddCarePath - distinctCarePlans
+                var data = ddCarePath.filter(function (x) { return !Enumerable.From(distinctCarePlansTextArray).Contains(x.text); });
+
+                // create DropDownList from input HTML element
+                var kendoAutoCompleteWC = $("#carePaths").kendoAutoComplete({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    filter: "startswith",
+                    placeholder: "Viewing All (Select Category)",
+                    dataSource: data,
+                    index: 0,
+                    change: onChange
+                }).data("kendoAutoComplete");
+            }
+
+            function onChange() {
+                // Get the selected carepath from dropdown
+                //var selectedCarePath = $('#carePaths').val();
+                //var listCarePath = Enumerable.From(data);
+                //// Get the selected CarePathId
+                //var selectedCarePathId = listCarePath
+                //                         .Where(function (x) { return x.text === selectedCarePath })
+                //                         .Select(function (x) { return x.value; })
+                //                         .FirstOrDefault();
+                //// Check if the data selcted from datasource <> ''
+                //var IsSelectedCarePathfromDataSource = listCarePath
+                //                                       .Select(function (x) { return x.text; })
+                //                                       .Contains(selectedCarePath);
+
+                //if (selectedCarePath !== '' && IsSelectedCarePathfromDataSource) {
+
+                //    var carePathdataToUpdate = {
+                //        tri_cccarepathid: { 'value': selectedCarePathId },
+                //        tri_name: { "value": selectedCarePath }
+                //    };
+
+                //    var contact = {};
+                //    contact.tri_CarePlantoAddID = { Id: selectedCarePathId, LogicalName: "tri_cccarepath", Name: selectedCarePath };
+                //    SDK.REST.updateRecord(
+                //        contactId, // Pass Contact ID
+                //        contact,
+                //        "Contact",
+                //       // updateSuccessCallback(selectedCarePath, selectedCarePathId, data, kendoAutoCompleteWC),
+                //        updateSuccessCallback,
+                //        errorHandler); //
+                }
         });
     </script>
 </head>
@@ -415,9 +494,22 @@
 
         <!-- window wrapper -->
         <div class="window-wrapper" style="width:99%;">
+            
             <!-- X-CLOSE -->
-            <div style="width: 100%; margin-bottom: 20px;">
-                <div style="float:right;" class="x-close"><a style="text-decoration:none;" href="KMmonitormode.html">X</a></div>
+            <div style="width: 90%; padding-bottom: 50px;">
+                <div style="float:right;" class="x-close"><a style="text-decoration:none;">X</a></div>
+            </div>
+            <!-- dropdown -->
+            <div id="ddVitaltypesarea">
+                <div style="margin-top:-30px;">
+                    <span style="color: #333333; font-size: 18px; text-align: left;"><h4>Select the Care Plan you want to add:</h4></span>
+                </div>
+                <div style="margin-top:20px;">
+                    <div class="dropdown1">
+                        <input id="carePaths" style="width: 100%;" class="dropdown-content1" />
+                    </div>
+                    <input type="text" name="searchonAddCarePlan" placeholder="Search for entries" style="float: right; font-style: italic;" />
+                </div>
             </div>
             <!-- FLAG + Title -->
             <div class="personalizeCarePlans"></div>
@@ -536,7 +628,7 @@
                                                             <!-- FACTOR DROP-DOWN -->
                                                             <div class="dropdown" style="width: 60px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    # GetFactorModifier(data.tri_patientfactor.Value) # <span class="caret"></span>
+                                                                    #= GetFactorModifier(data.tri_patientfactor.Value) # <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
                                                                     <li><a href="\\#" data-value="100000000">Most Patients</a></li>
@@ -557,9 +649,9 @@
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                 # if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null) {#
-                                                                                # GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
-                                                                                # } else if(data.tri_metricoperatortwo !== undefined && data.tri_targetmetricoperator !== null) { #
-                                                                                # GetTargetMetricOperator(data.tri_metricoperatortwo.Value) #
+                                                                                #= GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
+                                                                                # } else if(data.tri_metricoperatortwo !== undefined && data.tri_metricoperatortwo !== null) { #
+                                                                                #= GetTargetMetricOperator(data.tri_metricoperatortwo.Value) #
                                                                                 # } #
                                                                                 <span class="caret"></span>
                                                                             </button>
@@ -647,9 +739,8 @@
                                                             <!-- ASSIGNMENT ROLE DROP-DOWN -->
                                                             <div class="dropdown" style="width: 120px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    # if(data.tri_activityassignmentrole !== undefined && data.tri_activityassignmentrole !== null)
-                                                                         GetActivityAssignmentRole(data.tri_activityassignmentrole.Value)
-                                                                    #
+                                                                    # if(data.tri_activityassignmentrole !== undefined && data.tri_activityassignmentrole !== null) #
+                                                                        #= GetActivityAssignmentRole(data.tri_activityassignmentrole.Value) #
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">

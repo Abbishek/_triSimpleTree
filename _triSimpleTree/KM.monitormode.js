@@ -1054,6 +1054,8 @@ function ReviewAndUpdateGoal(currentId) {
         }
 
         $('.monitor-wrapper').hide();
+        $('#ddVitaltypesarea').hide();
+
         $('.sectiontitle_personalize').text(tri_name);
         // $('.window-wrapper').show('slow')
         debugger;
@@ -3638,7 +3640,6 @@ function gotoAddCarePlan() {
     // var currentId = 'dbf34939-a624-e611-80d1-005056810c7c';
     var contactId = parent.Xrm.Page.data.entity.getId();
     $('.monitor-wrapper').hide('slow');
-
    // $('.window-wrapper').show('slow');
     // $(location).attr('href', 'StierSolution.html');
     debugger;
@@ -3673,7 +3674,7 @@ function gotoAddCarePlan() {
            var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
        }
 
-       $('.monitor-wrapper').hide();
+       //$('.monitor-wrapper').hide();
        $('.sectiontitle_personalize').text(tri_name);
        // $('.window-wrapper').show('slow')
        debugger;
@@ -3737,4 +3738,9 @@ function gotoAddCarePlan() {
 //    });
 
 //    myWindow.data("kendoWindow").center().open();
+//}
+
+//function showMonitorWrapper() {
+//    $('.window-wrapper').hide('slow');
+//    $('.monitor-wrapper').show('slow');
 //}

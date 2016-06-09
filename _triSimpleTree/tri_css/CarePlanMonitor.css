@@ -312,7 +312,7 @@
     background-color: #F7F7F7 !important;
 }
 
-.dropdown-content1 {
+.dropdown1 span {
     min-width: 220px;
     border: 1px solid #999999;
     background-color: #F7F7F7;
@@ -325,12 +325,12 @@
     color: #333333;
 }
 
-    .dropdown-content1 :hover {
+    .dropdown1 span:hover {
         background-color: #c9c9c9;
         color: #fff;
     }
 
-    .dropdown-content1 ul li:hover{
+    .dropdown1 span ul li:hover{
         border: 1px solid #333333 !important; 
         padding: 5px !important;
     }
@@ -338,6 +338,22 @@
     .k-animation-container{
         overflow:hidden;
     }
+
+    #carePaths_listbox li{
+        color:#333333;
+        border: 1px solid #999999;
+        background-color: #F7F7F7;
+        cursor: pointer;
+        font-family: 'Arial Regular', 'Arial';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 11px;
+        line-height: normal;
+        text-decoration: none;
+        display: block;
+        padding: 5px;
+        min-width: 220px;
+}
 
 #carePaths_listbox li:hover{
         color:#fff;
