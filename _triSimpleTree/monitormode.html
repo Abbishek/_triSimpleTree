@@ -108,11 +108,9 @@
 
             // Select the dropdown
             if (parent.Xrm !== undefined) {
-                debugger;
                 var contactId = parent.Xrm.Page.data.entity.getId();
                 var newPlans = GetCarePlanfromPatitentId(contactId);
                 var newPaths = GetAllCarePath();
-                debugger;
 
                 var selectedCarePath;
                 var selectedCarePathId;
@@ -504,20 +502,21 @@
                 <div style="margin-top:-30px;">
                     <span style="color: #333333; font-size: 18px; text-align: left;"><h4>Select the Care Plan you want to add:</h4></span>
                 </div>
-                <div style="margin-top:20px;">
-                    <div class="dropdown1">
+                <div style="padding-bottom: 20px;">
+                    <div class="dropdown1" style="float: left;">
                         <input id="carePaths" style="width: 100%;" class="dropdown-content1" />
                     </div>
                     <input type="text" name="searchonAddCarePlan" placeholder="Search for entries" style="float: right; font-style: italic;" />
                 </div>
             </div>
+            <div style="clear:both;margin-top:20px;margin-bottom:20px;z-index:-1;"></div>
             <!-- FLAG + Title -->
-            <div class="personalizeCarePlans"></div>
+            <div class="personalizeCarePlans" style="z-index:-1;"></div>
             <script id="PersonalizeCarePlanTemplate" type="text/x-kendo-template">
-                <div class="indicator-wrapper" style="display: inline;">
+                <div class="indicator-wrapper" style="display: inline;z-index:-1;">
 
                     <!--<div class="flag-box-big green" style=""></div>-->
-                    # debugger;
+                    # 
                     var goalState;
                     if(data.tri_CarePlanGoalState != undefined)
                         goalState = data.tri_CarePlanGoalState.Value
@@ -631,6 +630,7 @@
                                                                     #= GetFactorModifier(data.tri_patientfactor.Value) # <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
+                                                                    <li><a href="\\#" data-value="-1"></a></li>
                                                                     <li><a href="\\#" data-value="100000000">Most Patients</a></li>
                                                                     <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
                                                                     <li><a href="\\#" data-value="100000002">Comorbid</a></li>
@@ -648,14 +648,16 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                # if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null) {#
+                                                                                # debugger; 
+                                                                                if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null && data.tri_targetmetricoperator.Value !== null) {#
                                                                                 #= GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
-                                                                                # } else if(data.tri_metricoperatortwo !== undefined && data.tri_metricoperatortwo !== null) { #
+                                                                                # } else if(data.tri_metricoperatortwo !== undefined && data.tri_metricoperatortwo !== null && data.tri_metricoperatortwo.Value !== null) { #
                                                                                 #= GetTargetMetricOperator(data.tri_metricoperatortwo.Value) #
                                                                                 # } #
                                                                                 <span class="caret"></span>
                                                                             </button>
                                                                             <ul class="dropdown-menu">
+                                                                                <li><a href="\\#" data-value="-1"></a></li>
                                                                                 <li><a href="\\#" data-value="167410000">></a></li>
                                                                                 <li><a href="\\#" data-value="167410002">=</a></li>
                                                                                 <li><a href="\\#" data-value="167410001"><</a></li>

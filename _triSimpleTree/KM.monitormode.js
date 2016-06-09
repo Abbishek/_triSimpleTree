@@ -221,7 +221,7 @@ $(document).ready(function () {
             operator = "% Decrease";
         else if (operatorValue === 167410003) // % Increase
             operator = "% Increase";
-        else if (operatorValue === -1)
+        else if (operatorValue == -1)
             operator = "";
 
         return operator;
@@ -244,7 +244,7 @@ $(document).ready(function () {
             modifier = "Normal";
         else if (factorValue === 100000006) // % Increase
             modifier = "Abnormal";
-        else if (factorValue === -1)
+        else if (factorValue == -1)
             modifier = "";
 
         return modifier;
@@ -267,7 +267,7 @@ $(document).ready(function () {
             role = "Cardiologist";
         else if (roleValue === 167410006) // % Increase
             role = "Physician";
-        else if (roleValue === -1)
+        else if (roleValue == -1)
             role = "";
 
         return role;
@@ -596,7 +596,7 @@ $(document).ready(function () {
         // alert("hello");
         $('.window-wrapper').hide();
         $('.monitor-wrapper').show('slow');
-
+        //alert('x-close called');
     });
 
 });
@@ -1006,33 +1006,7 @@ function retrievePatient(PatientId) {
 }
 
 function ReviewAndUpdateGoal(currentId) {
-   // alert(currentId);
-
-  //  SDK.JQuery.retrieveRecord(
-  //currentId,
-  //"tri_cccareplangoal",
-  //"tri_actiontriggervalue,tri_activitydescription,tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_typeofgoalcode,tri_patientmodifier_tri_cccareplangoal/tri_name,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype/tri_name",
-  //'tri_patientmodifier_tri_cccareplangoal,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype',
-  //function (result) {
-  //    //alert(result.tri_name);
-  //    debugger;
-
-  //    var tri_actiontriggervalue = result.tri_actiontriggervalue;
-  //    var tri_activitydescription = result.tri_activitydescription;
-  //    var tri_activitydescriptionabnormal = result.tri_activitydescriptionabnormal;
-  //    var tri_CarePlanGoalState = result.tri_CarePlanGoalState;
-  //    var tri_LastGoalDate = result.tri_LastGoalDate;
-  //    var tri_LastResultDate = result.tri_LastResultDate;
-  //    var tri_name = result.tri_name;
-  //    var tri_NextDueDate = result.tri_NextDueDate;
-  //    var tri_typeofgoalcode = result.tri_typeofgoalcode;
-  //    var tri_patientmodifier_tri_cccareplangoal_tri_name = result.tri_patientmodifier_tri_cccareplangoal.tri_name;
-  //    var tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype_tri_name = result.tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype.tri_name;
-  //    $('.monitor-wrapper').hide();
-  //    $('.sectiontitle_personalize').text(tri_name);
-  //    $('.window-wrapper').show('slow');
-  //}
-
+    // alert('review & updated called');
     SDK.JQuery.retrieveMultipleRecords(
    "tri_cccareplangoal",
     "?$select=tri_actiontriggervalue,tri_activitydescription,tri_measuredetails,tri_LastTargetValue,tri_targetmetricoperator,tri_metricoperatortwo," +
@@ -1047,7 +1021,7 @@ function ReviewAndUpdateGoal(currentId) {
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
             var tri_LastResultDate = results[i].tri_LastResultDate;
             var tri_name = results[i].tri_name;
-            var tri_NextDueDate = results[i].tri_NextDueDate;
+            var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
             var tri_patientfactor = results[i].tri_patientfactor;
             var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
@@ -1057,7 +1031,7 @@ function ReviewAndUpdateGoal(currentId) {
         $('#ddVitaltypesarea').hide();
 
         $('.sectiontitle_personalize').text(tri_name);
-        // $('.window-wrapper').show('slow')
+        $('.window-wrapper').show('slow')
         debugger;
         var myWindow = $(".window-wrapper");
         var temp = $("#PersonalizeCarePlanTemplate").html();
@@ -3640,6 +3614,7 @@ function gotoAddCarePlan() {
     // var currentId = 'dbf34939-a624-e611-80d1-005056810c7c';
     var contactId = parent.Xrm.Page.data.entity.getId();
     $('.monitor-wrapper').hide('slow');
+    var carePlans = [];
    // $('.window-wrapper').show('slow');
     // $(location).attr('href', 'StierSolution.html');
     debugger;
@@ -3665,7 +3640,8 @@ function gotoAddCarePlan() {
            var tri_metric = results[i].tri_metric;
            var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
            var tri_name = results[i].tri_name;
-           var tri_NextDueDate = results[i].tri_NextDueDate;
+           //format dates to correct formats
+           var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
            var tri_patientfactor = results[i].tri_patientfactor;
            var tri_qualitativetarget = results[i].tri_qualitativetarget;
            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
@@ -3674,28 +3650,7 @@ function gotoAddCarePlan() {
            var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
        }
 
-       //$('.monitor-wrapper').hide();
-       $('.sectiontitle_personalize').text(tri_name);
-       // $('.window-wrapper').show('slow')
-       debugger;
-       var myWindow = $(".window-wrapper");
-       var temp = $("#PersonalizeCarePlanTemplate").html();
-       var PersonalizeCarePlanTemplate = kendo.template(temp);
-       var dataSource = new kendo.data.DataSource({
-           data: results,
-           change: function () { // subscribe to the CHANGE event of the data source
-               $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
-           }
-       });
-       dataSource.read();
-
-       /// Drop down Selection
-       $(".dropdown-menu li a").click(function () {
-           $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-           $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-       });
-
-       myWindow.data("kendoWindow").center().open();
+       carePlans = carePlans.concat(results);
    }
    ,
  function (error) {
@@ -3703,44 +3658,35 @@ function gotoAddCarePlan() {
  },
   function () {
       //On Complete - Do Something
+      debugger;
+      var allPlandata = Enumerable.From(carePlans)
+                                  //.Select(function (x) { return x.text; })
+                                  .Distinct(function (y) { return y; })
+                                  .ToArray();
+
+      carePlans = Enumerable.From(carePlans)
+                  .Take(10)
+                  .ToArray();
+
+      var myWindow = $(".window-wrapper");
+      var temp = $("#PersonalizeCarePlanTemplate").html();
+      var PersonalizeCarePlanTemplate = kendo.template(temp);
+      var dataSource = new kendo.data.DataSource({
+          data: carePlans,
+          change: function () { // subscribe to the CHANGE event of the data source
+              $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
+          }
+      });
+      dataSource.read();
+
+      /// Drop down Selection
+      $(".dropdown-menu li a").click(function () {
+          $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+          $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+      });
+
+      myWindow.data("kendoWindow").center().open();
   }
  );
 
 }
-
-//function OpenPersonalizeWindow(CarePlanId) {
-//    debugger;
-//    var myWindow = $(".window-wrapper");
-
-//    //////////////////////////////////
-//    var popupPlans = GetCarePlanfromCarePlanId(CarePlanId);
-//    // var popupPlans = CarePlanDataPersonalize;
-
-//    var CarPlans = Enumerable.From(popupPlans)
-//                               .Where(function (x) { return x.attributes.tri_careplanid.id })
-//                               .ToArray();
-
-//    // create a template using the above definition
-//    var temp = $("#PersonalizeCarePlanTemplate").html();
-//    var PersonalizeCarePlanTemplate = kendo.template(temp);
-//    var dataSource = new kendo.data.DataSource({
-//        data: CarPlans,
-//        change: function () { // subscribe to the CHANGE event of the data source
-//            $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
-//        }
-//    });
-//    dataSource.read();
-
-//    /// Drop down Selection
-//    $(".dropdown-menu li a").click(function () {
-//        $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-//        $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-//    });
-
-//    myWindow.data("kendoWindow").center().open();
-//}
-
-//function showMonitorWrapper() {
-//    $('.window-wrapper').hide('slow');
-//    $('.monitor-wrapper').show('slow');
-//}

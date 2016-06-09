@@ -33,61 +33,6 @@
             //if(1==1){
             //var newPlans = CarePathData;
 
-    //        "tri_cccareplangoal",
-    //"?$select=tri_actiontriggervalue,tri_activitydescription,tri_measuredetails,tri_LastTargetValue,tri_targetmetricoperator,tri_metricoperatortwo," +
-    //"tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_Metric,tri_targetvaluetwo,tri_activityassignmentrole," +
-    //"tri_patientfactor,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_cccareplangoalId eq (guid'" + currentId + "')",
-    //function (results) {
-    //    for (var i = 0; i < results.length; i++) {
-    //        var tri_actiontriggervalue = results[i].tri_actiontriggervalue;
-    //        var tri_activitydescription = results[i].tri_activitydescription;
-    //        var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-    //        var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState;
-    //        var tri_LastGoalDate = results[i].tri_LastGoalDate;
-    //        var tri_LastResultDate = results[i].tri_LastResultDate;
-    //        var tri_name = results[i].tri_name;
-    //        var tri_NextDueDate = results[i].tri_NextDueDate;
-    //        var tri_patientfactor = results[i]. ;
-    //        var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
-    //        var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
-    //    }
-
-//            SDK.JQuery.retrieveMultipleRecords(
-//    "tri_careplanjoin",
-//    "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection,tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_patientfactor,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName&$filter=tri_PatientID/Id eq (guid'0CDF8B04-C90B-E611-80D1-005056810C7C')",
-//    function (results) {
-//        for (var i = 0; i < results.length; i++) {
-//            var new_GoalState = results[i].new_GoalState;
-//            var tri_activityassignmentrole = results[i].tri_activityassignmentrole;
-//            var tri_CarePlanGoalID = results[i].tri_CarePlanGoalID;
-//            var tri_CarePlanID = results[i].tri_CarePlanID;
-//            var tri_careplanjoinId = results[i].tri_careplanjoinId;
-//            var tri_GoalName = results[i].tri_GoalName;
-//            var tri_GoalSection = results[i].tri_GoalSection;
-//            var tri_GoalSelected = results[i].tri_GoalSelected;
-//            var tri_LastGoalDate = results[i].tri_LastGoalDate;
-//            var tri_LastTargetValue = results[i].tri_LastTargetValue;
-//            var tri_measuredetails = results[i].tri_measuredetails;
-//            var tri_metric = results[i].tri_metric;
-//            var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
-//            var tri_name = results[i].tri_name;
-//            var tri_NextDueDate = results[i].tri_NextDueDate;
-//            var tri_patientfactor = results[i].tri_patientfactor;
-//            var tri_qualitativetarget = results[i].tri_qualitativetarget;
-//            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-//            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-//            var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
-//            var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
-//        }
-//    },
-//    function (error) {
-//        alert(error.message);
-//    },
-//    function () {
-//        //On Complete - Do Something
-//    }
-//);
-
             if (parent.Xrm !== undefined) {
                 debugger;
                 var contactId = parent.Xrm.Page.data.entity.getId();

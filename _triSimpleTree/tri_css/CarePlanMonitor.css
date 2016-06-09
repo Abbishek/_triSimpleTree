@@ -308,11 +308,11 @@
 
 .dropdown1 {
     display: inline-block !important;
-     border: 1px solid #999999 !important;
+    /*border: 1px solid #999999 !important;*/
     background-color: #F7F7F7 !important;
 }
 
-.dropdown1 span {
+    /*.dropdown1 span {
     min-width: 220px;
     border: 1px solid #999999;
     background-color: #F7F7F7;
@@ -323,24 +323,10 @@
     font-style: normal;
     font-size: 11px;
     color: #333333;
-}
+}*/
 
-    .dropdown1 span:hover {
-        background-color: #c9c9c9;
-        color: #fff;
-    }
-
-    .dropdown1 span ul li:hover{
-        border: 1px solid #333333 !important; 
-        padding: 5px !important;
-    }
-    
-    .k-animation-container{
-        overflow:hidden;
-    }
-
-    #carePaths_listbox li{
-        color:#333333;
+    .dropdown1 span input {
+        min-width: 220px;
         border: 1px solid #999999;
         background-color: #F7F7F7;
         cursor: pointer;
@@ -348,23 +334,56 @@
         font-weight: 400;
         font-style: normal;
         font-size: 11px;
-        line-height: normal;
-        text-decoration: none;
-        display: block;
+        color: #333333;
+        z-index: 9999;
         padding: 5px;
-        min-width: 220px;
+    }
+
+        .dropdown1 span input:hover {
+            background-color: #c9c9c9;
+            color: #fff;
+        }
+
+        .dropdown1 span input ul li:hover {
+            border: 1px solid #333333 !important;
+            padding: 5px !important;
+        }
+
+.k-animation-container {
+    overflow: hidden !important;
+    left: 4.5px !important;
+    top: 125px !important;
 }
 
-#carePaths_listbox li:hover{
-        color:#fff;
-        border: 1px solid #999999;
-        background-color: #c9c9c9;
-        cursor: pointer;
-        font-family: 'Arial Regular', 'Arial';
-        font-weight: 400;
-        font-style: normal;
-        font-size: 11px;
-        line-height: normal;
-        text-decoration: none;
-        display: block;
+#carePaths-list li {
+    color: #333333;
+    border: 1px solid #999999;
+    background-color: #F7F7F7;
+    cursor: pointer;
+    font-family: 'Arial Regular', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    line-height: normal;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    min-width: 220px;
+    z-index: 9999;
+    text-align: left;
+}
+
+#carePaths-list li:hover {
+    color: #fff;
+    border: 1px solid #999999;
+    background-color: #c9c9c9;
+    cursor: pointer;
+    font-family: 'Arial Regular', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    line-height: normal;
+    text-decoration: none;
+    display: block;
+    z-index: 9999;
 }
