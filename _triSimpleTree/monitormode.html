@@ -4,23 +4,24 @@
     <title>Monitor Mode HTML / CSS</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">
-    <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
     <link href="../tri_css/jquery_ui_192.custom.css" rel="stylesheet">
-    <script src="../tri_scripts/jquery_ui_192.custom.js" type="text/javascript"></script>
-    <script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
-    <script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
-    <script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
-    <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
     <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
     <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../tri_css/CarePlanMonitor.css" rel="stylesheet" />
 
-    <!-- added by Abhishek -->
+    <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/jquery_ui_192.custom.js" type="text/javascript"></script>
     <script src="../tri_scripts/kendo.js"></script>
     <script src="../tri_scripts/linq.js"></script>
-    <script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>
+
     <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/SDK.REST.js" type="text/javascript"></script>
+    <script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>
+
+    <script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
     <script src="../tri_scripts/PatientMonitorMode.js"></script>
-    <link href="../tri_css/CarePlanMonitor.css" rel="stylesheet" />
 
     <!-- styling just for the table header-->
     <style type="text/css">
@@ -89,7 +90,7 @@
     </style>
     <script>
         $(document).ready(function () {
-
+            debugger;
             // Set up the kendo window
             $(".window-wrapper").kendoWindow({
                 width: "60%",
@@ -105,79 +106,7 @@
                 //        "Close"
                 //]
             }).data("kendoWindow");
-
-            // Select the dropdown
-            if (parent.Xrm !== undefined) {
-                var contactId = parent.Xrm.Page.data.entity.getId();
-                var newPlans = GetCarePlanfromPatitentId(contactId);
-                var newPaths = GetAllCarePath();
-
-                var selectedCarePath;
-                var selectedCarePathId;
-
-                // Get All CarePaths for DropDown
-                var ddCarePath = Enumerable.From(newPaths)
-                .Select(function (x) { return { 'text': x.attributes.tri_name.value, 'value': x.attributes.tri_cccarepathid.value }; })
-                .ToArray();
-
-                // Get All CarePlan to display on Page
-                var ddCarePlans = Enumerable.From(newPlans)
-                .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id }; })
-                .ToArray();
-
-                // Get Distinct CarePlans
-                var distinctCarePlansTextArray = Enumerable.From(ddCarePlans)
-                                                  .Select(function (x) { return x.text; })
-                                                  .Distinct(function (y) { return y; })
-                                                  .ToArray();
-
-                // Get data to display on dropdown
-                // ddCarePath - distinctCarePlans
-                var data = ddCarePath.filter(function (x) { return !Enumerable.From(distinctCarePlansTextArray).Contains(x.text); });
-
-                // create DropDownList from input HTML element
-                var kendoAutoCompleteWC = $("#carePaths").kendoAutoComplete({
-                    dataTextField: "text",
-                    dataValueField: "value",
-                    filter: "startswith",
-                    placeholder: "Viewing All (Select Category)",
-                    dataSource: data,
-                    index: 0,
-                    change: onChange
-                }).data("kendoAutoComplete");
-            }
-
-            function onChange() {
-                // Get the selected carepath from dropdown
-                //var selectedCarePath = $('#carePaths').val();
-                //var listCarePath = Enumerable.From(data);
-                //// Get the selected CarePathId
-                //var selectedCarePathId = listCarePath
-                //                         .Where(function (x) { return x.text === selectedCarePath })
-                //                         .Select(function (x) { return x.value; })
-                //                         .FirstOrDefault();
-                //// Check if the data selcted from datasource <> ''
-                //var IsSelectedCarePathfromDataSource = listCarePath
-                //                                       .Select(function (x) { return x.text; })
-                //                                       .Contains(selectedCarePath);
-
-                //if (selectedCarePath !== '' && IsSelectedCarePathfromDataSource) {
-
-                //    var carePathdataToUpdate = {
-                //        tri_cccarepathid: { 'value': selectedCarePathId },
-                //        tri_name: { "value": selectedCarePath }
-                //    };
-
-                //    var contact = {};
-                //    contact.tri_CarePlantoAddID = { Id: selectedCarePathId, LogicalName: "tri_cccarepath", Name: selectedCarePath };
-                //    SDK.REST.updateRecord(
-                //        contactId, // Pass Contact ID
-                //        contact,
-                //        "Contact",
-                //       // updateSuccessCallback(selectedCarePath, selectedCarePathId, data, kendoAutoCompleteWC),
-                //        updateSuccessCallback,
-                //        errorHandler); //
-                }
+           
         });
     </script>
 </head>
