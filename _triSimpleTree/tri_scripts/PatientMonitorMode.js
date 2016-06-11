@@ -168,7 +168,6 @@ function GetCarePlanfromPatitentId(PatientId) {
 "  </entity>" +
 "</fetch>";
     // alert(FetchXmlplan);
-    debugger;
     retrievedPlanRecords = XrmServiceToolkit.Soap.Fetch(FetchXmlplan);
 
     return retrievedPlanRecords;

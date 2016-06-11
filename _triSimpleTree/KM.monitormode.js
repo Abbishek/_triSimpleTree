@@ -142,6 +142,14 @@ $(document).ready(function () {
     var PatientId2 = PatientId1.replace("{", "");
     var PatientId = PatientId2.replace("}", "");
     var joinEntityCollection = null;
+
+    // Set up the kendo window
+    $(".window-wrapper").kendoWindow({
+        width: "60%",
+        height: "60%",
+        visible: false,
+    }).data("kendoWindow");
+
     //var PatientIdTrimmed= .replace("{", "");
     //alert(PatientId);
     //getJoinsForContact(PatientId);
@@ -3613,11 +3621,9 @@ function gotoAddCarePlan() {
     $('#ddVitaltypesarea').show('slow');
     $('.window-wrapper').show('slow');
 
-    var carePlans = [];
     var selectedCarePath;
     var selectedCarePathId;
 
-    debugger;
     // Select the dropdown
     if (parent.Xrm !== undefined) {
         var contactId = parent.Xrm.Page.data.entity.getId();
@@ -3690,6 +3696,9 @@ function gotoAddCarePlan() {
             // Function to execute after CarePlanToAdd is updated
             function updateSuccessCallback() {
                 alert("The Patient record changes were saved");
+
+                ///// Do we also need to update the GoalSelected as true for each added care plan or will there be any condition when it becomes true ??
+
                 // get the newly added CarePlan Data
                 // Recheck this logic
                 var carePlanJoinData = GetCarePlanfromPatitentId(contactId)
@@ -3699,8 +3708,7 @@ function gotoAddCarePlan() {
                     .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id }; })
                     .ToArray();
 
-                debugger;
-
+                // Check if added careplanjoin records were created, then update the UI & dropdown 
                 if (addedCarePlan !== undefined && addedCarePlan !== null && addedCarePlan.length > 0) {
                     // Get Distinct CarePlans
                     var distinctAddedCarePlans = Enumerable.From(addedCarePlan)
@@ -3708,8 +3716,8 @@ function gotoAddCarePlan() {
                                                  .Distinct(function (y) { return y.text; })
                                                  .ToArray();
 
-                    // Update this method to draw Vital Type Section
-                    // drawCarePlanRow(distinctAddedCarePlans[0].text, distinctAddedCarePlans[0].value);
+                    // Get data and show 
+                    updateVitalTypeRecords(contactId);
 
                     carePathDropdownArray = Enumerable.From(carePathDropdownArray)
                                             .Where(function (x) { return x.text !== selectedCarePath; })
@@ -3726,67 +3734,8 @@ function gotoAddCarePlan() {
             }
         };
 
-        SDK.JQuery.retrieveMultipleRecords(
-        "tri_careplanjoin",
-        "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection," +
-        "tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate," +
-        "tri_patientfactor,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName" +
-        "&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_GoalSelected eq true",
-       function (results) {
-           for (var i = 0; i < results.length; i++) {
-               var new_GoalState = results[i].new_GoalState;
-               var tri_activityassignmentrole = results[i].tri_activityassignmentrole;
-               var tri_CarePlanGoalID = results[i].tri_CarePlanGoalID;
-               var tri_CarePlanID = results[i].tri_CarePlanID;
-               var tri_careplanjoinId = results[i].tri_careplanjoinId;
-               var tri_GoalName = results[i].tri_GoalName;
-               var tri_GoalSection = results[i].tri_GoalSection;
-               var tri_GoalSelected = results[i].tri_GoalSelected;
-               var tri_LastGoalDate = results[i].tri_LastGoalDate;
-               var tri_LastTargetValue = results[i].tri_LastTargetValue;
-               var tri_measuredetails = results[i].tri_measuredetails;
-               var tri_metric = results[i].tri_metric;
-               var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
-               var tri_name = results[i].tri_name;
-               //format dates to correct formats
-               var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
-               var tri_patientfactor = results[i].tri_patientfactor;
-               var tri_qualitativetarget = results[i].tri_qualitativetarget;
-               var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-               var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-               var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
-               var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
-           }
-           carePlans = carePlans.concat(results);
-       },
-     function (error) {
-         alert(error.message);
-     },
-      function () {
-          //On Complete - Do Something
-          debugger;
-          var allPlandata = Enumerable.From(carePlans)
-                                      .Distinct(function (y) { return y; })
-                                      .ToArray();
-
-          carePlans = Enumerable.From(carePlans)
-                                .Take(10)
-                                .ToArray();
-
-          var myWindow = $(".window-wrapper");
-          var temp = $("#PersonalizeCarePlanTemplate").html();
-          var PersonalizeCarePlanTemplate = kendo.template(temp);
-          var dataSource = new kendo.data.DataSource({
-              data: carePlans,
-              change: function () { // subscribe to the CHANGE event of the data source
-                  $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
-              }
-          });
-          dataSource.read();
-          /// Drop down Selection
-          updateDropDownSelection();
-          myWindow.data("kendoWindow").center().open();
-      });
+        // Get data and show 
+        updateVitalTypeRecords(contactId);
     }
 }
 
@@ -3797,3 +3746,67 @@ function updateDropDownSelection() {
     });
 }
 
+function updateVitalTypeRecords(contactId) {
+    var carePlansJoin = [];
+    SDK.JQuery.retrieveMultipleRecords(
+          "tri_careplanjoin",
+          "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection," +
+          "tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate," +
+          "tri_patientfactor,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName" +
+          "&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_VitalValueTypeName ne '' and tri_VitalValueTypeName ne null", //  and tri_GoalSelected eq true
+         function (results) {
+             for (var i = 0; i < results.length; i++) {
+                 var new_GoalState = results[i].new_GoalState;
+                 var tri_activityassignmentrole = results[i].tri_activityassignmentrole;
+                 var tri_CarePlanGoalID = results[i].tri_CarePlanGoalID;
+                 var tri_CarePlanID = results[i].tri_CarePlanID;
+                 var tri_careplanjoinId = results[i].tri_careplanjoinId;
+                 var tri_GoalName = results[i].tri_GoalName;
+                 var tri_GoalSection = results[i].tri_GoalSection;
+                 var tri_GoalSelected = results[i].tri_GoalSelected;
+                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
+                 var tri_LastTargetValue = results[i].tri_LastTargetValue;
+                 var tri_measuredetails = results[i].tri_measuredetails;
+                 var tri_metric = results[i].tri_metric;
+                 var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
+                 var tri_name = results[i].tri_name;
+                 //format dates to correct formats
+                 var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
+                 var tri_patientfactor = results[i].tri_patientfactor;
+                 var tri_qualitativetarget = results[i].tri_qualitativetarget;
+                 var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+                 var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+                 var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
+                 var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
+             }
+             carePlansJoin = carePlansJoin.concat(results);
+         },
+         function (error) {
+             alert(error.message);
+         },
+         function () {
+             //On Complete - Do Something
+             debugger;
+             var distinctVitalTypeData = Enumerable.From(carePlansJoin)
+                                         .Distinct(function (y) { return y.tri_VitalValueTypeName; })
+                                         .ToArray();
+
+             //carePlans = Enumerable.From(carePlans)
+             //                      .Take(10)
+             //                      .ToArray();
+
+             var myWindow = $(".window-wrapper");
+             var temp = $("#PersonalizeCarePlanTemplate").html();
+             var PersonalizeCarePlanTemplate = kendo.template(temp);
+             var dataSource = new kendo.data.DataSource({
+                 data: distinctVitalTypeData,
+                 change: function () { // subscribe to the CHANGE event of the data source
+                     $(".personalizeCarePlans").html(kendo.render(PersonalizeCarePlanTemplate, this.view()));
+                 }
+             });
+             dataSource.read();
+             /// Drop down Selection
+             updateDropDownSelection();
+             myWindow.data("kendoWindow").center().open();
+         });
+}

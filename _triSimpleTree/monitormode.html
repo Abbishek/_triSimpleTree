@@ -88,30 +88,7 @@
                 text-align: center;
             }
     </style>
-    <script>
-        $(document).ready(function () {
-            debugger;
-            // Set up the kendo window
-            $(".window-wrapper").kendoWindow({
-                width: "60%",
-                height: "60%",
-               // title: "Personalize View",
-                visible: false,
-               // modal: true,
-                //content: "",
-                //actions: [
-                //        "Pin",
-                //        "Minimize",
-                //        "Maximize",
-                //        "Close"
-                //]
-            }).data("kendoWindow");
-           
-        });
-    </script>
 </head>
-
-
 <body>
     <div class="main-wrapper">
         <div class="monitor-wrapper">
@@ -569,6 +546,8 @@
                                                                     <li><a href="\\#" data-value="100000006">Abnormal</a></li>
                                                                 </ul>
                                                             </div>
+
+                                                            <!-- Patitent Factor -->
                                                         </td>
                                                         <td class="labelcenter" width="200px">
                                                             <table align="center">
@@ -577,7 +556,7 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                # debugger; 
+                                                                                # 
                                                                                 if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null && data.tri_targetmetricoperator.Value !== null) {#
                                                                                 #= GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
                                                                                 # } else if(data.tri_metricoperatortwo !== undefined && data.tri_metricoperatortwo !== null && data.tri_metricoperatortwo.Value !== null) { #
