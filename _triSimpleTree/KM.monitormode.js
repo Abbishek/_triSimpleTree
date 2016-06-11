@@ -1028,7 +1028,7 @@ function ReviewAndUpdateGoal(currentId) {
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
             var tri_LastResultDate = results[i].tri_LastResultDate;
             var tri_name = results[i].tri_name;
-            var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
+            var tri_NextDueDate = $.datepicker.formatDate('mm/dd/yy', new Date(results[i].tri_NextDueDate));
             var tri_patientfactor = results[i].tri_patientfactor;
             var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
@@ -3771,7 +3771,8 @@ function updateVitalTypeRecords(contactId) {
                  var tri_metricoperatortwo = results[i].tri_metricoperatortwo;
                  var tri_name = results[i].tri_name;
                  //format dates to correct formats
-                 var tri_NextDueDate = $.datepicker.formatDate('dd M yy', results[i].tri_NextDueDate);
+                 //var tri_NextDueDate = $.datepicker.formatDate('mm/dd/yy', results[i].tri_NextDueDate);
+                 var tri_NextDueDate = $.datepicker.formatDate('mm/dd/yy', new Date(results[i].tri_NextDueDate));
                  var tri_patientfactor = results[i].tri_patientfactor;
                  var tri_qualitativetarget = results[i].tri_qualitativetarget;
                  var tri_targetmetricoperator = results[i].tri_targetmetricoperator;

@@ -422,12 +422,12 @@
                 <div class="indicator-wrapper" style="display: inline;z-index:-1;">
 
                     <!--<div class="flag-box-big green" style=""></div>-->
-                    # 
-                    var goalState;
-                    if(data.tri_CarePlanGoalState != undefined)
-                        goalState = data.tri_CarePlanGoalState.Value
-                    else if(data.new_GoalState != undefined)
-                        goalState = data.new_GoalState.Value
+                    # var goalState;
+
+                        if(data.tri_CarePlanGoalState != undefined)
+                            goalState = data.tri_CarePlanGoalState.Value
+                        else if(data.new_GoalState != undefined)
+                            goalState = data.new_GoalState.Value
                         
                     if(goalState == 167410000) { #
                     <div class="flag-box-big orange" style="">
@@ -505,13 +505,13 @@
                                                     <tr>
                                                         <td class="label-name"> Last Result Date:</td>
                                                         # if(data.tri_LastResultDate !== undefined && data.tri_LastResultDate !== null) { #
-                                                        <td class="result-1">#= data.tri_LastResultDate #</td>
+                                                        <td class="result-1">#= $.datepicker.formatDate('mm/dd/yy', data.tri_LastResultDate) #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
                                                         <td class="label-name"> Next Due Date:</td>
                                                         # if(data.tri_NextDueDate !== undefined && data.tri_NextDueDate !== null) { #
-                                                        <td class="result-1">#= data.tri_NextDueDate #</td>
+                                                        <td class="result-1">#= $.datepicker.formatDate('mm/dd/yy', data.tri_NextDueDate) #</td>
                                                         # } else { #
                                                         <td class="result-1"></td>
                                                         # } #
@@ -548,6 +548,8 @@
                                                             </div>
 
                                                             <!-- Patitent Factor -->
+
+
                                                         </td>
                                                         <td class="labelcenter" width="200px">
                                                             <table align="center">
