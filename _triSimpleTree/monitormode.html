@@ -87,7 +87,42 @@
                 min-width: 20px;
                 text-align: center;
             }
+
+        /*  .textarea-container {
+            position: relative;
+            width: 50%;
+        }
+
+        textarea, .textarea-size {
+             min-height: 25px;
+            font-family: sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+            padding: 4px;
+            border: 1px solid;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        textarea {
+            resize: none;
+            white-space: normal;
+            background-color: #fff;
+            border-color: #ccc;
+            border-radius: 3px;
+            height: 33px;
+            font-size: 16px;
+        }
+
+        .textarea-size {
+            visibility: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        */
     </style>
+
 </head>
 <body>
     <div class="main-wrapper">
@@ -398,7 +433,7 @@
 
         <!-- window wrapper -->
         <div class="window-wrapper" style="width:99%;">
-            
+
             <!-- X-CLOSE -->
             <div style="width: 90%; padding-bottom: 50px;">
                 <div style="float:right;" class="x-close"><a style="text-decoration:none;">X</a></div>
@@ -424,11 +459,11 @@
                     <!--<div class="flag-box-big green" style=""></div>-->
                     # var goalState;
 
-                        if(data.tri_CarePlanGoalState != undefined)
-                            goalState = data.tri_CarePlanGoalState.Value
-                        else if(data.new_GoalState != undefined)
-                            goalState = data.new_GoalState.Value
-                        
+                    if(data.tri_CarePlanGoalState != undefined)
+                    goalState = data.tri_CarePlanGoalState.Value
+                    else if(data.new_GoalState != undefined)
+                    goalState = data.new_GoalState.Value
+
                     if(goalState == 167410000) { #
                     <div class="flag-box-big orange" style="">
                         # } else if(goalState == 167410001) { #
@@ -442,12 +477,12 @@
                                     FLAG
                                 </div>
 
-                                # 
+                                #
                                 var vitaltype;
                                 if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null)
-                                    vitaltype = data.tri_vitalsvaluetype.Name;
+                                vitaltype = data.tri_vitalsvaluetype.Name;
                                 else if(tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined)
-                                    vitaltype = tri_VitalValueTypeName;
+                                vitaltype = tri_VitalValueTypeName;
 
                                 if(vitaltype !== undefined && vitaltype !== null) { #
                                 <div class="sectiontitle" style="">#= vitaltype #</div>
@@ -529,27 +564,52 @@
                                                 </table>
                                                 <table class="factors" align="center">
                                                     <tr>
-                                                        <td class="labelcenter" style="width:90px; padding-right:20px;">
+                                                        <td class="labelcenter" style="width:250px; padding-right:10px;">
                                                             <!-- FACTOR DROP-DOWN -->
-                                                            <div class="dropdown" style="width: 60px;">
-                                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    #= GetFactorModifier(data.tri_patientfactor.Value) # <span class="caret"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu">
-                                                                    <li><a href="\\#" data-value="-1"></a></li>
-                                                                    <li><a href="\\#" data-value="100000000">Most Patients</a></li>
-                                                                    <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
-                                                                    <li><a href="\\#" data-value="100000002">Comorbid</a></li>
-                                                                    <li><a href="\\#" data-value="100000003">Stage 2-3</a></li>
-                                                                    <li><a href="\\#" data-value="100000004">All</a></li>
-                                                                    <li><a href="\\#" data-value="100000005">Normal</a></li>
-                                                                    <li><a href="\\#" data-value="100000006">Abnormal</a></li>
-                                                                </ul>
+                                                            <div class="PatientModifier" style="float: left;">
+                                                                # debugger;
+                                                                if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
+                                                                && data.tri_PatientModifierId.Name !== null
+                                                                && data.tri_PatientModifierId.Name !== undefined) {  #
+                                                                <input type="text" id="#= data.tri_PatientModifierId.Id #"  value="#= data.tri_PatientModifierId.Name #">
+                                                                #} else {#
+                                                                <input type="text" value="">
+                                                                #}#
                                                             </div>
+                                                            <!--<div class="textarea-container">
+                                                                # debugger;
+                                                                if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
+                                                                && data.tri_PatientModifierId.Name !== null
+                                                                && data.tri_PatientModifierId.Name !== undefined) {  #
+                                                                <textarea id="data.tri_PatientModifierId.Id" style="width: 200px; text-align: left;">
+                                                                    #= data.tri_PatientModifierId.Name #
+                                                                </textarea>
+                                                                #} else { #
+                                                                <textarea style="width: 200px; text-align: left;"></textarea>
+                                                                # } #
+                                                                <div class="textarea-size"></div>
+                                                            </div>-->
+                                                                <!--
+                    <div class="dropdown" style="width: 60px;">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    #= GetFactorModifier(data.tri_patientfactor.Value) #
+                    <span class="caret"></span>
+                    <ul class="dropdown-menu">
+                    <li><a href="\\#" data-value="-1"></a></li>
+                    <li><a href="\\#" data-value="100000000">Most Patients</a></li>
+                    <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
+                    <li><a href="\\#" data-value="100000002">Comorbid</a></li>
+                    <li><a href="\\#" data-value="100000003">Stage 2-3</a></li>
+                    <li><a href="\\#" data-value="100000004">All</a></li>
+                    <li><a href="\\#" data-value="100000005">Normal</a></li>
+                    <li><a href="\\#" data-value="100000006">Abnormal</a></li>
+                </ul>
+            </button>
+        </div>-->
+                                                               
 
                                                             <!-- Patitent Factor -->
-
-
                                                         </td>
                                                         <td class="labelcenter" width="200px">
                                                             <table align="center">
@@ -558,7 +618,7 @@
                                                                         <!-- MODIFIER DROP-DOWN -->
                                                                         <div class="dropdown" id="#= data.id#_ddTargetValue">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                # 
+                                                                                #
                                                                                 if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null && data.tri_targetmetricoperator.Value !== null) {#
                                                                                 #= GetTargetMetricOperator(data.tri_targetmetricoperator.Value) #
                                                                                 # } else if(data.tri_metricoperatortwo !== undefined && data.tri_metricoperatortwo !== null && data.tri_metricoperatortwo.Value !== null) { #
@@ -652,7 +712,7 @@
                                                             <div class="dropdown" style="width: 120px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                     # if(data.tri_activityassignmentrole !== undefined && data.tri_activityassignmentrole !== null) #
-                                                                        #= GetActivityAssignmentRole(data.tri_activityassignmentrole.Value) #
+                                                                    #= GetActivityAssignmentRole(data.tri_activityassignmentrole.Value) #
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">

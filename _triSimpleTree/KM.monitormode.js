@@ -135,7 +135,7 @@ var tagwrapupRed = "";
 var tagwrapupOrange = "";
 var tagwrapupGreen = "";
 var tagwrapupGrey = "";
-
+var patientModifierData = [];
 
 $(document).ready(function () {
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
@@ -149,6 +149,41 @@ $(document).ready(function () {
         height: "60%",
         visible: false,
     }).data("kendoWindow");
+
+    SDK.JQuery.retrieveMultipleRecords(
+    "tri_cccareplangoal",
+    "?$select=tri_PatientModifierId&$filter=tri_PatientID/Id eq (guid'" + PatientId + "')",
+    function (results) {
+        for (var i = 0; i < results.length; i++) {
+            var tri_PatientModifierId = results[i].tri_PatientModifierId;
+        }
+        patientModifierData = patientModifierData.concat(
+                              Enumerable.From(results)
+                                        .Where(function (x) { return x.tri_PatientModifierId.Id !== null && x.tri_PatientModifierId.Id !== undefined; })
+                                        .Select(function (x) { return { 'Name': x.tri_PatientModifierId.Name, 'Id': x.tri_PatientModifierId.Id }; })
+                                        .ToArray());
+    },
+    function (error) {
+        alert(error.message);
+    },
+    function () {
+        //On Complete - Do Something
+        patientModifierData = patientModifierData;
+    });
+
+    //// upadting the text container for Patitent Modifier
+    //var textContainer, textareaSize, input;
+    //var autoSize = function () {
+    //    textareaSize.innerHTML = input.value + '\n';
+    //};
+    //document.addEventListener('DOMContentLoaded', function () {
+    //    textContainer = document.querySelector('.textarea-container');
+    //    textareaSize = textContainer.querySelector('.textarea-size');
+    //    input = textContainer.querySelector('textarea');
+
+    //    autoSize();
+    //    input.addEventListener('input', autoSize);
+    //});
 
     //var PatientIdTrimmed= .replace("{", "");
     //alert(PatientId);
@@ -608,6 +643,10 @@ $(document).ready(function () {
 
 });
 
+
+
+
+
 function getJoinsForContact(PatientId) {
     //alert(PatientId);
     SDK.JQuery.retrieveMultipleRecords(
@@ -661,7 +700,6 @@ function getCPGoalSymptomsAll(PatientId) {
 
         $('.indicator-box-big_symptoms_all').text(intTotalSymptoms);
         for (var i = 0; i < results.length; i++) {
-            // debugger;
             var targetClass = AppendtxtClassBasisGoalState(results[i].new_GoalState.Value, "target");
             var CPGoalId = results[i].tri_tri_cccareplangoal_tri_careplanjoin_CarePlanGoalID.tri_cccareplangoalId;
             var merticOperator;
@@ -1018,7 +1056,7 @@ function ReviewAndUpdateGoal(currentId) {
    "tri_cccareplangoal",
     "?$select=tri_actiontriggervalue,tri_activitydescription,tri_measuredetails,tri_LastTargetValue,tri_targetmetricoperator,tri_metricoperatortwo," +
     "tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_Metric,tri_targetvaluetwo,tri_activityassignmentrole," +
-    "tri_patientfactor,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_cccareplangoalId eq (guid'" + currentId + "')",
+    "tri_patientfactor,tri_PatientModifierId,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_cccareplangoalId eq (guid'" + currentId + "')",
     function (results) {
         for (var i = 0; i < results.length; i++) {
             var tri_actiontriggervalue = results[i].tri_actiontriggervalue;
@@ -1032,6 +1070,7 @@ function ReviewAndUpdateGoal(currentId) {
             var tri_patientfactor = results[i].tri_patientfactor;
             var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
+            var tri_PatientModifierId = results[i].tri_PatientModifierId;
         }
 
         $('.monitor-wrapper').hide();
@@ -1039,7 +1078,6 @@ function ReviewAndUpdateGoal(currentId) {
 
         $('.sectiontitle_personalize').text(tri_name);
         $('.window-wrapper').show('slow')
-        debugger;
         var myWindow = $(".window-wrapper");
         var temp = $("#PersonalizeCarePlanTemplate").html();
         var PersonalizeCarePlanTemplate = kendo.template(temp);
@@ -1056,6 +1094,9 @@ function ReviewAndUpdateGoal(currentId) {
             $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
             $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
         });
+
+        // Patient Modifier Dropdown Values
+        CreatePatientModifierDropdown();
 
         myWindow.data("kendoWindow").center().open();
     }
@@ -2200,7 +2241,6 @@ function getCPGoalactivityAll(PatientId) {
             // alert(results[i].tri_metric); // getting value
 
             // $('#temp').append(JSON.stringify(results[i]));
-            debugger;
             //check between qualitative/quantitative vals
             //if (results[i].tri_qualitativetarget === "" || results[i].tri_qualitativetarget === null) {
             if (results[i].tri_typeofgoalcode.Value == 100000001 && results[i].tri_typeofgoalcode != null) {
@@ -3752,7 +3792,7 @@ function updateVitalTypeRecords(contactId) {
           "tri_careplanjoin",
           "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection," +
           "tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate," +
-          "tri_patientfactor,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName" +
+          "tri_patientfactor,tri_PatientModifierId,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName" +
           "&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_VitalValueTypeName ne '' and tri_VitalValueTypeName ne null", //  and tri_GoalSelected eq true
          function (results) {
              for (var i = 0; i < results.length; i++) {
@@ -3779,6 +3819,7 @@ function updateVitalTypeRecords(contactId) {
                  var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
                  var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
                  var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
+                 var tri_PatientModifierId = results[i].tri_PatientModifierId;
              }
              carePlansJoin = carePlansJoin.concat(results);
          },
@@ -3787,7 +3828,6 @@ function updateVitalTypeRecords(contactId) {
          },
          function () {
              //On Complete - Do Something
-             debugger;
              var distinctVitalTypeData = Enumerable.From(carePlansJoin)
                                          .Distinct(function (y) { return y.tri_VitalValueTypeName; })
                                          .ToArray();
@@ -3808,6 +3848,22 @@ function updateVitalTypeRecords(contactId) {
              dataSource.read();
              /// Drop down Selection
              updateDropDownSelection();
+             CreatePatientModifierDropdown();
              myWindow.data("kendoWindow").center().open();
          });
+}
+
+function CreatePatientModifierDropdown() {
+    // create dropdown list for Patient Modifier
+    debugger;
+    //On Complete - Do Something
+    var kendoAutoCompleteWC = $(".PatientModifier input").kendoAutoComplete({
+        dataTextField: "Name",
+        dataValueField: "Id",
+        filter: "startswith",
+        //placeholder: "Viewing All (Select Category)",
+        dataSource: patientModifierData,
+        index: 0,
+        //change: onPatitentModifierChange
+    }).data("kendoAutoComplete");
 }
