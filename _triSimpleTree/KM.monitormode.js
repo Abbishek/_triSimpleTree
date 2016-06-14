@@ -137,6 +137,7 @@ var tagwrapupGreen = "";
 var tagwrapupGrey = "";
 var patientModifierData = [];
 
+
 $(document).ready(function () {
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
     var PatientId2 = PatientId1.replace("{", "");
@@ -150,26 +151,26 @@ $(document).ready(function () {
         visible: false,
     }).data("kendoWindow");
 
-    SDK.JQuery.retrieveMultipleRecords(
-    "tri_cccareplangoal",
-    "?$select=tri_PatientModifierId&$filter=tri_PatientID/Id eq (guid'" + PatientId + "')",
-    function (results) {
-        for (var i = 0; i < results.length; i++) {
-            var tri_PatientModifierId = results[i].tri_PatientModifierId;
-        }
-        patientModifierData = patientModifierData.concat(
-                              Enumerable.From(results)
-                                        .Where(function (x) { return x.tri_PatientModifierId.Id !== null && x.tri_PatientModifierId.Id !== undefined; })
-                                        .Select(function (x) { return { 'Name': x.tri_PatientModifierId.Name, 'Id': x.tri_PatientModifierId.Id }; })
-                                        .ToArray());
-    },
-    function (error) {
-        alert(error.message);
-    },
-    function () {
-        //On Complete - Do Something
-        patientModifierData = patientModifierData;
-    });
+    //SDK.JQuery.retrieveMultipleRecords(
+    //"tri_cccareplangoal",
+    //"?$select=tri_PatientModifierId&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_vitalsvaluetype/Id eq (guid'" + vitaltype + "')",
+    //function (results) {
+    //    for (var i = 0; i < results.length; i++) {
+    //        var tri_PatientModifierId = results[i].tri_PatientModifierId;
+    //    }
+    //    patientModifierData = patientModifierData.concat(
+    //                          Enumerable.From(results)
+    //                                    .Where(function (x) { return x.tri_PatientModifierId.Id !== null && x.tri_PatientModifierId.Id !== undefined; })
+    //                                    .Select(function (x) { return { 'Name': x.tri_PatientModifierId.Name, 'Id': x.tri_PatientModifierId.Id }; })
+    //                                    .ToArray());
+    //},
+    //function (error) {
+    //    alert(error.message);
+    //},
+    //function () {
+    //    //On Complete - Do Something
+    //    patientModifierData = patientModifierData;
+    //});
 
     //// upadting the text container for Patitent Modifier
     //var textContainer, textareaSize, input;
@@ -1056,12 +1057,13 @@ function ReviewAndUpdateGoal(currentId) {
    "tri_cccareplangoal",
     "?$select=tri_actiontriggervalue,tri_activitydescription,tri_measuredetails,tri_LastTargetValue,tri_targetmetricoperator,tri_metricoperatortwo," +
     "tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_Metric,tri_targetvaluetwo,tri_activityassignmentrole," +
-    "tri_patientfactor,tri_PatientModifierId,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_cccareplangoalId eq (guid'" + currentId + "')",
+    "tri_patientfactor,tri_cccareplangoalId,tri_PatientModifierId,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_cccareplangoalId eq (guid'" + currentId + "')",
     function (results) {
         for (var i = 0; i < results.length; i++) {
             var tri_actiontriggervalue = results[i].tri_actiontriggervalue;
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
             var tri_LastResultDate = results[i].tri_LastResultDate;
@@ -1071,6 +1073,7 @@ function ReviewAndUpdateGoal(currentId) {
             var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
             var tri_PatientModifierId = results[i].tri_PatientModifierId;
+            var tri_CarePlanGoalID = results[i].tri_cccareplangoalId;
         }
 
         $('.monitor-wrapper').hide();
@@ -1096,7 +1099,7 @@ function ReviewAndUpdateGoal(currentId) {
         });
 
         // Patient Modifier Dropdown Values
-        CreatePatientModifierDropdown();
+       // CreatePatientModifierDropdown();
 
         myWindow.data("kendoWindow").center().open();
     }
@@ -3792,7 +3795,7 @@ function updateVitalTypeRecords(contactId) {
           "tri_careplanjoin",
           "?$select=new_GoalState,tri_activityassignmentrole,tri_CarePlanGoalID,tri_CarePlanID,tri_careplanjoinId,tri_GoalName,tri_GoalSection," +
           "tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_metricoperatortwo,tri_name,tri_NextDueDate," +
-          "tri_patientfactor,tri_PatientModifierId,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName" +
+          "tri_patientfactor,tri_PatientModifierId,tri_qualitativetarget,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_VitalValueTypeName,tri_vitalsvaluetypeid" +
           "&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_VitalValueTypeName ne '' and tri_VitalValueTypeName ne null", //  and tri_GoalSelected eq true
          function (results) {
              for (var i = 0; i < results.length; i++) {
@@ -3820,6 +3823,7 @@ function updateVitalTypeRecords(contactId) {
                  var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
                  var tri_VitalValueTypeName = results[i].tri_VitalValueTypeName;
                  var tri_PatientModifierId = results[i].tri_PatientModifierId;
+                 var tri_vitalsvaluetypeid = results[i].tri_vitalsvaluetypeid;
              }
              carePlansJoin = carePlansJoin.concat(results);
          },
@@ -3848,22 +3852,22 @@ function updateVitalTypeRecords(contactId) {
              dataSource.read();
              /// Drop down Selection
              updateDropDownSelection();
-             CreatePatientModifierDropdown();
+             // CreatePatientModifierDropdown();
              myWindow.data("kendoWindow").center().open();
          });
 }
 
-function CreatePatientModifierDropdown() {
-    // create dropdown list for Patient Modifier
-    debugger;
-    //On Complete - Do Something
-    var kendoAutoCompleteWC = $(".PatientModifier input").kendoAutoComplete({
-        dataTextField: "Name",
-        dataValueField: "Id",
-        filter: "startswith",
-        //placeholder: "Viewing All (Select Category)",
-        dataSource: patientModifierData,
-        index: 0,
-        //change: onPatitentModifierChange
-    }).data("kendoAutoComplete");
-}
+//function CreatePatientModifierDropdown() {
+//    // create dropdown list for Patient Modifier
+//    debugger;
+//    //On Complete - Do Something
+//    var kendoAutoCompleteWC = $("'" + patientModifierData + "'").kendoAutoComplete({
+//        dataTextField: "Name",
+//        dataValueField: "Id",
+//        filter: "startswith",
+//        //placeholder: "Viewing All (Select Category)",
+//        dataSource: patientModifierData,
+//        index: 0,
+//        //change: onPatitentModifierChange
+//    }).data("kendoAutoComplete");
+//}

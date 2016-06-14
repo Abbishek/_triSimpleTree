@@ -479,13 +479,21 @@
 
                                 #
                                 var vitaltype;
-                                if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null)
+                                var vitalId;
+                                var uiVitalId;
+                                if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null){
                                 vitaltype = data.tri_vitalsvaluetype.Name;
-                                else if(tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined)
+                                vitalId = data.tri_vitalsvaluetype.Id;
+                                uiVitalId = "vital_"+data.tri_vitalsvaluetype.Id+"_Id";
+                                }
+                                else if(tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined){
                                 vitaltype = tri_VitalValueTypeName;
+                                vitalId = data.tri_vitalsvaluetypeid.Id;
+                                uiVitalId = "vital_"+data.tri_vitalsvaluetypeid.Id+"_Id";
+                                }
 
                                 if(vitaltype !== undefined && vitaltype !== null) { #
-                                <div class="sectiontitle" style="">#= vitaltype #</div>
+                                <div class="sectiontitle" id="#= uiVitalId #" style="">#= vitaltype #</div>
                                 # } else { #
                                 <div class="sectiontitle" style=""></div>
                                 # } #
@@ -567,48 +575,82 @@
                                                         <td class="labelcenter" style="width:250px; padding-right:10px;">
                                                             <!-- FACTOR DROP-DOWN -->
                                                             <div class="PatientModifier" style="float: left;">
-                                                                # debugger;
-                                                                if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
-                                                                && data.tri_PatientModifierId.Name !== null
-                                                                && data.tri_PatientModifierId.Name !== undefined) {  #
-                                                                <input type="text" id="#= data.tri_PatientModifierId.Id #"  value="#= data.tri_PatientModifierId.Name #">
+                                                                # if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
+                                                                    && data.tri_PatientModifierId.Name !== null
+                                                                    && data.tri_PatientModifierId.Name !== undefined) {  #
+                                                                <input type="text" id="#= data.tri_PatientModifierId.Id #" value="#= data.tri_PatientModifierId.Name #">
                                                                 #} else {#
                                                                 <input type="text" value="">
-                                                                #}#
+                                                                #}
+                                                                <!-- var PatientId = parent.Xrm.Page.data.entity.getId(); tri_PatientID/Id eq (guid'" + PatientId + "') and-->
+                                                                SDK.JQuery.retrieveMultipleRecords(
+                                                                "tri_cccareplangoal",
+                                                                "?$select=tri_PatientModifierId&$filter=tri_vitalsvaluetype/Id eq (guid'" + vitalId + "')",
+                                                                function (results) {
+                                                                for (var i = 0; i < results.length; i++) {
+                                                                var tri_PatientModifierId = results[i].tri_PatientModifierId;
+                                                                }
+                                                                patientModifierData =   Enumerable.From(results)
+                                                                                        .Where(function (x) { return x.tri_PatientModifierId.Id !== null && x.tri_PatientModifierId.Id !== undefined; })
+                                                                                        .Select(function (x) { return { 'Name': x.tri_PatientModifierId.Name, 'Id': x.tri_PatientModifierId.Id }; })
+                                                                                        .Distinct(function (y) { return y.Name; })
+                                                                                        .ToArray();
+                                                                },
+                                                                function (error) {
+                                                                alert(error.message);
+                                                                },
+                                                                function () {
+                                                                //On Complete - Do Something
+                                                                patientModifierData = patientModifierData;
+                                                                debugger;
+                                                                var kendoAutoCompleteWC = $("\\#"+data.tri_PatientModifierId.Id).kendoAutoComplete({
+                                                                dataTextField: "Name",
+                                                                dataValueField: "Id",
+                                                                filter: "startswith",
+                                                                dataSource: patientModifierData,
+                                                                index: 0,
+                                                                minLength : 0,
+                                                                select: onPatitentModifierChange(data.tri_CarePlanGoalID.Id),
+                                                                }).data("kendoAutoComplete");
+
+                                                                function onPatitentModifierChange(goalId) {
+                                                                //alert(goalId);
+                                                                }
+
+                                                                });
+                                                                #
                                                             </div>
                                                             <!--<div class="textarea-container">
-                                                                # debugger;
-                                                                if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
-                                                                && data.tri_PatientModifierId.Name !== null
-                                                                && data.tri_PatientModifierId.Name !== undefined) {  #
-                                                                <textarea id="data.tri_PatientModifierId.Id" style="width: 200px; text-align: left;">
-                                                                    #= data.tri_PatientModifierId.Name #
-                                                                </textarea>
-                                                                #} else { #
-                                                                <textarea style="width: 200px; text-align: left;"></textarea>
-                                                                # } #
-                                                                <div class="textarea-size"></div>
-                                                            </div>-->
-                                                                <!--
-                    <div class="dropdown" style="width: 60px;">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    #= GetFactorModifier(data.tri_patientfactor.Value) #
-                    <span class="caret"></span>
-                    <ul class="dropdown-menu">
-                    <li><a href="\\#" data-value="-1"></a></li>
-                    <li><a href="\\#" data-value="100000000">Most Patients</a></li>
-                    <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
-                    <li><a href="\\#" data-value="100000002">Comorbid</a></li>
-                    <li><a href="\\#" data-value="100000003">Stage 2-3</a></li>
-                    <li><a href="\\#" data-value="100000004">All</a></li>
-                    <li><a href="\\#" data-value="100000005">Normal</a></li>
-                    <li><a href="\\#" data-value="100000006">Abnormal</a></li>
-                </ul>
-            </button>
-        </div>-->
-                                                               
-
+                                                    # debugger;
+                                                    if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
+                                                    && data.tri_PatientModifierId.Name !== null
+                                                    && data.tri_PatientModifierId.Name !== undefined) {  #
+                                                    <textarea id="data.tri_PatientModifierId.Id" style="width: 200px; text-align: left;">
+                                                        #= data.tri_PatientModifierId.Name #
+                                                    </textarea>
+                                                    #} else { #
+                                                    <textarea style="width: 200px; text-align: left;"></textarea>
+                                                    # } #
+                                                    <div class="textarea-size"></div>
+                                                </div>-->
+                                                            <!--
+                                                            <div class="dropdown" style="width: 60px;">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            #= GetFactorModifier(data.tri_patientfactor.Value) #
+                                                            <span class="caret"></span>
+                                                            <ul class="dropdown-menu">
+                                                            <li><a href="\\#" data-value="-1"></a></li>
+                                                            <li><a href="\\#" data-value="100000000">Most Patients</a></li>
+                                                            <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
+                                                            <li><a href="\\#" data-value="100000002">Comorbid</a></li>
+                                                            <li><a href="\\#" data-value="100000003">Stage 2-3</a></li>
+                                                            <li><a href="\\#" data-value="100000004">All</a></li>
+                                                            <li><a href="\\#" data-value="100000005">Normal</a></li>
+                                                            <li><a href="\\#" data-value="100000006">Abnormal</a></li>
+                                                        </ul>
+                                                    </button>
+                                                </div>-->
                                                             <!-- Patitent Factor -->
                                                         </td>
                                                         <td class="labelcenter" width="200px">
@@ -731,7 +773,7 @@
                                                 </table>
                                             </div>
                                         </div>
-            </script>
+</script>
             <div class="center-wrapper" style="padding-left:200px;">
                 <div class="bluebtn">SAVE CHANGES</div>
             </div>
