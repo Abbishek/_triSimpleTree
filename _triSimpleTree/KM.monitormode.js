@@ -3914,7 +3914,82 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId) {
   },
    function () {
        //On Complete - Do Something
-       alert(JSON.stringify(GoalData));
+       debugger;
+       var table = $("#" + VitalValueTypeId).next().next()[0].children;
+
+       // Set Last Result
+       var lastResultSec = table[0];
+       var lastResult;
+       if (GoalData.tri_measuredetails !== undefined && GoalData.tri_measuredetails !== null) {
+           lastResult = GoalData.tri_measuredetails;
+       }
+       $(lastResultSec.children).find('td:last').html(lastResult);
+
+       // Set Result Score
+       var resultScoreSec = table[1];
+       var resultScore;
+       if (GoalData.tri_LastTargetValue !== undefined && GoalData.tri_LastTargetValue !== null) {
+           resultScore = GoalData.tri_LastTargetValue;
+       }
+
+       $(resultScoreSec.children).find('td:last').html(resultScore);
+
+       // Set Dates
+       var datesSec = table[2];
+       var lastResultDate;
+       var nextDueDate;
+
+       if (GoalData.tri_LastResultDate !== undefined && GoalData.tri_LastResultDate !== null) {
+           lastResultDate = $.datepicker.formatDate('mm/dd/yy', GoalData.tri_LastResultDate);
+       }
+
+       if (GoalData.tri_NextDueDate !== undefined && GoalData.tri_NextDueDate !== null) {
+           nextDueDate = $.datepicker.formatDate('mm/dd/yy', GoalData.tri_NextDueDate);;
+       }
+
+       $(datesSec.children).find('td:nth-child(2)').html(lastResultDate);
+       $(datesSec.children).find('td:last').html(nextDueDate);
+
+       // Set Factor Modifier
+       var factorModifierSec = table[6];
+
+       var modifierOperator;
+       if (GoalData.tri_targetmetricoperator !== undefined && GoalData.tri_targetmetricoperator !== null && GoalData.tri_targetmetricoperator.Value !== null) {
+           modifierOperator = GetTargetMetricOperator(GoalData.tri_targetmetricoperator.Value);
+       }
+       else if (GoalData.tri_metricoperatortwo !== undefined && GoalData.tri_metricoperatortwo !== null && GoalData.tri_metricoperatortwo.Value !== null) {
+           modifierOperator = GetTargetMetricOperator(GoalData.tri_metricoperatortwo.Value);
+       }
+
+       $(factorModifierSec.children).find('tbody tr td:nth-child(1) div button').text(modifierOperator);
+
+       var modifierValue;
+       if (GoalData.tri_metric !== undefined && GoalData.tri_metric !== null) {
+           modifierValue = GoalData.tri_metric;
+       }
+       else if (GoalData.tri_targetvaluetwo !== undefined && GoalData.tri_targetvaluetwo !== null) {
+           modifierValue = GoalData.tri_targetvaluetwo;
+       }
+       
+       $(factorModifierSec.children).find('tbody tr td:nth-child(2) input').val(modifierValue);
+
+
+       // Set Description 
+       var descriptionSec = table[9];
+       var descText;
+       if (GoalData.tri_activitydescription !== undefined && GoalData.tri_activitydescription !== null) {
+           descText = GoalData.tri_activitydescription;
+       }
+       
+       $(descriptionSec.children).find('tr td:first-child input').val(descText);
+
+       var assignmentRole;
+       if (GoalData.tri_activityassignmentrole !== undefined && GoalData.tri_activityassignmentrole !== null) {
+           assignmentRole = GetActivityAssignmentRole(GoalData.tri_activityassignmentrole.Value);
+       }
+      
+       $(descriptionSec.children).find('tr td:last-child div button').text(assignmentRole);
+
    }
   );
 }

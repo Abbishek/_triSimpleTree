@@ -480,20 +480,17 @@
                                 #
                                 var vitaltype;
                                 var vitalId;
-                                var uiVitalId;
                                 if(data.tri_vitalsvaluetype !== undefined && data.tri_vitalsvaluetype !== null){
-                                vitaltype = data.tri_vitalsvaluetype.Name;
-                                vitalId = data.tri_vitalsvaluetype.Id;
-                                uiVitalId = "vital_"+data.tri_vitalsvaluetype.Id+"_Id";
+                                    vitaltype = data.tri_vitalsvaluetype.Name;
+                                    vitalId = data.tri_vitalsvaluetype.Id;
                                 }
                                 else if(tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined){
-                                vitaltype = tri_VitalValueTypeName;
-                                vitalId = data.tri_vitalsvaluetypeid.Id;
-                                uiVitalId = "vital_"+data.tri_vitalsvaluetypeid.Id+"_Id";
+                                    vitaltype = tri_VitalValueTypeName;
+                                    vitalId = data.tri_vitalsvaluetypeid.Id;
                                 }
 
                                 if(vitaltype !== undefined && vitaltype !== null) { #
-                                <div class="sectiontitle" id="#= uiVitalId #" style="">#= vitaltype #</div>
+                                <div class="sectiontitle" id="#= vitalId #" style="">#= vitaltype #</div>
                                 # } else { #
                                 <div class="sectiontitle" style=""></div>
                                 # } #
@@ -618,7 +615,8 @@
                                                                     debugger;
                                                                     var dataItem = this.dataItem(e.item.index());
                                                                     //alert(dataItem);
-                                                                    UpdateGoaldata(dataItem.Id,vitalId);
+                                                                    var goalData = UpdateGoaldata(dataItem.Id,vitalId);
+                                                                    
                                                                 }
 
                                                                 });
@@ -662,7 +660,7 @@
                                                                 <tr>
                                                                     <td>
                                                                         <!-- MODIFIER DROP-DOWN -->
-                                                                        <div class="dropdown" id="#= data.id#_ddTargetValue">
+                                                                        <div class="dropdown">
                                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                 #
                                                                                 if(data.tri_targetmetricoperator !== undefined && data.tri_targetmetricoperator !== null && data.tri_targetmetricoperator.Value !== null) {#
