@@ -610,11 +610,15 @@
                                                                 dataSource: patientModifierData,
                                                                 index: 0,
                                                                 minLength : 0,
-                                                                select: onPatitentModifierChange(data.tri_CarePlanGoalID.Id),
+                                                                placeholder: "Select Modifier...",
+                                                                select: onPatitentModifierChange,
                                                                 }).data("kendoAutoComplete");
 
-                                                                function onPatitentModifierChange(goalId) {
-                                                                //alert(goalId);
+                                                                function onPatitentModifierChange(e){
+                                                                    debugger;
+                                                                    var dataItem = this.dataItem(e.item.index());
+                                                                    //alert(dataItem);
+                                                                    UpdateGoaldata(dataItem.Id,vitalId);
                                                                 }
 
                                                                 });

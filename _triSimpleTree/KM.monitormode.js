@@ -3871,3 +3871,50 @@ function updateVitalTypeRecords(contactId) {
 //        //change: onPatitentModifierChange
 //    }).data("kendoAutoComplete");
 //}
+
+
+function UpdateGoaldata(PatientModifierId,VitalValueTypeId) {
+    // alert('review & updated called');
+    var GoalData;
+    SDK.JQuery.retrieveMultipleRecords(
+   "tri_cccareplangoal",
+    "?$select=tri_actiontriggervalue,tri_activitydescription,tri_measuredetails,tri_LastTargetValue,tri_targetmetricoperator,tri_metricoperatortwo," +
+    "tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_Metric,tri_targetvaluetwo,tri_activityassignmentrole," +
+    "tri_patientfactor,tri_cccareplangoalId,tri_PatientModifierId,tri_typeofgoalcode,tri_vitalsvaluetype"+
+    "&$filter=tri_PatientModifierId/Id eq (guid'"+PatientModifierId+"') and tri_vitalsvaluetype/Id eq (guid'"+VitalValueTypeId+"')",
+    function (results) {
+        for (var i = 0; i < results.length; i++) {
+            var tri_actiontriggervalue = results[i].tri_actiontriggervalue;
+            var tri_activitydescription = results[i].tri_activitydescription;
+            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState;
+            var tri_LastGoalDate = results[i].tri_LastGoalDate;
+            var tri_LastResultDate = results[i].tri_LastResultDate;
+            var tri_name = results[i].tri_name;
+            var tri_NextDueDate = $.datepicker.formatDate('mm/dd/yy', new Date(results[i].tri_NextDueDate));
+            var tri_patientfactor = results[i].tri_patientfactor;
+            var tri_typeofgoalcode = results[i].tri_typeofgoalcode;
+            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
+            var tri_PatientModifierId = results[i].tri_PatientModifierId;
+            var tri_CarePlanGoalID = results[i].tri_cccareplangoalId;
+        }
+
+        GoalData = results;
+        /// Drop down Selection
+        $(".dropdown-menu li a").click(function () {
+            $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+            $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+        });
+
+    }
+    ,
+  function (error) {
+      alert(error.message);
+  },
+   function () {
+       //On Complete - Do Something
+       alert(JSON.stringify(GoalData));
+   }
+  );
+}
