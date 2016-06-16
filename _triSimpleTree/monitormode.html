@@ -456,7 +456,6 @@
             <script id="PersonalizeCarePlanTemplate" type="text/x-kendo-template">
                 <div class="indicator-wrapper" style="display: inline;z-index:-1;">
 
-                    <!--<div class="flag-box-big green" style=""></div>-->
                     # var goalState;
 
                     if(data.tri_CarePlanGoalState != undefined)
@@ -494,7 +493,6 @@
                                 # } else { #
                                 <div class="sectiontitle" style=""></div>
                                 # } #
-                                <!--<div class="indicator-line green"></div>-->
                                 # if(goalState == 167410000) { #
                                 <div class="indicator-line orange" style="">
                                     # } else if(goalState == 167410001) { #
@@ -522,7 +520,6 @@
                                                             # } else { #
                                                         <td class="result-1 greytxt">
                                                             # } #
-                                                            <!--<td class="result-1 greentxt">-->
                                                             # if(data.tri_measuredetails !== undefined && data.tri_measuredetails !== null){ #
                                                             #= data.tri_measuredetails #
                                                             # } #
@@ -579,7 +576,6 @@
                                                                 #} else {#
                                                                 <input type="text" value="">
                                                                 #}
-                                                                <!-- var PatientId = parent.Xrm.Page.data.entity.getId(); tri_PatientID/Id eq (guid'" + PatientId + "') and-->
                                                                 SDK.JQuery.retrieveMultipleRecords(
                                                                 "tri_cccareplangoal",
                                                                 "?$select=tri_PatientModifierId&$filter=tri_vitalsvaluetype/Id eq (guid'" + vitalId + "')",
@@ -615,44 +611,12 @@
                                                                     debugger;
                                                                     var dataItem = this.dataItem(e.item.index());
                                                                     //alert(dataItem);
-                                                                    var goalData = UpdateGoaldata(dataItem.Id,vitalId);
-                                                                    
+                                                                    var goalData = UpdateGoaldata(dataItem.Id,vitalId,data.tri_CarePlanGoalID.Id);
                                                                 }
 
                                                                 });
                                                                 #
                                                             </div>
-                                                            <!--<div class="textarea-container">
-                                                    # debugger;
-                                                    if(data.tri_PatientModifierId !== null && data.tri_PatientModifierId !== undefined
-                                                    && data.tri_PatientModifierId.Name !== null
-                                                    && data.tri_PatientModifierId.Name !== undefined) {  #
-                                                    <textarea id="data.tri_PatientModifierId.Id" style="width: 200px; text-align: left;">
-                                                        #= data.tri_PatientModifierId.Name #
-                                                    </textarea>
-                                                    #} else { #
-                                                    <textarea style="width: 200px; text-align: left;"></textarea>
-                                                    # } #
-                                                    <div class="textarea-size"></div>
-                                                </div>-->
-                                                            <!--
-                                                            <div class="dropdown" style="width: 60px;">
-                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                            #= GetFactorModifier(data.tri_patientfactor.Value) #
-                                                            <span class="caret"></span>
-                                                            <ul class="dropdown-menu">
-                                                            <li><a href="\\#" data-value="-1"></a></li>
-                                                            <li><a href="\\#" data-value="100000000">Most Patients</a></li>
-                                                            <li><a href="\\#" data-value="100000001">Elderly Frail</a></li>
-                                                            <li><a href="\\#" data-value="100000002">Comorbid</a></li>
-                                                            <li><a href="\\#" data-value="100000003">Stage 2-3</a></li>
-                                                            <li><a href="\\#" data-value="100000004">All</a></li>
-                                                            <li><a href="\\#" data-value="100000005">Normal</a></li>
-                                                            <li><a href="\\#" data-value="100000006">Abnormal</a></li>
-                                                        </ul>
-                                                    </button>
-                                                </div>-->
                                                             <!-- Patitent Factor -->
                                                         </td>
                                                         <td class="labelcenter" width="200px">

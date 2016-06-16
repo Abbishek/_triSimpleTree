@@ -1,4 +1,114 @@
 ﻿"use Strict";
+///// Sample Goal Data
+var careplangoal = [
+{
+    tri_CarePathGoalID: {
+        Id: "35413781-8abf-e311-9876-0050568b4c09",
+        LogicalName: "tri_cccarepathgoal",
+        Name: "Optimal Start To RRT",
+        RowVersion: null
+    },
+    tri_metricoperatortwo: {
+        Value: null
+    },
+    tri_LastGoalDate: null,
+    tri_LastTargetValue: null,
+    tri_Metric: null,
+    tri_LastResultDate: null,
+    tri_activitydescription: null,
+    tri_GoalSelected: null,
+    tri_name: "Optimal Start To RRT",
+    tri_targetvaluetwo: null,
+    tri_targetmetricoperator: {
+        Value: null
+    },
+    tri_MetricOperator: {
+        Value: null
+    },
+    tri_typeofgoalcode: {
+        Value: null
+    },
+    tri_NextDueDate: null,
+    tri_activityassignmentrole: {
+        Value: null
+    },
+    tri_PatientModifierId: {
+        Id: null,
+        LogicalName: null,
+        Name: null,
+        RowVersion: null
+    },
+    tri_measuredetails: null
+}];
+
+//// Sample CarePlan Join entity Data
+var abc = [{
+    tri_measuredetails: null,
+    tri_NextDueDate: null,
+    tri_PatientModifierId: {
+        Id: null,
+        LogicalName: null,
+        Name: null,
+        RowVersion: null
+    },
+    tri_metricoperatortwo: {
+        Value: null
+    },
+    tri_typeofgoalcode: {
+        Value: null
+    },
+    tri_targetvaluetwo: null,
+    tri_name: "Sarnac Scott :: Care Plan",
+    tri_LastTargetValue: null,
+    tri_targetmetricoperator: {
+        Value: null
+    },
+    tri_activitydescription: null,
+    tri_CarePlanGoalID: {
+        Id: "7382e9ef-9424-e411-8403-0050568f5c83",
+        LogicalName: "tri_cccareplangoal",
+        Name: "Blood Pressure - Systolic < 128, Diastolic < 88",
+        RowVersion: null
+    },
+    tri_metric: null,
+    new_GoalState: {
+        Value: null
+    },
+    tri_LastGoalDate: null
+}];
+
+// sample code careplan goal update //
+var entity = {};
+entity.tri_GoalSelected = true;
+entity.tri_activityassignmentrole = { Value: 167410000 };
+entity.tri_activitydescription = "Test";
+entity.tri_CarePlanGoalState = { Value: 167410001 };
+entity.tri_LastGoalDate = new Date("06/16/2016").toLocaleString();
+entity.tri_LastResultDate = new Date("06/17/2016").toLocaleString();
+entity.tri_LastTargetValue = parseFloat(20).toFixed(2);
+entity.tri_measuredetails = "test";
+entity.tri_Metric = parseFloat(20).toFixed(2);
+entity.tri_targetvaluetwo = parseFloat(40).toFixed(2);
+entity.tri_metricoperatortwo = { Value: 167410001 };
+entity.tri_NextDueDate = new Date("06/30/2016").toLocaleString();
+entity.tri_PatientModifierId = {
+    Id: null,
+    LogicalName: null
+};
+entity.tri_targetmetricoperator = { Value: 167410001 };
+entity.tri_typeofgoalcode = { Value: 100000000 };
+
+SDK.JQuery.updateRecord(
+    "dbf34939-a624-e611-80d1-005056810c7c",
+    entity,
+    "tri_cccareplangoal",
+    function () {
+        //Success - No Return Data - Do Something
+    },
+    function (error) {
+        alert(error.message);
+    }
+);
 
 var CarePlanDataPersonalize = [
 {

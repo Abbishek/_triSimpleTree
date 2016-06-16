@@ -136,7 +136,7 @@ var tagwrapupOrange = "";
 var tagwrapupGreen = "";
 var tagwrapupGrey = "";
 var patientModifierData = [];
-
+var contactId;
 
 $(document).ready(function () {
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
@@ -150,7 +150,7 @@ $(document).ready(function () {
         height: "60%",
         visible: false,
     }).data("kendoWindow");
-
+    contactId = parent.Xrm.Page.data.entity.getId();
     //SDK.JQuery.retrieveMultipleRecords(
     //"tri_cccareplangoal",
     //"?$select=tri_PatientModifierId&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_vitalsvaluetype/Id eq (guid'" + vitaltype + "')",
@@ -3669,7 +3669,7 @@ function gotoAddCarePlan() {
 
     // Select the dropdown
     if (parent.Xrm !== undefined) {
-        var contactId = parent.Xrm.Page.data.entity.getId();
+       
         var allPlans = GetCarePlanfromPatitentId(contactId);
         var allPaths = GetAllCarePath();
 
@@ -3873,7 +3873,7 @@ function updateVitalTypeRecords(contactId) {
 //}
 
 
-function UpdateGoaldata(PatientModifierId,VitalValueTypeId) {
+function UpdateGoaldata(PatientModifierId,VitalValueTypeId, CurrentGoalId) {
     // alert('review & updated called');
     var GoalData;
     SDK.JQuery.retrieveMultipleRecords(
@@ -3914,6 +3914,114 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId) {
   },
    function () {
        //On Complete - Do Something
+
+       var carePlanGoal = {};
+       var carePlanJoin = {};
+       var metricoperatortwo;
+       var metricoperator;
+       var goalcode;
+       var activityassignmentrole;
+
+       if (GoalData.tri_metricoperatortwo !== undefined && GoalData.tri_metricoperatortwo !== null)
+           metricoperatortwo = GoalData.tri_metricoperatortwo.Value;
+
+       if (GoalData.tri_targetmetricoperator !== undefined && GoalData.tri_targetmetricoperator !== null)
+           metricoperator = GoalData.tri_targetmetricoperator.Value;
+
+       if (GoalData.tri_typeofgoalcode !== undefined && GoalData.tri_typeofgoalcode !== null)
+           goalcode = GoalData.tri_typeofgoalcoder.Value;
+
+       if (GoalData.tri_activityassignmentrole !== undefined && GoalData.tri_activityassignmentrole !== null)
+           activityassignmentrole = GoalData.tri_activityassignmentrole.Value;
+
+       // Update CarePlan Goal Entity
+       carePlanGoal.tri_cccareplangoal = {
+            tri_CarePathGoalID: {
+                Id: CurrentGoalId, //Needs to be retrived from current careplan join entity
+            },
+            tri_metricoperatortwo: {
+                Value: metricoperatortwo
+            },
+            tri_LastGoalDate: GoalData.tri_LastGoalDate,
+            tri_LastTargetValue: GoalData.tri_LastTargetValue,
+            tri_Metric: GoalData.tri_Metric,
+            tri_LastResultDate: GoalData.tri_LastResultDate,
+            tri_activitydescription: GoalData.tri_activitydescription,
+            tri_GoalSelected: true,
+            tri_targetvaluetwo: GoalData.tri_targetvaluetwo,
+            tri_targetmetricoperator: {
+                Value: metricoperator
+            },
+            tri_typeofgoalcode: {
+                Value: goalcode
+            },
+            tri_NextDueDate: GoalData.tri_NextDueDate,
+            tri_activityassignmentrole: {
+                Value: activityassignmentrole
+            },
+            tri_PatientModifierId: {
+                Id: PatientModifierId,
+            },
+            tri_measuredetails: GoalData.tri_measuredetails
+        }
+        SDK.REST.updateRecord(
+            CurrentGoalId,
+            carePlanGoal,
+            "tri_cccareplangoal",
+            function () {
+                //On Complete
+                alert('The Patient Goal data records are updated successfully.');
+            },
+            function (error) {
+                alert(error.message);
+            });
+
+       //// Update Care Plan Join Entity
+       // carePlanJoin.tri_careplanjoin = {
+       //     tri_CarePlanGoalID: {
+       //         Id: CurrentGoalId, //Needs to be retrived from current careplan join entity
+       //     },
+       //     tri_metricoperatortwo: {
+       //         Value: metricoperatortwo
+       //     },
+       //     tri_LastGoalDate: GoalData.tri_LastGoalDate,
+       //     tri_LastTargetValue: GoalData.tri_LastTargetValue,
+       //     tri_metric: GoalData.tri_Metric,
+       //     //tri_LastResultDate: GoalData.tri_LastResultDate,
+       //     tri_activitydescription: GoalData.tri_activitydescription,
+       //     tri_GoalSelected: true,
+       //     tri_targetvaluetwo: GoalData.tri_targetvaluetwo,
+       //     tri_targetmetricoperator: {
+       //         Value: metricoperator
+       //     },
+       //     tri_typeofgoalcode: {
+       //         Value: goalcode
+       //     },
+       //     tri_NextDueDate: GoalData.tri_NextDueDate,
+       //     tri_activityassignmentrole: {
+       //         Value: activityassignmentrole
+       //     },
+       //     tri_PatientModifierId: {
+       //         Id: PatientModifierId,
+       //     },
+       //     tri_measuredetails: GoalData.tri_measuredetails
+       // }
+
+       // SDK.REST.updateRecord(
+       //     CurrentGoalId,
+       //     carePlanJoin,
+       //     "tri_cccareplangoal",
+       //     function () {
+       //         //On Complete
+       //         alert('The Patient Goal data records are updated successfully.');
+       //     },
+       //     function (error) {
+       //         alert(error.message);
+       //     });
+
+       // alert('Updating CarePlan join Entity');
+
+
        debugger;
        var table = $("#" + VitalValueTypeId).next().next()[0].children;
 
@@ -3989,7 +4097,7 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId) {
        }
       
        $(descriptionSec.children).find('tr td:last-child div button').text(assignmentRole);
-
+       alert('Updated UI Attributes');
    }
   );
 }
