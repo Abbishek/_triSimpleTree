@@ -611,7 +611,16 @@
                                                                     debugger;
                                                                     var dataItem = this.dataItem(e.item.index());
                                                                     //alert(dataItem);
-                                                                    var goalData = UpdateGoaldata(dataItem.Id,vitalId,data.tri_CarePlanGoalID.Id);
+                                                                    var goalId;
+                                                                if(data.tri_cccareplangoalId !== null && data.tri_cccareplangoalId !== undefined) 
+                                                                {
+                                                                    goalId = tri_cccareplangoalId;
+                                                                }
+                                                                else
+                                                                {
+                                                                    goalId = data.tri_CarePlanGoalID.Id;
+                                                                }
+                                                                    UpdateGoaldata(dataItem.Id,vitalId,goalId);
                                                                 }
 
                                                                 });

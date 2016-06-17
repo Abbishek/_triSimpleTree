@@ -3917,10 +3917,10 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId, CurrentGoalId) {
 
        var carePlanGoal = {};
        var carePlanJoin = {};
-       var metricoperatortwo;
-       var metricoperator;
-       var goalcode;
-       var activityassignmentrole;
+       var metricoperatortwo = -1;
+       var metricoperator = -1;
+       var goalcode = -1;
+       var activityassignmentrole = -1;
 
        if (GoalData.tri_metricoperatortwo !== undefined && GoalData.tri_metricoperatortwo !== null)
            metricoperatortwo = GoalData.tri_metricoperatortwo.Value;
@@ -3935,8 +3935,8 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId, CurrentGoalId) {
            activityassignmentrole = GoalData.tri_activityassignmentrole.Value;
 
        // Update CarePlan Goal Entity
-       carePlanGoal.tri_cccareplangoal = {
-            tri_CarePathGoalID: {
+       carePlanGoal = {
+           tri_cccareplangoalId: {
                 Id: CurrentGoalId, //Needs to be retrived from current careplan join entity
             },
             tri_metricoperatortwo: {
