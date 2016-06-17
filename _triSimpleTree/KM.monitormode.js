@@ -3873,7 +3873,7 @@ function updateVitalTypeRecords(contactId) {
 //}
 
 
-function UpdateGoaldata(PatientModifierId,VitalValueTypeId, CurrentGoalId) {
+function UpdateGoaldata(PatientModifierId, VitalValueTypeId, CurrentGoalId, carePlanJoinId) {
     // alert('review & updated called');
     var GoalData;
     SDK.JQuery.retrieveMultipleRecords(
@@ -3976,50 +3976,50 @@ function UpdateGoaldata(PatientModifierId,VitalValueTypeId, CurrentGoalId) {
                 alert(error.message);
             });
 
-       //// Update Care Plan Join Entity
-       // carePlanJoin.tri_careplanjoin = {
-       //     tri_CarePlanGoalID: {
-       //         Id: CurrentGoalId, //Needs to be retrived from current careplan join entity
-       //     },
-       //     tri_metricoperatortwo: {
-       //         Value: metricoperatortwo
-       //     },
-       //     tri_LastGoalDate: GoalData.tri_LastGoalDate,
-       //     tri_LastTargetValue: GoalData.tri_LastTargetValue,
-       //     tri_metric: GoalData.tri_Metric,
-       //     //tri_LastResultDate: GoalData.tri_LastResultDate,
-       //     tri_activitydescription: GoalData.tri_activitydescription,
-       //     tri_GoalSelected: true,
-       //     tri_targetvaluetwo: GoalData.tri_targetvaluetwo,
-       //     tri_targetmetricoperator: {
-       //         Value: metricoperator
-       //     },
-       //     tri_typeofgoalcode: {
-       //         Value: goalcode
-       //     },
-       //     tri_NextDueDate: GoalData.tri_NextDueDate,
-       //     tri_activityassignmentrole: {
-       //         Value: activityassignmentrole
-       //     },
-       //     tri_PatientModifierId: {
-       //         Id: PatientModifierId,
-       //     },
-       //     tri_measuredetails: GoalData.tri_measuredetails
-       // }
+       // Update Care Plan Join Entity
+        carePlanJoin = {
+            tri_CarePlanGoalID: {
+                Id: CurrentGoalId, //Needs to be retrived from current careplan join entity
+            },
+            tri_metricoperatortwo: {
+                Value: metricoperatortwo
+            },
+            tri_LastGoalDate: GoalData.tri_LastGoalDate,
+            tri_LastTargetValue: GoalData.tri_LastTargetValue,
+            tri_metric: GoalData.tri_Metric,
+            //tri_LastResultDate: GoalData.tri_LastResultDate,
+            tri_activitydescription: GoalData.tri_activitydescription,
+            tri_GoalSelected: true,
+            tri_targetvaluetwo: GoalData.tri_targetvaluetwo,
+            tri_targetmetricoperator: {
+                Value: metricoperator
+            },
+            tri_typeofgoalcode: {
+                Value: goalcode
+            },
+            tri_NextDueDate: GoalData.tri_NextDueDate,
+            tri_activityassignmentrole: {
+                Value: activityassignmentrole
+            },
+            tri_PatientModifierId: {
+                Id: PatientModifierId,
+            },
+            tri_measuredetails: GoalData.tri_measuredetails
+        }
 
-       // SDK.REST.updateRecord(
-       //     CurrentGoalId,
-       //     carePlanJoin,
-       //     "tri_cccareplangoal",
-       //     function () {
-       //         //On Complete
-       //         alert('The Patient Goal data records are updated successfully.');
-       //     },
-       //     function (error) {
-       //         alert(error.message);
-       //     });
+        SDK.REST.updateRecord(
+            carePlanJoinId,
+            carePlanJoin,
+            "tri_cccareplangoal",
+            function () {
+                //On Complete
+                alert('The Patient Goal data records are updated successfully.');
+            },
+            function (error) {
+                alert(error.message);
+            });
 
-       // alert('Updating CarePlan join Entity');
+        alert('Updating CarePlan join Entity');
 
 
        debugger;

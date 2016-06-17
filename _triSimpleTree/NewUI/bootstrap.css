@@ -3023,7 +3023,7 @@ select[multiple].input-lg {
   border: 1px solid transparent;
   border-radius: 4px;
 
-  max-width: 250px !important;
+  max-width: 220px !important;
     overflow: hidden !important;
     white-space: pre !important;
     text-overflow: ellipsis !important;
