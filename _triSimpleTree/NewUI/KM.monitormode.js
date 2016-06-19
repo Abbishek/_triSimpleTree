@@ -3267,24 +3267,25 @@ function gotoAddCarePlan() {
                 GetSelectedGoalForCurrentVitalType(results[i].tri_vitalsvaluetypeid.Id, contactId);  //need this to default the dropdownlist and all the fields when the page loads the first time.
                 //alert(vSelectedGoal.length);
                 var goalState;
-                var goalClass;
+                var goalState = results[i].new_GoalState.Value;
+                if (goalState == 167410000) {
+                    goalClass = "orange";
+                }
+                else if (goalState == 167410001) {
+                    goalClass = "green";
+                }
+                else if (goalState == 167410002) {
+                    goalClass = "red";
+                }
+                else {
+                    goalClass = "grey";
+                }
 
                 switch (results[i].tri_GoalSection.Value) {
                     case 100000000:
                         // vSectnName = "Symptoms";
-                        goalState = results[i].new_GoalState;
-                        if (goalState == 167410000) {
-                            goalClass = "orange";
-                        }
-                        else if (goalState == 167410001) {
-                            goalClass = "green";
-                        }
-                        else if (goalState == 167410002) {
-                            goalClass = "red";
-                        }
-                        else {
-                            goalClass = "grey";
-                        }
+                      
+                        debugger;
                         vTblRowsSymptoms = vTblRowsSymptoms +
                             '<br><div class="indicator-wrapper"><div class="flag-box-big ' + goalClass + '" style="">SET<br>FLAG</div><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div></div>' +  // indicator wrapper div open-closes
 
