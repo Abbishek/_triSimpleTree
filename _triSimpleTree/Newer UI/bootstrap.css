@@ -1417,6 +1417,7 @@ ul,
 ol {
   margin-top: 11px;
   margin-bottom: 10px;
+  overflow:visible !important
 }
 ul ul,
 ol ul,

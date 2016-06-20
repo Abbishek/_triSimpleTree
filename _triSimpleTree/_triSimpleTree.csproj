@@ -71,6 +71,11 @@
     <Content Include="KM.monitormode.js" />
     <Content Include="monitormode.html" />
     <Content Include="MonitorModev2_files\u456" />
+    <Content Include="Newer UI\bootstrap.css" />
+    <Content Include="Newer UI\KM.monitormode.js" />
+    <Content Include="Newer UI\monitormode-style.css" />
+    <Content Include="Newer UI\monitormode.html" />
+    <Content Include="Newer UI\personalize-style.css" />
     <Content Include="NewUI\bootstrap.css" />
     <Content Include="NewUI\KM.monitormode.js" />
     <Content Include="NewUI\monitormode-style.css" />

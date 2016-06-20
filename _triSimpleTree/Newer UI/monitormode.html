@@ -4,21 +4,25 @@
 <title>Monitor Mode HTML / CSS</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">
-<script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
-<link href="../tri_css/jquery_ui_192.custom.css" rel="stylesheet">
-<script src="../tri_scripts/jquery_ui_192.custom.js" type="text/javascript"></script>
-<script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
-<script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
-<script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
-<script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
-    <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
+ <link href="../tri_css/jquery_ui_1_11_4.custom.css" rel="stylesheet">
+ <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
 <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">
+<script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
+<script src="../tri_scripts/jquery_ui_1_11_4.custom.js" type="text/javascript"></script>
+<script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
 <script src="../tri_scripts/SDK.REST.js" type="text/javascript"></script>
 <script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>
-    <script src="../tri_scripts/PatientMonitorMode.js"></script>
-    <script src="../tri_scripts/linq.js"></script>
-    <script src="../tri_scripts/kendo.js"></script>
 
+<!--<link href="../tri_css/jquery_ui_1_11_4.structure.custom.css" rel="stylesheet">-->
+
+<script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
+
+<script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
+
+<script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+ <script src="../tri_scripts/kendo.js"></script>
+ <script src="../tri_scripts/linq.js"></script>
+ <script src="../tri_scripts/PatientMonitorMode.js"></script>
 
 <!-- styling just for the table header-->
  <style type="text/css">
@@ -33,15 +37,6 @@
 .tg .tg-more{vertical-align:top;width: 4%;   min-width: 20px;    text-align:center }
 </style>
 
-    <style>
-        textarea {
-            resize: none;
-            overflow: hidden;
-        }
-    </style>
-    <script>
-       
-    </script>
 </head>
 
    
@@ -49,7 +44,7 @@
 <div class="main-wrapper"  >
 <div class="monitor-wrapper">
 
-<div><button class="button" type="button" onclick="return gotoAddCarePlan();"><img src="../tri_imgs/KM.addcareplan.png"> Add Plan</button></div>
+<div><button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button></div><br /><br />
 
 <table class="tg">
   <tr>
@@ -74,8 +69,7 @@
         <div class="indicator-box-small_symptoms_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Symptoms</div>
 
-  	<div class="indicator-line_symptoms blue">
-    </div>
+  	<div class="indicator-line_symptoms blue"></div>
 </div>
   
 <!-- Section Content -->      
@@ -116,9 +110,7 @@
         <div class="indicator-box-small_testcare_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Test Care</div>
 
-  	<div class="indicator-line_testcare blue">
-    </div>
-</div>
+  	<div class="indicator-line_testcare blue"></div></div>
 
     <!-- Test/Care Section Content -->
 
@@ -158,9 +150,7 @@
         <div class="indicator-box-small_vitals_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Vitals</div>
 
-  	<div class="indicator-line_vitals blue">
-    </div>
-</div>
+  	<div class="indicator-line_vitals blue"></div></div>
 
     <!-- Test/Care Section Content -->
 
@@ -200,9 +190,7 @@
         <div class="indicator-box-small_medications_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Medications</div>
 
-  	<div class="indicator-line_medications blue">
-    </div>
-</div>
+  	<div class="indicator-line_medications blue"></div></div>
 
     <!-- Test/Care Section Content -->
 
@@ -242,9 +230,7 @@
         <div class="indicator-box-small_activity_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Activity</div>
 
-  	<div class="indicator-line_activity blue">
-    </div>
-</div>
+  	<div class="indicator-line_activity blue"></div></div>
 
     <!-- Test/Care Section Content -->
 
@@ -284,9 +270,7 @@
         <div class="indicator-box-small_nutrition_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Nutrition</div>
 
-  	<div class="indicator-line_nutrition blue">
-    </div>
-</div>   
+  	<div class="indicator-line_nutrition blue"></div></div>   
 
     <!-- Test/Care Section Content -->
 
@@ -326,9 +310,7 @@
         <div class="indicator-box-small_psychosocial_grey grey"><img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14"></div>
         <div class="sectiontitle_monitor bluetxt">Psycho-Social/Behavioral Health</div>
 
-  	<div class="indicator-line_psychosocial blue">
-    </div>
-</div>
+  	<div class="indicator-line_psychosocial blue"></div></div>
 
     <!-- Test/Care Section Content -->
 
@@ -399,26 +381,23 @@
     <!-- END ITEM 8 (Wrap Up) -->   
  </div>
 
-<div class="window-wrapper" style="width: 60%; float: left;">
+<div class="window-wrapper">
 
 <!-- X-CLOSE -->  
-<div style="width:100%;padding-bottom:40px;">
-<div class="x-close">X</div>
-</div>
+<button type="button" class="btn btn-primary" id="windowwrapperclose" style="float:right;">Close</button><br /><br />
 
-
-
+  
  
 
 <!-- FLAG + Title -->    
 
 	<div class="indicator-wrapper">
   
-    	<div class="flag-box-big red">SET<br>
-        FLAG</div>
+    	<div class="flag-box-big blue">
+        <br /></div>
         <div class="sectiontitle_personalize"></div>
 
-  	<div class="indicator-line red">
+  	<div class="indicator-line blue">
     </div>
 
 
@@ -433,7 +412,7 @@
     <tr>
     	<td class="label-name">
         Last Result:</td>
-        <td class="result-1 redtxt"></td>
+        <td class="result-1" id="lastresult_personalize"></td>
        
      </tr></table>
      
@@ -444,7 +423,7 @@
      <table class="maintable" align="center">
      <tr>
      <td class="label-name">Result Source:</td>
-        <td class="result-1">User</td></tr></table>
+        <td class="result-1" id="resultsource_personalize">User</td></tr></table>
         
  
  
@@ -454,9 +433,21 @@
      <table class="maintable" align="center">
     <tr>
     	<td class="label-name" > Last Result Date:</td>
-        <td class="result-1"></td>
+        <td class="result-1" ><input type="text" class="txtfield" id="lastresultdate_personalize"></td>
         <td class="label-name"> Next Due Date:</td>
-        <td class="result-1"><br></td>
+        <td class="result-1" ><input type="text" class="txtfield" id="nextresultdate_personalize"></td>
+        <td class="label-name"> Goal State:</td>
+        <td class="labelcenter" >
+        <div class="btn-group" style="width: 90px;">       
+        <button type="button" class="btn btn-default dropdown-toggle personalizegoalbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+        <ul class="dropdown-menu personalizegoalUL">
+          <li role="presentation" class="dropdown-header">Open</li>
+          <li role="presentation" class="dropdown-header">Met</li>
+          <li role="presentation" class="dropdown-header">Not Met</li>
+          <li role="presentation" class="dropdown-header">Closed, Cancelled</li>
+        </ul>
+      </div>
+        </td>
      </tr></table>
      
      <br><br>
@@ -482,136 +473,123 @@
 
         
 <!-- FACTOR DROP-DOWN -->    
-        <div class="btn-group" style="width: 60px;">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">18-25</li>
-          <li role="presentation" class="dropdown-header">15-18</li>
-        </ul>
+        <div class="btn-group" style="width: 90px;">       
+        <button type="button" class="btn btn-default dropdown-toggle personalizemodifierbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+        <!--<ul class="dropdown-menu personalizedropdownmenu">-->
+          <!--<li role="presentation" class="dropdown-header">18-25</li>
+          <li role="presentation" class="dropdown-header">15-18</li>-->
+        <!--</ul>-->
       </div>
 
-      </td>
+      </td></tr>     
         
+        <tr><td  width="270px"><td class="labelcenter" width="75px"> 
         
-        
-        <td class="labelcenter" width="200px"> 
-        
-<table align="center"><tr><td>
+<!--<table align="center"><tr><td>-->
  
         <!-- MODIFIER DROP-DOWN -->    
         <div class="btn-group">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&lt; &nbsp; &nbsp;<span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">=</li>
-          <li role="presentation" class="dropdown-header">&gt;</li>
+        <button type="button" class="btn btn-default dropdown-toggle personalizeoperator" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+        <ul class="dropdown-menu personalizeULoperator" >
+        <li role="presentation" class="dropdown-header"><</li>
+        <li role="presentation" class="dropdown-header">=</li>
+         <li role="presentation" class="dropdown-header">></li>
+         <li role="presentation" class="dropdown-header">>=</li>
+         <li role="presentation" class="dropdown-header"><=</li>
+         <li role="presentation" class="dropdown-header">% Increase</li>
+         <li role="presentation" class="dropdown-header">% Decrease</li>
         </ul>
-</td><td>
- <input type="text" class="txtfield">   </td>
-    
-    
-    
-    <td>
-    
-    <!-- TYPE DROP-DOWN --> 
-        <div class="btn-group">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">item1 <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header"></li>
-          <li role="presentation" class="dropdown-header"></li>
-        </ul>
-      </div> </td></tr></table>
- 
- </td>
-        <td class="labelcenter" width="120px" style="padding-right:30px;"> 
-        
-     <input type="text" class="txtfield" style="width:30px;">    
-       
-
-
-
-        <!-- MODIFIER DROP-DOWN -->    
-        <div class="btn-group" style="width:60px;">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">months <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">days</li>
-          <li role="presentation" class="dropdown-header">weeks</li>
-          <li role="presentation" class="dropdown-header">years</li>
-        </ul>
-      </div>
-
+        </div>
         </td>
-        <td class="labelcenter" width="120px" style="padding-right:30px;"> <input type="text" class="txtfield" style="width:30px;">    
-       
-       
-       
-       
-       
+<td>
+  <td class="labelcenter"  width="525px">
+        <input type="text" class="txtfield personalizetargetval"  style="width:480px;text-align: left; padding-left: 10px;" ></td >
+        <td> 
+        <input  type="text" class="txtfieldquantitative personalizenormalmultiplier" style="width:45px;" > 
         <!-- MODIFIER DROP-DOWN -->    
-        <div class="btn-group" style="width:60px;">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">months <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li role="presentation" class="dropdown-header">days</li>
-          <li role="presentation" class="dropdown-header">weeks</li>
-          <li role="presentation" class="dropdown-header">years</li>
+        <div class="btn-group" style="width:60px;">
+        <button type="button" class="btn btn-default dropdown-toggle personalizerecurrnormal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="caret"></span></button>
+        <ul class="dropdown-menu personalizeULnormalrecurr" >
+          <li role="presentation" class="dropdown-header">Daily</li>
+          <li role="presentation" class="dropdown-header">Weekly</li>
+          <li role="presentation" class="dropdown-header">Bi-Weekly</li>
+          <li role="presentation" class="dropdown-header">Monthly</li>
+          <li role="presentation" class="dropdown-header">Quarterly</li>
+          <li role="presentation" class="dropdown-header">Every 6 Months</li>
+          <li role="presentation" class="dropdown-header">Every 12 Months</li>
+          <li role="presentation" class="dropdown-header">3 times a day</li>
+          <li role="presentation" class="dropdown-header">Every Encounter</li>
+        </ul>
+      </div>
+      </td>
+        <td> <input type="text" class="txtfieldquantitative personalizeabnormalmultiplier" style="width:45px;" >   
+         <!-- MODIFIER DROP-DOWN -->    
+        <div class="btn-group" style="width:60px;">
+        <button type="button" class="btn btn-default dropdown-toggle personalizerecurrabnormal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="caret"></span></button>
+        <ul class="dropdown-menu personalizeULabnormalrecurr"  >
+          <li role="presentation" class="dropdown-header">Daily</li>
+          <li role="presentation" class="dropdown-header">Weekly</li>
+          <li role="presentation" class="dropdown-header">Bi-Weekly</li>
+          <li role="presentation" class="dropdown-header">Monthly</li>
+          <li role="presentation" class="dropdown-header">Quarterly</li>
+          <li role="presentation" class="dropdown-header">Every 6 Months</li>
+          <li role="presentation" class="dropdown-header">Every 12 Months</li>
+          <li role="presentation" class="dropdown-header">3 times a day</li>
+          <li role="presentation" class="dropdown-header">Every Encounter</li>
         </ul>
       </div>
  <br></td>
      </tr></table>
-
-<br>
- 
- 
- 
- 
- <!-- DESCRIPTION & ASSIGNMENT ROLE -->     
-     <table class="maintable" align="center">
+     <br>
+     <!-- DESCRIPTION & ASSIGNMENT ROLE -->     
+     <table class="maintable" align="left"> 
     <tr>
-    	<td class="label-name"  style="width:500px">Trigger Description:</td>
-        <td class="label-name"  style="width:150px">Assignment Role:</td>
-     </tr></table>
-     
- <table class="factors" align="center">
+    	<td class="label-name"  style="width:600px">Trigger Description:</td>
+        <td class="label-name"  style="width:175px">Assignment Role:</td>
+     </tr><tr class="label-name"></tr></table>
+      <table class="factors" align="left">
     <tr>
-    
-        <td style="width:450px; padding-left:10px; padding-right: 0px;">
-            <input type="text" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;">
-        
-        <!--<textarea class="txtfield" style="width:450px;text-align: left; padding-left: 10px;"></textarea>-->
-        </td>
-    	
-        
-        <td class="label-name" style="width:150px; text-align:left;"> 
-        
-        
-		
-        
-        
-        
-        <!-- ASSIGNMENT ROLE DROP-DOWN -->    
-        <div class="btn-group" style="width: 120px;">       
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Care Navigator <span class="caret"></span></button>
-        <ul class="dropdown-menu">
+        <td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield personalizetriggeraction" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" ></td><td style="width:320px; text-align:left;"></td><td>
+                <!-- ASSIGNMENT ROLE DROP-DOWN -->    
+        <div class="btn-group" style="width: 150px;">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><span class="caret"></span></button>
+        <ul class="dropdown-menu" >
+          <li role="presentation" class="dropdown-header">Care Manager</li>
           <li role="presentation" class="dropdown-header">Nurse</li>
-          <li role="presentation" class="dropdown-header">Item 3</li>
+          <li role="presentation" class="dropdown-header">Dietician</li>
+          <li role="presentation" class="dropdown-header">Care Navigator</li>
+          <li role="presentation" class="dropdown-header">Physiatrist</li>
+          <li role="presentation" class="dropdown-header">Cardiologist</li>
+          <li role="presentation" class="dropdown-header">Physician</li>
         </ul>
       </div>
-
       </td>
-        
-     </textarea></table>
-     
-     <br>
-     <div class="center-wrapper" style="padding-left:200px;">
-     
-     <div class="bluebtn">SAVE CHANGES</div>
-     
-     </div>
-     
-</div>    
-</div></div>
+     </tr></table>
+    <br>
+    <table class="maintable" >
+    <tr></tr> <tr><td>
+        <br><div class = "center-wrapper" ><div class="center-wrapper" >
+        <button class="btn btn-primary savebtn_prsnlize" type="button" >Save Changes</button>
+        </div></div>
+        </td></tr></table>
+    <br>
+    </div><br>
 
-    <div class="Personalize-details" style="width:60%;">
-  
+
+	</div>
+    </div>
+
+    
+    <div class="personalize-section">
+
+        <div><button type="button" class="btn btn-primary" id="closepersonalizewindow" style="float:right;">Close</button><br /><br /></div>
+
+        <div class="Personalize-details">
+    
+       
+        
+
+    </div>
 
     </div>
 
