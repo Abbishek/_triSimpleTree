@@ -3406,9 +3406,7 @@ function GetSectionName(OptionSetVal) {
     
 }
 function gotoAddCarePlan() {
-    $('.monitor-wrapper').hide('slow');
-    if(isCarePlanUpdated)
-    {
+        $('.monitor-wrapper').hide('slow');
         $('.Personalize-details').html('');
         var vFinalTbl = "";
         var vTblRowsSymptoms = "";
@@ -3423,7 +3421,6 @@ function gotoAddCarePlan() {
 
         var VitalTypeArray = [];
         //var vSelectedGoal = [];
-        debugger;
         if (parent.Xrm !== undefined) {
             var contactId = parent.Xrm.Page.data.entity.getId();
         }
@@ -4673,6 +4670,7 @@ function gotoAddCarePlan() {
         },
         function () {
             //On Complete - Do Something
+
         }
     );
         //show hidden div
@@ -4683,8 +4681,6 @@ function gotoAddCarePlan() {
         //    //$('.btn:first-child').val($(this).text());
 
         //});
-        isCarePlanUpdated = false;
-    }
     $('.Personalize-details,.personalize-section').show();
 }
 
@@ -5233,7 +5229,7 @@ $(document).on('click', '.savebtn', function () {
     GetModfrIdFromName(vVitalTypId,contactId,vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt);
    //alert(strModfrId);
     //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
-    isCarePlanUpdated = true;
+
 });
 
 $(document).on('click', '.savebtn_prsnlize', function () {
@@ -5261,7 +5257,7 @@ $(document).on('click', '.savebtn_prsnlize', function () {
     GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt);
     //alert(strModfrId);
     //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
-    isCarePlanUpdated = true;
+
 });
 
 function GetModfrIdFromName(vVitalTypId,contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt) {
