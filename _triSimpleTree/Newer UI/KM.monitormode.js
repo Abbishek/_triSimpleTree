@@ -3456,7 +3456,7 @@ function gotoAddCarePlan() {
 
                 var IndexOfVitalType = VitalTypeArray.indexOf(tri_VitalValueTypeName);
 
-                if (IndexOfVitalType === -1) {
+                if (IndexOfVitalType === -1 && IndexOfVitalType !== null && IndexOfVitalType !== undefined) {
 
                     VitalTypeArray.push(tri_VitalValueTypeName)
 
@@ -4546,7 +4546,15 @@ function gotoAddCarePlan() {
 
                 }
             }
+            /// End For
 
+            
+        },
+        function (error) {
+            alert(error.message);
+        },
+        function () {
+            //On Complete - Do Something
             vFinalTbl = '<div style="margin-bottom: 60px;"><div style="margin-top:-30px;">' +
                         '<span style="color: #333333; font-size: 18px; text-align: left;"><h4>Select the Care Plan you want to add:</h4></span></div>' +
                         '<div style="padding-bottom: 20px;"><div class="carePathDropdown" style="float: left;"><input class="txtfield" id="carePaths" style="width: 100%;"/></div>' +
@@ -4664,13 +4672,8 @@ function gotoAddCarePlan() {
                     }
                 }
             };
-        },
-        function (error) {
-            alert(error.message);
-        },
-        function () {
-            //On Complete - Do Something
 
+            //////////////////////////////
         }
     );
         //show hidden div
