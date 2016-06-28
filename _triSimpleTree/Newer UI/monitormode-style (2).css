@@ -50,8 +50,8 @@ margin-top: 0px;
 .sectiontitle_monitor
 {
 min-width: 200px;
-height:30px;
-line-height: 32px;
+/*height:30px;*/
+/*line-height: 32px;*/
 text-align:left;
 font-size:20px;
 font-family: Segoe UI, Helvetica, Arial;
@@ -175,7 +175,7 @@ background-color: #666666;
 }
 
 
-.indicator-line,.indicator-line_symptoms,.indicator-line_testcare,.indicator-line_vitals,.indicator-line_medications,.indicator-line_activity,.indicator-line_nutrition,.indicator-line_psychosocial,.indicator-line_wrapup
+.indicator-line_symptoms,.indicator-line_testcare,.indicator-line_vitals,.indicator-line_medications,.indicator-line_activity,.indicator-line_nutrition,.indicator-line_psychosocial,.indicator-line_wrapup
 {
 width: 100%;
 height:5px;
@@ -381,7 +381,9 @@ font-weight: bold;
 
 hr.grey { border: 0; height: 1px; background: #CCC;}
 
-.window-wrapper,.Personalize-details,.personalizetableheader {
+.window-wrapper,.Personalize-details,.personalize-section,.personalizequalitative,.personalizequantitative,.personalizetargetvalQual 
+/*.personalizeoperatorOne,.personalizeoperatorTwo,personalizerangeAnd,.personalizeULoperatorOne,.personalizeULoperatorTwo,.personalizetargetvalMetric,.personalizetargetvalMetricTwo*/
+{
     display:none;
 }
 
