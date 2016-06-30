@@ -628,7 +628,9 @@ function getCPGoalSymptomsAll(PatientId) {
     function () {
         //On Complete - Do Something
        
-
+        if (intTotalSymptoms === null || intTotalSymptoms === undefined) {
+            $('.indicator-box-small_symptoms_all').text(0);
+        }
     }
 );
 
@@ -748,7 +750,6 @@ function getCPGoalSymptomsNotMet(PatientId) {
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
              intTotalSymptomsNotMet = " " + results.length + " ";
-
              $('.indicator-box-small_symptoms_red').text(intTotalSymptomsNotMet);
 
 
@@ -830,7 +831,9 @@ function getCPGoalSymptomsNotMet(PatientId) {
      function () {
          //On Complete - Do Something
 
-
+         if (intTotalSymptomsNotMet === null || intTotalSymptomsNotMet === undefined) {
+             $('.indicator-box-small_symptoms_red').text(0);
+         }
      }
  );
 }
@@ -952,7 +955,9 @@ function getCPGoalSymptomsMet(PatientId) {
         function () {
             //On Complete - Do Something
 
-
+            if (intTotalSymptomsMet === null || intTotalSymptomsMet === undefined) {
+                $('.indicator-box-small_symptoms_green').text(0);
+            }
         }
     );
 }
@@ -1074,7 +1079,9 @@ function getCPGoalSymptomsOpen(PatientId) {
       function () {
           //On Complete - Do Something
 
-
+          if (intTotalSymptomsOpen === null || intTotalSymptomsOpen === undefined) {
+              $('.indicator-box-small_symptoms_orange').text(0);
+          }
       }
   );
 }
@@ -1204,7 +1211,9 @@ function getCPGoalSymptomsOverDue(PatientId) {
         function () {
             //On Complete - Do Something
 
-
+            if (intTotalSymptomsOverDue === null || intTotalSymptomsOverDue === undefined) {
+                $('.indicator-box-small_symptoms_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + " " + 0);
+            }
         }
     );
 }
@@ -1644,7 +1653,9 @@ function getCPGoaltestcareAll(PatientId) {
     function () {
         //On Complete - Do Something
 
-
+        if (intTotaltestcare === null || intTotaltestcare === undefined) {
+            $('.indicator-box-big_testcare_all').hide();
+        }
     }
 );
 
@@ -1768,7 +1779,9 @@ function getCPGoaltestcareNotMet(PatientId) {
      function () {
          //On Complete - Do Something
 
-
+         if (intTotaltestcareNotMet === null || intTotaltestcareNotMet === undefined) {
+             $('.indicator-box-small_testcare_red').hide();
+         }
      }
  );
 }
@@ -1889,7 +1902,9 @@ function getCPGoaltestcareOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-
+          if (intTotaltestcareOpen === null || intTotaltestcareOpen === undefined) {
+              $('.indicator-box-small_testcare_orange').hide();
+          }
 
       }
   );
@@ -2012,7 +2027,9 @@ function getCPGoaltestcareMet(PatientId) {
         function () {
             //On Complete - Do Something
 
-
+            if (intTotaltestcareMet === null || intTotaltestcareMet === undefined) {
+                $('.indicator-box-small_testcare_green').hide();
+            }
         }
     );
 }
@@ -2142,7 +2159,9 @@ function getCPGoaltestcareOverDue(PatientId) {
         function () {
             //On Complete - Do Something
 
-
+            if (intTotaltestcareOverDue === null || intTotaltestcareOverDue === undefined) {
+                $('.indicator-box-small_testcare_grey').hide();
+            }
         }
     );
 }
