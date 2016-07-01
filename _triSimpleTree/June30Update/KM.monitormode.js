@@ -157,46 +157,7 @@ $(document).ready(function () {
 
     };
     if (PatientId !== null && PatientId !== "") {
-        getCPGoalSymptomsAll(PatientId);
-        getCPGoaltestcareAll(PatientId);
-        getCPGoalvitalsAll(PatientId);
-        getCPGoalmedicationsAll(PatientId);
-        getCPGoalactivityAll(PatientId);
-        getCPGoalnutritionAll(PatientId);
-        getCPGoalpsychosocialAll(PatientId);
-        getCPGoalwrapupAll(PatientId);
-        getCPGoalSymptomsNotMet(PatientId);
-        getCPGoaltestcareNotMet(PatientId);
-        getCPGoalvitalsNotMet(PatientId);
-        getCPGoalmedicationsNotMet(PatientId);
-        getCPGoalactivityNotMet(PatientId);
-        getCPGoalnutritionNotMet(PatientId);
-        getCPGoalpsychosocialNotMet(PatientId);
-        getCPGoalwrapupNotMet(PatientId);
-        getCPGoalSymptomsOpen(PatientId);
-        getCPGoaltestcareOpen(PatientId);
-        getCPGoalvitalsOpen(PatientId);
-        getCPGoalmedicationsOpen(PatientId);
-        getCPGoalactivityOpen(PatientId);
-        getCPGoalnutritionOpen(PatientId);
-        getCPGoalpsychosocialOpen(PatientId);
-        getCPGoalwrapupOpen(PatientId);
-        getCPGoalSymptomsMet(PatientId);
-        getCPGoaltestcareMet(PatientId);
-        getCPGoalvitalsMet(PatientId);
-        getCPGoalmedicationsMet(PatientId);
-        getCPGoalactivityMet(PatientId);
-        getCPGoalnutritionMet(PatientId);
-        getCPGoalpsychosocialMet(PatientId);
-        getCPGoalwrapupMet(PatientId);
-        getCPGoalSymptomsOverDue(PatientId);
-        getCPGoaltestcareOverDue(PatientId);
-        getCPGoalvitalsOverDue(PatientId);
-        getCPGoalmedicationsOverDue(PatientId);
-        getCPGoalactivityOverDue(PatientId);
-        getCPGoalnutritionOverDue(PatientId);
-        getCPGoalpsychosocialOverDue(PatientId);
-        getCPGoalwrapupOverDue(PatientId);
+        DisplayMonitorMode(PatientId);
     };
 
     $('.indicator-box-big_symptoms_all').click(function () {
@@ -463,7 +424,7 @@ $(document).ready(function () {
         $('.Personalize-details,.personalize-section').hide();
         $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
         $('.monitor-wrapper').show('slow');
-
+         DisplayMonitorMode(PatientId);
     });
 
     $('#windowwrapperclose').click(function () {
@@ -474,6 +435,48 @@ $(document).ready(function () {
 
 }); //document ready function closes here
 
+function DisplayMonitorMode(PatientId) {
+    getCPGoalSymptomsAll(PatientId);
+    getCPGoaltestcareAll(PatientId);
+    getCPGoalvitalsAll(PatientId);
+    getCPGoalmedicationsAll(PatientId);
+    getCPGoalactivityAll(PatientId);
+    getCPGoalnutritionAll(PatientId);
+    getCPGoalpsychosocialAll(PatientId);
+    getCPGoalwrapupAll(PatientId);
+    getCPGoalSymptomsNotMet(PatientId);
+    getCPGoaltestcareNotMet(PatientId);
+    getCPGoalvitalsNotMet(PatientId);
+    getCPGoalmedicationsNotMet(PatientId);
+    getCPGoalactivityNotMet(PatientId);
+    getCPGoalnutritionNotMet(PatientId);
+    getCPGoalpsychosocialNotMet(PatientId);
+    getCPGoalwrapupNotMet(PatientId);
+    getCPGoalSymptomsOpen(PatientId);
+    getCPGoaltestcareOpen(PatientId);
+    getCPGoalvitalsOpen(PatientId);
+    getCPGoalmedicationsOpen(PatientId);
+    getCPGoalactivityOpen(PatientId);
+    getCPGoalnutritionOpen(PatientId);
+    getCPGoalpsychosocialOpen(PatientId);
+    getCPGoalwrapupOpen(PatientId);
+    getCPGoalSymptomsMet(PatientId);
+    getCPGoaltestcareMet(PatientId);
+    getCPGoalvitalsMet(PatientId);
+    getCPGoalmedicationsMet(PatientId);
+    getCPGoalactivityMet(PatientId);
+    getCPGoalnutritionMet(PatientId);
+    getCPGoalpsychosocialMet(PatientId);
+    getCPGoalwrapupMet(PatientId);
+    getCPGoalSymptomsOverDue(PatientId);
+    getCPGoaltestcareOverDue(PatientId);
+    getCPGoalvitalsOverDue(PatientId);
+    getCPGoalmedicationsOverDue(PatientId);
+    getCPGoalactivityOverDue(PatientId);
+    getCPGoalnutritionOverDue(PatientId);
+    getCPGoalpsychosocialOverDue(PatientId);
+    getCPGoalwrapupOverDue(PatientId);
+}
         
 function getJoinsForContact(PatientId) {
     //alert(PatientId);
@@ -605,7 +608,7 @@ function getCPGoalSymptomsAll(PatientId) {
 
             }
 
-                        getVitalNameAndAppendTag("maintable_symptoms_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+      getVitalNameAndAppendTag("maintable_symptoms_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
                     
                  
         }
@@ -662,6 +665,8 @@ function GetMetricOperatorTextBasedOnVal(OprtrVal) {
 
 function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor) {
  
+    $('.' + AppendClassName).html('');
+
     SDK.JQuery.retrieveMultipleRecords(
     "tri_vitalsvaluetype",
     "?$select=tri_name&$filter=tri_vitalsvaluetypeId eq (guid'" + tri_vitalsvaluetype + "')",
@@ -672,17 +677,17 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
         }
 
         tagSymptomsAll = '<tr >' +
-                                                          '<td class="typedetails">' + tri_name + '</td>' +
-                                                          //'<td class="target"><input type="text" id = "'+vinputTrgtId+'" class="txtfield"  style="background-color: #FAFAFA;border:none;"></td >' +
-                                                          '<td class="target" style="color:'+vtxtColor+';">' + strTargetVal + '<td>' +
-                                                          '<td class="lastresult">' + strLastTargetVal + '</td>' +
-                                                          '<td class="lastresultdate">'+ strLastGoalDt +'</td>' +
-                                                          '<td class="duedate">'+ strNextDueDt +'</td>' +
-                                                          '<td class="more" id="' + strGoalId + '">...</td>' +
-                                                          '</tr>' +
-                                                          '<tr>' +
-                                                          '<td colspan="6" style=" font-size:1px;"><hr class="grey"></td>' +
-                                                          '</tr>'
+                        '<td class="typedetails">' + tri_name + '</td>' +
+                        //'<td class="target"><input type="text" id = "'+vinputTrgtId+'" class="txtfield"  style="background-color: #FAFAFA;border:none;"></td >' +
+                        '<td class="target" style="color:'+vtxtColor+';">' + strTargetVal + '<td>' +
+                        '<td class="lastresult">' + strLastTargetVal + '</td>' +
+                        '<td class="lastresultdate">'+ strLastGoalDt +'</td>' +
+                        '<td class="duedate">'+ strNextDueDt +'</td>' +
+                        '<td class="more" id="' + strGoalId + '">...</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td colspan="6" style=" font-size:1px;"><hr class="grey"></td>' +
+                        '</tr>'
         //alert(tagSymptomsAll);
         $('.' + AppendClassName).append(tagSymptomsAll);
         
@@ -5913,7 +5918,7 @@ function gotoAddCarePlan() {
 
     if (personId !== null && personId !== "") {
         $('.monitor-wrapper').hide('slow');
-       // $('.Personalize-details').html('');
+        $('.Personalize-details').html('');
        
 
         //var vSelectedGoal = [];
@@ -7185,19 +7190,6 @@ function DisplayPersonalizeMode(contactId) {
                  '<table class="factors" align="left">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
-                           //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
-                 //  '<div class="btn-group" style="width: 150px;">' +
-                 //  '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalAssgnRoleButtonId + '><span class="caret"></span></button>' +
-                 //  '<ul class="dropdown-menu" id=' + vVitalAssgnRoleULId + '>' +
-                 //    '<li role="presentation" class="dropdown-header">Care Manager</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Nurse</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Dietician</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Care Navigator</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Physiatrist</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Cardiologist</li>' +
-                 //    '<li role="presentation" class="dropdown-header">Physician</li>' +
-                 //  '</ul>' +
-                 //'</div>' +
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
@@ -7207,15 +7199,10 @@ function DisplayPersonalizeMode(contactId) {
                    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
                    '</div></div>' +
                    '</td></tr></table>' +
-               //'<br>'+
                '</div><br>';//tablecontent div closes here
-
                                break;
                            case -1:
-
-
                                break;
-
                        }
                        //add current row to previous row
                    }
