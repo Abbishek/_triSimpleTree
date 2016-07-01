@@ -130,39 +130,40 @@ function GetAllCarePath() {
 //}
 
 function GetCarePlanfromPatitentId(PatientId) {
+    var retrievedPlanRecords = [];
 
     var FetchXmlplan =
 "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>" +
 "  <entity name='tri_careplanjoin'>" +
 "    <attribute name='tri_careplanid' />" +
-"    <attribute name='tri_careplanactionid' />" +
-"    <attribute name='tri_careplanissueid' />" +
-"    <attribute name='tri_careplangoalid' />" +
-"    <attribute name='tri_careplanjoinid' />" +
+//"    <attribute name='tri_careplanactionid' />" +
+//"    <attribute name='tri_careplanissueid' />" +
+//"    <attribute name='tri_careplangoalid' />" +
+//"    <attribute name='tri_careplanjoinid' />" +
 "    <attribute name='tri_planname' />" +
-"    <attribute name='tri_issuename' />" +
-"    <attribute name='tri_goalname' />" +
-"    <attribute name='tri_actionname' />" +
-"    <attribute name='new_goalstate' />" +
-"    <attribute name='tri_planselected'/>" +
-"    <attribute name='tri_issueselected'/>" +
-"    <attribute name='tri_goalselected'/>" +
-"    <attribute name='tri_actionselected'/>" +
-"   <attribute name='tri_vitalvaluetypename' />" +
-"   <attribute name='tri_patientfactor' />" +
-"   <attribute name='tri_metric' />" +
-"   <attribute name='tri_targetvaluetwo' />" +
-"   <attribute name='tri_targetmetricoperator' />" +
-"   <attribute name='tri_actiontriggervalue' />" +
-"   <attribute name='tri_activitydescription' />" +
-"   <attribute name='tri_measuredetails' />" +
-"   <attribute name='tri_activityassignmentrole'  />" +
-"   <attribute name='tri_schedulecategory'  />" +
-"   <attribute name='tri_goalsection'  />" +
-"   <attribute name='tri_metric'/> " +
-"   <attribute name='tri_nextduedate'/> " +
-"   <attribute name='tri_lastgoaldate'/> " +
-"   <attribute name='tri_lasttargetvalue'/> " +
+//"    <attribute name='tri_issuename' />" +
+//"    <attribute name='tri_goalname' />" +
+//"    <attribute name='tri_actionname' />" +
+//"    <attribute name='new_goalstate' />" +
+//"    <attribute name='tri_planselected'/>" +
+//"    <attribute name='tri_issueselected'/>" +
+//"    <attribute name='tri_goalselected'/>" +
+//"    <attribute name='tri_actionselected'/>" +
+//"   <attribute name='tri_vitalvaluetypename' />" +
+//"   <attribute name='tri_patientfactor' />" +
+//"   <attribute name='tri_metric' />" +
+//"   <attribute name='tri_targetvaluetwo' />" +
+//"   <attribute name='tri_targetmetricoperator' />" +
+//"   <attribute name='tri_actiontriggervalue' />" +
+//"   <attribute name='tri_activitydescription' />" +
+//"   <attribute name='tri_measuredetails' />" +
+//"   <attribute name='tri_activityassignmentrole'  />" +
+//"   <attribute name='tri_schedulecategory'  />" +
+//"   <attribute name='tri_goalsection'  />" +
+//"   <attribute name='tri_metric'/> " +
+//"   <attribute name='tri_nextduedate'/> " +
+//"   <attribute name='tri_lastgoaldate'/> " +
+//"   <attribute name='tri_lasttargetvalue'/> " +
 "   <order attribute='tri_schedulecategory' descending='false' />" +
 "   <order attribute='tri_goalsection' descending='false' />" +
 "    <filter type='and'>" +
@@ -171,9 +172,27 @@ function GetCarePlanfromPatitentId(PatientId) {
 "  </entity>" +
 "</fetch>";
     // alert(FetchXmlplan);
-    retrievedPlanRecords = XrmServiceToolkit.Soap.Fetch(FetchXmlplan);
+     retrievedPlanRecords = XrmServiceToolkit.Soap.Fetch(FetchXmlplan);
 
-    return retrievedPlanRecords;
+//    debugger;
+//    SDK.REST.retrieveMultipleRecords(
+//    "tri_careplanjoin",
+//    "?$select=tri_CarePlanID,tri_name&$filter=tri_PatientID/Id eq (guid'" + PatientId + "')",
+//    function (results) {
+//        for (var i = 0; i < results.length; i++) {
+//            var tri_CarePlanID = results[i].tri_CarePlanID;
+//            var tri_name = results[i].tri_name;
+//        }
+//        retrievedPlanRecords = retrievedPlanRecords.concat(results)
+//    },
+//    function (error) {
+//        alert(error.message);
+//    },
+//    function () {
+//        //On Complete - Do Something
+        return retrievedPlanRecords;
+//    }
+//);
 }
 
 function GetCarePlanfromCarePlanId(CarePlanId) {
