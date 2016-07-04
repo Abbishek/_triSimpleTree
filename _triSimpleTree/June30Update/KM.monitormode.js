@@ -6061,7 +6061,7 @@ function DisplayPersonalizeMode(contactId) {
                var vVitalFreqNormalButtonId = results[i].tri_vitalsvaluetypeid.Id + "_FRQNRMLBTN";
                var vVitalFreqAbNormalButtonId = results[i].tri_vitalsvaluetypeid.Id + "_FRQABNRMLBTN";
                var vVitalAssgnRoleButtonId = results[i].tri_vitalsvaluetypeid.Id + "_ASSGNROLEBTN";
-               var vVitalSaveButtonId = results[i].tri_vitalsvaluetypeid.Id + "_SAVEBTN";
+               // var vVitalSaveButtonId = results[i].tri_vitalsvaluetypeid.Id + "_SAVEBTN";
                var vVitalFactorANDId = results[i].tri_vitalsvaluetypeid.Id + "_AND";
                var vVitalFactorQualSPAN = results[i].tri_vitalsvaluetypeid.Id + "_QUALSPAN";
                var vVitalFactorQuantSPAN = results[i].tri_vitalsvaluetypeid.Id + "_QUANTSPAN";
@@ -6233,7 +6233,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6252,12 +6252,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -6369,7 +6369,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6388,12 +6388,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -6506,7 +6506,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6525,12 +6525,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -6643,7 +6643,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6662,12 +6662,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -6779,7 +6779,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6798,12 +6798,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -6915,7 +6915,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -6934,12 +6934,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -7051,7 +7051,7 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                            //<!-- ASSIGNMENT ROLE DROP-DOWN -->    
@@ -7070,12 +7070,12 @@ function DisplayPersonalizeMode(contactId) {
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                //'<br>'+
                '</div><br>';//tablecontent div closes here
 
@@ -7187,18 +7187,18 @@ function DisplayPersonalizeMode(contactId) {
                    '<td class="label-name"  style="width:600px">Trigger Description:</td>' +
                    //'<td class="label-name"  style="width:175px">Assignment Role:</td>' +
                 '</tr><tr class="label-name"></tr></table>' +
-                 '<table class="factors" align="left">' +//table4 start
+                 '<table class="factors" align="left" style="margin-bottom:20px;">' +//table4 start
                '<tr>' +
                    '<td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA" id=' + vVitalFactorQUAL_ACTIONId + '></td><td style="width:320px; text-align:left;"></td><td>' +
                  '</td>' +
                 '</tr></table>' +//table 4 end
                '<br>' +
-               '<table class="maintable" >' +//table5 start
-               '<tr></tr> <tr><td>' +
-                   '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
-                   '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
-                   '</div></div>' +
-                   '</td></tr></table>' +
+               //'<table class="maintable" >' +//table5 start
+               //'<tr></tr> <tr><td>' +
+               //    '<br><div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+               //    '<button class="btn btn-primary savebtn" type="button"  id=' + vVitalSaveButtonId + '>Save Changes</button>' +
+               //    '</div></div>' +
+               //    '</td></tr></table>' +
                '</div><br>';//tablecontent div closes here
                                break;
                            case -1:
@@ -7222,31 +7222,42 @@ function DisplayPersonalizeMode(contactId) {
                        '<table class="tg"><tr><th class="tg-typedetail" >Nutrition</th></tr></table>' + vTblRowsNutrition +
                        '<table class="tg"><tr><th class="tg-typedetail" >PsychoSocial</th></tr></table>' + vTblRowsPyschoSocial +
                        '<table class="tg"><tr><th class="tg-typedetail" >Wrap Up</th></tr></table>' + vTblRowsWrapUp +
-                       '<table class="tg"><tr><th class="tg-typedetail" >Home Vitals</th></tr></table>' + vTblRowsHomeVitals;
+                       '<table class="tg"><tr><th class="tg-typedetail" >Home Vitals</th></tr></table>' + vTblRowsHomeVitals +
+                        '<table class="maintable" >' +//table5 start
+                        '<tr></tr>'+
+                        '<tr><td><br>'+
+                        '<div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+                        '<button class="btn btn-primary savebtn" type="button">Save Changes</button>' +
+                        '</div>' +
+                        '</td></tr></table>';
 
            $('.Personalize-details').append(vFinalTbl);
        }
    );
 }
-// enabling save buttons on input text change
-//$(document).on('keyup click', 'input[type=text]', function () {
-//    var inputId = this.id;
-//    //EnableSaveChangesButton(inputId);
-//});
 
-//$(document).on("click", 'a.ui-spinner-button ui-spinner-up ui-corner-tr', function () {
-//    var inputId = $(this).prev().id;
-//    //EnableSaveChangesButton(inputId);
-//});
+// enabling save buttons on input text change
+$(document).on('keyup click', 'input[type=text]', function () {
+    var inputId = this.id;
+    //EnableSaveChangesButton(inputId);
+    AddVitaTypeToSave(inputId);
+});
+
+$(document).on("click", 'a.ui-spinner-button ui-spinner-up ui-corner-tr', function () {
+    var inputId = $(this).prev().id;
+    //EnableSaveChangesButton(inputId);
+    AddVitaTypeToSave(inputId);
+});
 
 //$(document).on("click", '.savebtn_prsnlize', function () {
 //    $(this).prop('disabled', true);
 //});
 
-//$(document).on("click", 'a.ui-spinner-button ui-spinner-down ui-corner-br', function () {
-//    var inputId = $(this).prev().prev().id;
-//    //EnableSaveChangesButton(inputId);
-//});
+$(document).on("click", 'a.ui-spinner-button ui-spinner-down ui-corner-br', function () {
+    var inputId = $(this).prev().prev().id;
+    //EnableSaveChangesButton(inputId);
+    AddVitaTypeToSave(inputId);
+});
 
 //function EnableSaveChangesButton(inputId) {
 //    if (inputId !== null && inputId !== undefined && inputId.length > 0 && inputId !== 'lastresultdate_personalize' && inputId !== 'nextresultdate_personalize')
@@ -7255,7 +7266,18 @@ function DisplayPersonalizeMode(contactId) {
 //        $('.savebtn_prsnlize').prop("disabled", false);
 //    }
 //}
+var vitalTypeToSaveArray = [];
+function AddVitaTypeToSave(inputId) {
 
+    if (inputId !== null && inputId !== undefined && inputId.length > 0) {
+        var vitalId = $(inputId.substring(0, 36)).selector;
+
+        var IndexOfVitalTypeId = vitalTypeToSaveArray.indexOf(vitalId);
+        if (IndexOfVitalTypeId === -1 && IndexOfVitalTypeId !== null && IndexOfVitalTypeId !== undefined) {
+            vitalTypeToSaveArray.push(vitalId);
+        }
+    }
+}
 
 function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
     //alert(tri_vitalsvaluetypeid);
@@ -7706,9 +7728,10 @@ $(document).on('click', '.dropdown-menu li', function () {
     }
 
     // enabling save buttons on dropdown change
-   //var inputId = $(this).parent().prev()[0].id;
+   var inputId = $(this).parent().prev()[0].id;
    //EnableSaveChangesButton(inputId);
-   
+   AddVitaTypeToSave(inputId);
+
 });
 
 function GetSetTargetMetricOperator(tri_vitalsvaluetypeid, Vmetricoperator,strWrapper) {
@@ -8307,52 +8330,61 @@ function () {
 
 
 $(document).on('click', '.savebtn', function () {
+
     //alert($(this).attr('id'));
-    var vVitalTypIdStr = $(this).attr('id');
-    var vVitalTypId = vVitalTypIdStr.replace("_SAVEBTN", "");
-    var vModfrName = $("#" + vVitalTypId + "_BTN").text();
-    var vMetricOprtrTxt = $("#" + vVitalTypId + "_MTRCOPRTRBTN").text();
-    var vTargetValueTxt = $("#" + vVitalTypId + "_METRIC").val();
-   
-    var vFreqNormalTxt = $("#" + vVitalTypId + "_FRQNRMLBTN").text();
-    var vFreqAbNormalTxt = $("#" + vVitalTypId + "_FRQABNRMLBTN").text();
-    //var vAssignmentRoleTxt = $("#" + vVitalTypId + "_ASSGNROLEBTN").text();
-    var vMultiplierNormalTxt = $("#" + vVitalTypId + "_MULTIPLIER_NORMAL").val();
-    var vMultiplierAbormalTxt = $("#" + vVitalTypId + "_MULTIPLIER_ABNORMAL").val();
+    //var vVitalTypIdStr = $(this).attr('id');
+    //var vVitalTypId = vVitalTypIdStr.replace("_SAVEBTN", "");
 
-    var vTargetValue2Txt = $("#" + vVitalTypId + "_TARGETVALTWO").val();
-    var vQualTxt = $("#" + vVitalTypId + "_QUALITATIVETXT").val();
-    var vMetricOprtr2Txt = $("#" + vVitalTypId + "_MTRCOPRTRBTNTWO").text();
+    for (i = 0; i < vitalTypeToSaveArray.length; i++) {
+        var vModfrName = $("#" + vitalTypeToSaveArray[i] + "_BTN").text();
+        var vMetricOprtrTxt = $("#" + vitalTypeToSaveArray[i] + "_MTRCOPRTRBTN").text();
+        var vTargetValueTxt = $("#" + vitalTypeToSaveArray[i] + "_METRIC").val();
 
-    if (parent.Xrm !== undefined) {
-        var contactId = parent.Xrm.Page.data.entity.getId();
+        var vFreqNormalTxt = $("#" + vitalTypeToSaveArray[i] + "_FRQNRMLBTN").text();
+        var vFreqAbNormalTxt = $("#" + vitalTypeToSaveArray[i] + "_FRQABNRMLBTN").text();
+        //var vAssignmentRoleTxt = $("#" + vitalTypeToSaveArray[i] + "_ASSGNROLEBTN").text();
+        var vMultiplierNormalTxt = $("#" + vitalTypeToSaveArray[i] + "_MULTIPLIER_NORMAL").val();
+        var vMultiplierAbormalTxt = $("#" + vitalTypeToSaveArray[i] + "_MULTIPLIER_ABNORMAL").val();
+
+        var vTargetValue2Txt = $("#" + vitalTypeToSaveArray[i] + "_TARGETVALTWO").val();
+        var vQualTxt = $("#" + vitalTypeToSaveArray[i] + "_QUALITATIVETXT").val();
+        var vMetricOprtr2Txt = $("#" + vitalTypeToSaveArray[i] + "_MTRCOPRTRBTNTWO").text();
+
+        if (parent.Xrm !== undefined) {
+            var contactId = parent.Xrm.Page.data.entity.getId();
+        }
+        var vOsetValMetricOperator = "";
+        if (vMetricOprtrTxt !== null && vMetricOprtrTxt !== "") {
+            vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt);
+        }
+        var vOsetValMetricOperator2 = "";
+        if (vMetricOprtr2Txt !== null && vMetricOprtr2Txt !== "") {
+            vOsetValMetricOperator2 = GetOsetValFromTextMtrcOprtr2(vMetricOprtr2Txt);
+        }
+
+        var vOsetValFreqNormal = "";
+        if (vFreqNormalTxt !== null && vFreqNormalTxt == "") {
+            vOsetValFreqNormal = GetOsetValFromTextFreqNormal(vFreqNormalTxt);
+        };
+
+        var vOsetValFreqAbNormal = "";
+        if (vFreqAbNormalTxt !== null && vFreqAbNormalTxt !== "") {
+            vOsetValFreqAbNormal = GetOsetValFromTextFreqAbNormal(vFreqAbNormalTxt);
+        };
+
+
+        //var vOsetValAssignmentRole = GetOsetValFromTextAssignmentRole(vAssignmentRoleTxt);
+        //alert(vOsetValAssignmentRole);
+        GetModfrIdFromName(vitalTypeToSaveArray[i], contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, "", vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, "");
+        //alert(strModfrId);
+        //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
+        //$(this).prop("disabled", true);
+        //if (i === vitalTypeToSaveArray.length - 1)
+        //{
+        //    alert("Goal Saved!");
+        //}
     }
-    var vOsetValMetricOperator = "";
-    if (vMetricOprtrTxt !== null && vMetricOprtrTxt !== "") {
-        vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt);
-    }
-    var vOsetValMetricOperator2 = "";
-    if (vMetricOprtr2Txt !== null && vMetricOprtr2Txt !== "") {
-        vOsetValMetricOperator2 = GetOsetValFromTextMtrcOprtr2(vMetricOprtr2Txt);
-    }
-
-    var vOsetValFreqNormal = "";
-    if (vFreqNormalTxt !== null && vFreqNormalTxt == "") {
-        vOsetValFreqNormal = GetOsetValFromTextFreqNormal(vFreqNormalTxt);
-    };
-
-    var vOsetValFreqAbNormal = "";
-    if (vFreqAbNormalTxt !== null && vFreqAbNormalTxt !== "") {
-        vOsetValFreqAbNormal = GetOsetValFromTextFreqAbNormal(vFreqAbNormalTxt);
-    };
-
-    
-    //var vOsetValAssignmentRole = GetOsetValFromTextAssignmentRole(vAssignmentRoleTxt);
-    //alert(vOsetValAssignmentRole);
-    GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, "", vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, "");
-   //alert(strModfrId);
-    //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
-    //$(this).prop("disabled", true);
+    vitalTypeToSaveArray.length = 0;
 });
 
 $(document).on('click', '.savebtn_prsnlize1', function () {
