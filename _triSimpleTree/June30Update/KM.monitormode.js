@@ -428,9 +428,10 @@ $(document).ready(function () {
     });
 
     $('#windowwrapperclose').click(function () {
-        $('.monitor-wrapper').show('slow');
         $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
         $('.window-wrapper').hide('slow');
+        DisplayMonitorMode(PatientId);
+        $('.monitor-wrapper').show('slow');
     });
 
 }); //document ready function closes here
@@ -476,6 +477,31 @@ function DisplayMonitorMode(PatientId) {
     getCPGoalnutritionOverDue(PatientId);
     getCPGoalpsychosocialOverDue(PatientId);
     getCPGoalwrapupOverDue(PatientId);
+
+    // ------symptoms
+    $('.indicator-line_symptoms').removeClass("red orange green grey");
+    $('.indicator-line_symptoms').addClass("blue");
+    //----testcare
+    $('.indicator-line_testcare').removeClass("red orange green grey");
+    $('.indicator-line_testcare').addClass("blue");
+    //-----vitals
+    $('.indicator-line_vitals').removeClass("red orange green grey");
+    $('.indicator-line_vitals').addClass("blue");
+    //----medications
+    $('.indicator-line_medications').removeClass("red orange green grey");
+    $('.indicator-line_medications').addClass("blue");
+    //----activity
+    $('.indicator-line_activity').removeClass("red orange green grey");
+    $('.indicator-line_activity').addClass("blue");
+    //----nutrition
+    $('.indicator-line_nutrition').removeClass("red orange green grey");
+    $('.indicator-line_nutrition').addClass("blue");
+    //----psychosocial
+    $('.indicator-line_psychosocial').removeClass("red orange green grey");
+    $('.indicator-line_psychosocial').addClass("blue");
+    //----wrapup
+    $('.indicator-line_wrapup').removeClass("red orange green grey");
+    $('.indicator-line_wrapup').addClass("blue");
 }
         
 function getJoinsForContact(PatientId) {
@@ -502,8 +528,11 @@ function getJoinsForContact(PatientId) {
         }
       );
 }
-   
+
 function getCPGoalSymptomsAll(PatientId) {
+    $('.indicator-box-big_symptoms_all').show();
+    $('.indicator-box-big_symptoms_all').text('');
+    intTotalSymptoms = "";
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -619,7 +648,8 @@ function getCPGoalSymptomsAll(PatientId) {
     function () {
         //On Complete - Do Something
        
-        if (intTotalSymptoms === null || intTotalSymptoms === undefined) {
+        if (intTotalSymptoms === null || intTotalSymptoms === undefined || intTotalSymptoms === "") {
+            $('.indicator-box-big_symptoms_all').text('');
             $('.indicator-box-big_symptoms_all').hide();
         }
     }
@@ -710,6 +740,11 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
 
 function getCPGoalSymptomsNotMet(PatientId) {
     //alert(PatientId);
+
+    $('.indicator-box-small_symptoms_red').show();
+    $('.indicator-box-small_symptoms_red').text('');
+    intTotalSymptomsNotMet = "";
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000000 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -825,7 +860,8 @@ function getCPGoalSymptomsNotMet(PatientId) {
      function () {
          //On Complete - Do Something
 
-         if (intTotalSymptomsNotMet === null || intTotalSymptomsNotMet === undefined) {
+         if (intTotalSymptomsNotMet === null || intTotalSymptomsNotMet === undefined || intTotalSymptomsNotMet === "") {
+             $('.indicator-box-small_symptoms_red').text('');
              $('.indicator-box-small_symptoms_red').hide();
          }
      }
@@ -833,6 +869,10 @@ function getCPGoalSymptomsNotMet(PatientId) {
 }
 
 function getCPGoalSymptomsMet(PatientId) {
+
+    $('.indicator-box-small_symptoms_green').show();
+    $('.indicator-box-small_symptoms_green').text('');
+    intTotalSymptomsMet = "";
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -948,7 +988,8 @@ function getCPGoalSymptomsMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalSymptomsMet === null || intTotalSymptomsMet === undefined) {
+            if (intTotalSymptomsMet === null || intTotalSymptomsMet === undefined || intTotalSymptomsMet === "") {
+                $('.indicator-box-small_symptoms_green').text('');
                 $('.indicator-box-small_symptoms_green').hide();
             }
         }
@@ -956,7 +997,12 @@ function getCPGoalSymptomsMet(PatientId) {
 }
 
 function getCPGoalSymptomsOpen(PatientId) {
+
     //alert(PatientId);
+    $('.indicator-box-small_symptoms_orange').show();
+    $('.indicator-box-small_symptoms_orange').text('');
+    intTotalSymptomsOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000000 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -1072,7 +1118,8 @@ function getCPGoalSymptomsOpen(PatientId) {
       function () {
           //On Complete - Do Something
 
-          if (intTotalSymptomsOpen === null || intTotalSymptomsOpen === undefined) {
+          if (intTotalSymptomsOpen === null || intTotalSymptomsOpen === undefined || intTotalSymptomsOpen === "") {
+              $('.indicator-box-small_symptoms_orange').text('');
               $('.indicator-box-small_symptoms_orange').hide();
           }
       }
@@ -1080,6 +1127,10 @@ function getCPGoalSymptomsOpen(PatientId) {
 }
 
 function getCPGoalSymptomsOverDue(PatientId) {
+
+    $('.indicator-box-small_symptoms_grey').show();
+    $('.indicator-box-small_symptoms_grey').text('');
+    intTotalSymptomsOverDue = "";
 
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
@@ -1203,7 +1254,8 @@ function getCPGoalSymptomsOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalSymptomsOverDue === null || intTotalSymptomsOverDue === undefined) {
+            if (intTotalSymptomsOverDue === null || intTotalSymptomsOverDue === undefined || intTotalSymptomsOverDue === "") {
+                $('.indicator-box-small_symptoms_grey').text('');
                 $('.indicator-box-small_symptoms_grey').hide();
             }
         }
@@ -1532,6 +1584,9 @@ function ReviewAndUpdateGoal(currentId) {
 }
 
 function getCPGoaltestcareAll(PatientId) {
+    $('.indicator-box-big_testcare_all').show();
+    $('.indicator-box-big_testcare_all').text('');
+    intTotaltestcare = "";
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -1647,7 +1702,8 @@ function getCPGoaltestcareAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotaltestcare === null || intTotaltestcare === undefined) {
+        if (intTotaltestcare === null || intTotaltestcare === undefined || intTotaltestcare === "") {
+            $('.indicator-box-big_testcare_all').text('');
             $('.indicator-box-big_testcare_all').hide();
         }
     }
@@ -1656,6 +1712,10 @@ function getCPGoaltestcareAll(PatientId) {
 
 function getCPGoaltestcareNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_testcare_red').show();
+    $('.indicator-box-small_testcare_red').text('');
+    intTotaltestcareNotMet = "";
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -1770,7 +1830,8 @@ function getCPGoaltestcareNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotaltestcareNotMet === null || intTotaltestcareNotMet === undefined) {
+         if (intTotaltestcareNotMet === null || intTotaltestcareNotMet === undefined || intTotaltestcareNotMet === "") {
+             $('.indicator-box-small_testcare_red').text('');
              $('.indicator-box-small_testcare_red').hide();
          }
      }
@@ -1779,6 +1840,10 @@ function getCPGoaltestcareNotMet(PatientId) {
 
 function getCPGoaltestcareOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_testcare_orange').show();
+    $('.indicator-box-small_testcare_orange').text('');
+    intTotaltestcareOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -1893,7 +1958,8 @@ function getCPGoaltestcareOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotaltestcareOpen === null || intTotaltestcareOpen === undefined) {
+          if (intTotaltestcareOpen === null || intTotaltestcareOpen === undefined || intTotaltestcareOpen === "") {
+              $('.indicator-box-small_testcare_orange').text('');
               $('.indicator-box-small_testcare_orange').hide();
           }
       }
@@ -1901,7 +1967,9 @@ function getCPGoaltestcareOpen(PatientId) {
 }
 
 function getCPGoaltestcareMet(PatientId) {
-
+    $('.indicator-box-small_testcare_green').show();
+    $('.indicator-box-small_testcare_green').text('');
+    intTotaltestcareMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -2016,7 +2084,8 @@ function getCPGoaltestcareMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotaltestcareMet === null || intTotaltestcareMet === undefined) {
+            if (intTotaltestcareMet === null || intTotaltestcareMet === undefined || intTotaltestcareMet === "") {
+                $('.indicator-box-small_testcare_green').text('');
                 $('.indicator-box-small_testcare_green').hide();
             }
         }
@@ -2032,6 +2101,9 @@ function getCPGoaltestcareOverDue(PatientId) {
     var dateMsg = dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
     //alert(dateMsg);
     //alert(PatientId);
+    $('.indicator-box-small_testcare_grey').show();
+    $('.indicator-box-small_testcare_grey').text('');
+    intTotaltestcareOverDue = "";
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -2147,7 +2219,8 @@ function getCPGoaltestcareOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotaltestcareOverDue === null || intTotaltestcareOverDue === undefined) {
+            if (intTotaltestcareOverDue === null || intTotaltestcareOverDue === undefined || intTotaltestcareOverDue === "") {
+                $('.indicator-box-small_testcare_grey').text('');
                 $('.indicator-box-small_testcare_grey').hide();
             }
         }
@@ -2155,6 +2228,9 @@ function getCPGoaltestcareOverDue(PatientId) {
 }
 
 function getCPGoalvitalsAll(PatientId) {
+    $('.indicator-box-big_vitals_all').show();
+    $('.indicator-box-big_vitals_all').text('');
+    intTotalvitals = "";
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -2267,7 +2343,8 @@ function getCPGoalvitalsAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalvitals === null || intTotalvitals === undefined) {
+        if (intTotalvitals === null || intTotalvitals === undefined || intTotalvitals === "") {
+            $('.indicator-box-big_vitals_all').text('');
             $('.indicator-box-big_vitals_all').hide();
         }
     }
@@ -2276,6 +2353,10 @@ function getCPGoalvitalsAll(PatientId) {
 
 function getCPGoalvitalsNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_vitals_red').show();
+    $('.indicator-box-small_vitals_red').text('');
+    intTotalvitalsNotMet = "";
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -2387,7 +2468,8 @@ function getCPGoalvitalsNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalvitalsNotMet === null || intTotalvitalsNotMet === undefined) {
+         if (intTotalvitalsNotMet === null || intTotalvitalsNotMet === undefined || intTotalvitalsNotMet === "") {
+             $('.indicator-box-small_vitals_red').text('');
              $('.indicator-box-small_vitals_red').hide();
          }
      }
@@ -2396,6 +2478,10 @@ function getCPGoalvitalsNotMet(PatientId) {
 
 function getCPGoalvitalsOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_vitals_orange').show();
+    $('.indicator-box-small_vitals_orange').text('');
+    intTotalvitalsOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -2507,7 +2593,8 @@ function getCPGoalvitalsOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalvitalsOpen === null || intTotalvitalsOpen === undefined) {
+          if (intTotalvitalsOpen === null || intTotalvitalsOpen === undefined || intTotalvitalsOpen === "") {
+              $('.indicator-box-small_vitals_orange').text('');
               $('.indicator-box-small_vitals_orange').hide();
           }
       }
@@ -2515,6 +2602,9 @@ function getCPGoalvitalsOpen(PatientId) {
 }
 
 function getCPGoalvitalsMet(PatientId) {
+    $('.indicator-box-small_vitals_green').show();
+    $('.indicator-box-small_vitals_green').text('');
+    intTotalvitalsMet = "";
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -2627,7 +2717,8 @@ function getCPGoalvitalsMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalvitalsMet === null || intTotalvitalsMet === undefined) {
+            if (intTotalvitalsMet === null || intTotalvitalsMet === undefined || intTotalvitalsMet === "") {
+                $('.indicator-box-small_vitals_green').text('');
                 $('.indicator-box-small_vitals_green').hide();
             }
         }
@@ -2643,6 +2734,9 @@ function getCPGoalvitalsOverDue(PatientId) {
     var dateMsg = dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
     //alert(dateMsg);
     //alert(PatientId);
+    $('.indicator-box-small_vitals_grey').show();
+    $('.indicator-box-small_vitals_grey').text('');
+    intTotalvitalsOverDue = "";
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -2758,7 +2852,8 @@ function getCPGoalvitalsOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalvitalsOverDue === null || intTotalvitalsOverDue === undefined) {
+            if (intTotalvitalsOverDue === null || intTotalvitalsOverDue === undefined || intTotalvitalsOverDue === "") {
+                $('.indicator-box-small_vitals_grey').text('');
                 $('.indicator-box-small_vitals_grey').hide();
             }
         }
@@ -2766,6 +2861,9 @@ function getCPGoalvitalsOverDue(PatientId) {
 }
 
 function getCPGoalmedicationsAll(PatientId) {
+    $('.indicator-box-big_medications_all').show();
+    $('.indicator-box-big_medications_all').text('');
+    intTotalmedications = "";
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -2878,7 +2976,8 @@ function getCPGoalmedicationsAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalmedications === null || intTotalmedications === undefined) {
+        if (intTotalmedications === null || intTotalmedications === undefined || intTotalmedications === "") {
+            $('.indicator-box-big_medications_all').text('');
             $('.indicator-box-big_medications_all').hide();
         }
     }
@@ -2887,6 +2986,10 @@ function getCPGoalmedicationsAll(PatientId) {
 
 function getCPGoalmedicationsNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_medications_red').show();
+    $('.indicator-box-small_medications_red').text('');
+    intTotalmedicationsNotMet = "";
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3001,7 +3104,8 @@ function getCPGoalmedicationsNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalmedicationsNotMet === null || intTotalmedicationsNotMet === undefined) {
+         if (intTotalmedicationsNotMet === null || intTotalmedicationsNotMet === undefined || intTotalmedicationsNotMet === "") {
+             $('.indicator-box-small_medications_red').text('');
              $('.indicator-box-small_medications_red').hide();
          }
      }
@@ -3010,6 +3114,10 @@ function getCPGoalmedicationsNotMet(PatientId) {
 
 function getCPGoalmedicationsOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_medications_orange').show();
+    $('.indicator-box-small_medications_orange').text('');
+    intTotalmedicationsOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3124,7 +3232,8 @@ function getCPGoalmedicationsOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalmedicationsOpen === null || intTotalmedicationsOpen === undefined) {
+          if (intTotalmedicationsOpen === null || intTotalmedicationsOpen === undefined || intTotalmedicationsOpen === "") {
+              $('.indicator-box-small_medications_orange').text('');
               $('.indicator-box-small_medications_orange').hide();
           }
       }
@@ -3132,7 +3241,9 @@ function getCPGoalmedicationsOpen(PatientId) {
 }
 
 function getCPGoalmedicationsMet(PatientId) {
-
+    $('.indicator-box-small_medications_green').show();
+    $('.indicator-box-small_medications_green').text('');
+    intTotalmedicationsMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3247,7 +3358,8 @@ function getCPGoalmedicationsMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalmedicationsMet === null || intTotalmedicationsMet === undefined) {
+            if (intTotalmedicationsMet === null || intTotalmedicationsMet === undefined || intTotalmedicationsMet === "") {
+                $('.indicator-box-small_medications_green').text('');
                 $('.indicator-box-small_medications_green').hide();
             }
         }
@@ -3263,7 +3375,9 @@ function getCPGoalmedicationsOverDue(PatientId) {
     var dateMsg = dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
     //alert(dateMsg);
     //alert(PatientId);
-
+    $('.indicator-box-small_medications_grey').show();
+    $('.indicator-box-small_medications_grey').text('');
+    intTotalmedicationsOverDue = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410000 and tri_NextDueDate le datetime'" + dateMsg + "'  and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3375,7 +3489,8 @@ function getCPGoalmedicationsOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalmedicationsOverDue === null || intTotalmedicationsOverDue === undefined) {
+            if (intTotalmedicationsOverDue === null || intTotalmedicationsOverDue === undefined || intTotalmedicationsOverDue === "") {
+                $('.indicator-box-small_medications_grey').text('');
                 $('.indicator-box-small_medications_grey').hide();
             }
         }
@@ -3383,7 +3498,9 @@ function getCPGoalmedicationsOverDue(PatientId) {
 }
 
 function getCPGoalactivityAll(PatientId) {
-
+    $('.indicator-box-big_activity_all').show();
+    $('.indicator-box-big_activity_all').text('');
+    intTotalactivity = "";
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3498,7 +3615,8 @@ function getCPGoalactivityAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalactivity === null || intTotalactivity === undefined) {
+        if (intTotalactivity === null || intTotalactivity === undefined || intTotalactivity === "") {
+            $('.indicator-box-big_activity_all').text('');
             $('.indicator-box-big_activity_all').hide();
         }
     }
@@ -3507,6 +3625,9 @@ function getCPGoalactivityAll(PatientId) {
 
 function getCPGoalactivityNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_activity_red').show();
+    $('.indicator-box-small_activity_red').text('');
+    intTotalactivityNotMet = "";
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3618,7 +3739,8 @@ function getCPGoalactivityNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalactivityNotMet === null || intTotalactivityNotMet === undefined) {
+         if (intTotalactivityNotMet === null || intTotalactivityNotMet === undefined || intTotalactivityNotMet === "") {
+             $('.indicator-box-small_activity_red').text('');
              $('.indicator-box-small_activity_red').hide();
          }
      }
@@ -3627,6 +3749,9 @@ function getCPGoalactivityNotMet(PatientId) {
 
 function getCPGoalactivityOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_activity_orange').show();
+    $('.indicator-box-small_activity_orange').text('');
+    intTotalactivityOpen = "";
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3738,7 +3863,8 @@ function getCPGoalactivityOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalactivityOpen === null || intTotalactivityOpen === undefined) {
+          if (intTotalactivityOpen === null || intTotalactivityOpen === undefined || intTotalactivityOpen === "") {
+              $('.indicator-box-small_activity_orange').text('');
               $('.indicator-box-small_activity_orange').hide();
           }
       }
@@ -3746,7 +3872,9 @@ function getCPGoalactivityOpen(PatientId) {
 }
 
 function getCPGoalactivityMet(PatientId) {
-
+    $('.indicator-box-small_activity_green').show();
+    $('.indicator-box-small_activity_green').text('');
+    intTotalactivityMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3858,7 +3986,8 @@ function getCPGoalactivityMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalactivityMet === null || intTotalactivityMet === undefined) {
+            if (intTotalactivityMet === null || intTotalactivityMet === undefined || intTotalactivityMet === "") {
+                $('.indicator-box-small_activity_green').text('');
                 $('.indicator-box-small_activity_green').hide();
             }
         }
@@ -3866,7 +3995,9 @@ function getCPGoalactivityMet(PatientId) {
 }
 
 function getCPGoalactivityOverDue(PatientId) {
-
+    $('.indicator-box-small_activity_grey').show();
+    $('.indicator-box-small_activity_grey').text('');
+    intTotalactivityOverDue = "";
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -3989,7 +4120,8 @@ function getCPGoalactivityOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalactivityOverDue === null || intTotalactivityOverDue === undefined) {
+            if (intTotalactivityOverDue === null || intTotalactivityOverDue === undefined || intTotalactivityOverDue === "") {
+                $('.indicator-box-small_activity_grey').text('');
                 $('.indicator-box-small_activity_grey').hide();
             }
         }
@@ -3997,7 +4129,9 @@ function getCPGoalactivityOverDue(PatientId) {
 }
 
 function getCPGoalnutritionAll(PatientId) {
-
+    $('.indicator-box-big_nutrition_all').show();
+    $('.indicator-box-big_nutrition_all').text('');
+    intTotalnutrition = "";
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4112,7 +4246,8 @@ function getCPGoalnutritionAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalnutrition === null || intTotalnutrition === undefined) {
+        if (intTotalnutrition === null || intTotalnutrition === undefined || intTotalnutrition === "") {
+            $('.indicator-box-big_nutrition_all').text('');
             $('.indicator-box-big_nutrition_all').hide();
         }
     }
@@ -4121,6 +4256,9 @@ function getCPGoalnutritionAll(PatientId) {
 
 function getCPGoalnutritionNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_nutrition_red').show();
+    $('.indicator-box-small_nutrition_red').text('');
+    intTotalnutritionNotMet = "";
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4235,7 +4373,8 @@ function getCPGoalnutritionNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalnutritionNotMet === null || intTotalnutritionNotMet === undefined) {
+         if (intTotalnutritionNotMet === null || intTotalnutritionNotMet === undefined || intTotalnutritionNotMet === "") {
+             $('.indicator-box-small_nutrition_red').text('');
              $('.indicator-box-small_nutrition_red').hide();
          }
      }
@@ -4244,6 +4383,10 @@ function getCPGoalnutritionNotMet(PatientId) {
 
 function getCPGoalnutritionOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_nutrition_orange').text('');
+    $('.indicator-box-small_nutrition_orange').show();
+    intTotalnutritionOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4358,7 +4501,8 @@ function getCPGoalnutritionOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalnutritionOpen === null || intTotalnutritionOpen === undefined) {
+          if (intTotalnutritionOpen === null || intTotalnutritionOpen === undefined || intTotalnutritionOpen === "") {
+              $('.indicator-box-small_nutrition_orange').text('');
               $('.indicator-box-small_nutrition_orange').hide();
           }
 
@@ -4367,7 +4511,9 @@ function getCPGoalnutritionOpen(PatientId) {
 }
 
 function getCPGoalnutritionMet(PatientId) {
-
+    $('.indicator-box-small_nutrition_green').show();
+    $('.indicator-box-small_nutrition_green').text('');
+    intTotalnutritionMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4482,7 +4628,8 @@ function getCPGoalnutritionMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalnutritionMet === null || intTotalnutritionMet === undefined) {
+            if (intTotalnutritionMet === null || intTotalnutritionMet === undefined || intTotalnutritionMet === "") {
+                $('.indicator-box-small_nutrition_green').text('');
                 $('.indicator-box-small_nutrition_green').hide();
             }
 
@@ -4500,6 +4647,9 @@ function getCPGoalnutritionOverDue(PatientId) {
     //alert(dateMsg);
     //alert(PatientId);
 
+    $('.indicator-box-small_nutrition_grey').show();
+    $('.indicator-box-small_nutrition_grey').text('');
+    intTotalnutritionOverDue = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410000 and tri_NextDueDate le datetime'" + dateMsg + "'  and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4614,7 +4764,8 @@ function getCPGoalnutritionOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalnutritionOverDue === null || intTotalnutritionOverDue === undefined) {
+            if (intTotalnutritionOverDue === null || intTotalnutritionOverDue === undefined || intTotalnutritionOverDue === "") {
+                $('.indicator-box-small_nutrition_grey').text('');
                 $('.indicator-box-small_nutrition_grey').hide();
             }
 
@@ -4623,7 +4774,9 @@ function getCPGoalnutritionOverDue(PatientId) {
 }
 
 function getCPGoalpsychosocialAll(PatientId) {
-
+    $('.indicator-box-big_psychosocial_all').show();
+    $('.indicator-box-big_psychosocial_all').text('');
+    intTotalpsychosocial = "";
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4738,7 +4891,9 @@ function getCPGoalpsychosocialAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalpsychosocial === null || intTotalpsychosocial === undefined) {
+        if (intTotalpsychosocial === null || intTotalpsychosocial === undefined || intTotalpsychosocial === "") {
+            $('.indicator-box-big_psychosocial_all').text('');
+
             $('.indicator-box-big_psychosocial_all').hide();
         }
     }
@@ -4747,6 +4902,9 @@ function getCPGoalpsychosocialAll(PatientId) {
 
 function getCPGoalpsychosocialNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_psychosocial_red').show();
+    $('.indicator-box-small_psychosocial_red').text();
+    intTotalpsychosocialNotMet = "";
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4861,7 +5019,9 @@ function getCPGoalpsychosocialNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalpsychosocialNotMet === null || intTotalpsychosocialNotMet === undefined) {
+         if (intTotalpsychosocialNotMet === null || intTotalpsychosocialNotMet === undefined || intTotalpsychosocialNotMet === "") {
+             $('.indicator-box-small_psychosocial_red').text();
+
              $('.indicator-box-small_psychosocial_red').hide();
          }
      }
@@ -4870,6 +5030,10 @@ function getCPGoalpsychosocialNotMet(PatientId) {
 
 function getCPGoalpsychosocialOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_psychosocial_orange').show();
+    $('.indicator-box-small_psychosocial_orange').text('');
+    intTotalpsychosocialOpen = "";
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4984,7 +5148,9 @@ function getCPGoalpsychosocialOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalpsychosocialOpen === null || intTotalpsychosocialOpen === undefined) {
+          if (intTotalpsychosocialOpen === null || intTotalpsychosocialOpen === undefined || intTotalpsychosocialOpen === "") {
+              $('.indicator-box-small_psychosocial_orange').text('');
+
               $('.indicator-box-small_psychosocial_orange').hide();
           }
       }
@@ -4992,7 +5158,9 @@ function getCPGoalpsychosocialOpen(PatientId) {
 }
 
 function getCPGoalpsychosocialMet(PatientId) {
-
+    $('.indicator-box-small_psychosocial_green').show();
+    $('.indicator-box-small_psychosocial_green').text('');
+    intTotalpsychosocialMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5104,7 +5272,9 @@ function getCPGoalpsychosocialMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalpsychosocialMet === null || intTotalpsychosocialMet === undefined) {
+            if (intTotalpsychosocialMet === null || intTotalpsychosocialMet === undefined || intTotalpsychosocialMet === "") {
+                $('.indicator-box-small_psychosocial_green').text('');
+
                 $('.indicator-box-small_psychosocial_green').hide();
             }
         }
@@ -5112,7 +5282,9 @@ function getCPGoalpsychosocialMet(PatientId) {
 }
 
 function getCPGoalpsychosocialOverDue(PatientId) {
-
+    $('.indicator-box-small_psychosocial_grey').show();
+    $('.indicator-box-small_psychosocial_grey').text('');
+    intTotalpsychosocialOverDue = "";
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -5235,7 +5407,8 @@ function getCPGoalpsychosocialOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalpsychosocialOverDue === null || intTotalpsychosocialOverDue === undefined) {
+            if (intTotalpsychosocialOverDue === null || intTotalpsychosocialOverDue === undefined || intTotalpsychosocialOverDue === "") {
+                $('.indicator-box-small_psychosocial_grey').text('');
                 $('.indicator-box-small_psychosocial_grey').hide();
             }
         }
@@ -5243,7 +5416,9 @@ function getCPGoalpsychosocialOverDue(PatientId) {
 }
 
 function getCPGoalwrapupAll(PatientId) {
-
+    $('.indicator-box-big_wrapup_all').show();
+    $('.indicator-box-big_wrapup_all').text('');
+    intTotalwrapup = "";
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5358,7 +5533,9 @@ function getCPGoalwrapupAll(PatientId) {
     },
     function () {
         //On Complete - Do Something
-        if (intTotalwrapup === null || intTotalwrapup === undefined) {
+        if (intTotalwrapup === null || intTotalwrapup === undefined || intTotalwrapup === "") {
+            $('.indicator-box-big_wrapup_all').text('');
+
             $('.indicator-box-big_wrapup_all').hide();
         }
     }
@@ -5369,6 +5546,9 @@ function getCPGoalwrapupAll(PatientId) {
 
 function getCPGoalwrapupNotMet(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_wrapup_red').show();
+    $('.indicator-box-small_wrapup_red').text('');
+    intTotalwrapupNotMet = "";
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5483,7 +5663,8 @@ function getCPGoalwrapupNotMet(PatientId) {
      },
      function () {
          //On Complete - Do Something
-         if (intTotalwrapupNotMet === null || intTotalwrapupNotMet === undefined) {
+         if (intTotalwrapupNotMet === null || intTotalwrapupNotMet === undefined || intTotalwrapupNotMet === "") {
+             $('.indicator-box-small_wrapup_red').text('');
              $('.indicator-box-small_wrapup_red').hide();
          }
      }
@@ -5492,6 +5673,9 @@ function getCPGoalwrapupNotMet(PatientId) {
 
 function getCPGoalwrapupOpen(PatientId) {
     //alert(PatientId);
+    $('.indicator-box-small_wrapup_orange').show();
+    $('.indicator-box-small_wrapup_orange').text('');
+    intTotalwrapupOpen = "";
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5606,16 +5790,18 @@ function getCPGoalwrapupOpen(PatientId) {
       },
       function () {
           //On Complete - Do Something
-          if (intTotalwrapupOpen === null || intTotalwrapupOpen === undefined) {
+          if (intTotalwrapupOpen === null || intTotalwrapupOpen === undefined || intTotalwrapupOpen === "") {
+              $('.indicator-box-small_wrapup_orange').text('');
               $('.indicator-box-small_wrapup_orange').hide();
           }
-
       }
   );
 }
 
 function getCPGoalwrapupMet(PatientId) {
-
+    $('.indicator-box-small_wrapup_green').show();
+    $('.indicator-box-small_wrapup_green').text('');
+    intTotalwrapupMet = "";
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5730,7 +5916,8 @@ function getCPGoalwrapupMet(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalwrapupMet === null || intTotalwrapupMet === undefined) {
+            if (intTotalwrapupMet === null || intTotalwrapupMet === undefined || intTotalwrapupMet === "") {
+                $('.indicator-box-small_wrapup_green').text('');
                 $('.indicator-box-small_wrapup_green').hide();
             }
         }
@@ -5738,7 +5925,9 @@ function getCPGoalwrapupMet(PatientId) {
 }
 
 function getCPGoalwrapupOverDue(PatientId) {
-
+    $('.indicator-box-small_wrapup_grey').show();
+    $('.indicator-box-small_wrapup_grey').text('');
+    intTotalwrapupOverDue = "";
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -5861,7 +6050,8 @@ function getCPGoalwrapupOverDue(PatientId) {
         },
         function () {
             //On Complete - Do Something
-            if (intTotalwrapupOverDue === null || intTotalwrapupOverDue === undefined) {
+            if (intTotalwrapupOverDue === null || intTotalwrapupOverDue === undefined || intTotalwrapupOverDue === "") {
+                $('.indicator-box-small_wrapup_grey').text('');
                 $('.indicator-box-small_wrapup_grey').hide();
             }
         }
@@ -7267,6 +7457,7 @@ $(document).on("click", 'a.ui-spinner-button ui-spinner-down ui-corner-br', func
 //    }
 //}
 var vitalTypeToSaveArray = [];
+var lastVitalId = "";
 function AddVitaTypeToSave(inputId) {
 
     if (inputId !== null && inputId !== undefined && inputId.length > 0) {
@@ -8379,10 +8570,10 @@ $(document).on('click', '.savebtn', function () {
         //alert(strModfrId);
         //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
         //$(this).prop("disabled", true);
-        //if (i === vitalTypeToSaveArray.length - 1)
-        //{
-        //    alert("Goal Saved!");
-        //}
+        if (i === vitalTypeToSaveArray.length - 1)
+        {
+            lastVitalId = vitalTypeToSaveArray[i];
+        }
     }
     vitalTypeToSaveArray.length = 0;
 });
@@ -8439,6 +8630,7 @@ $(document).on('click', '.savebtn_prsnlize1', function () {
     GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1);
     //alert(strModfrId);
     //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
+    lastVitalId = vVitalTypId1;
 
 });
 
@@ -8786,6 +8978,7 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
     },
     function () {
         //On Complete - Do Something
+        if (vVitalTypId === lastVitalId)
         alert("Goal Saved!");
     }
 );
