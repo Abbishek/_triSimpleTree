@@ -118,6 +118,7 @@
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="_imgs\logo-dh-small.png" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
