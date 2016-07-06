@@ -401,7 +401,10 @@
                                 Last Result:
                             </td>
                             <!--<td class="result-1" id="lastresult_personalize"></td>-->
-                            <td class="result-1"><input type="text" class="txtfield" id="lastresult_personalize" style="background-color: #FAFAFA"></td>
+                            <td class="result-1">
+                                <input type="text" class="txtfield" id="lastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                                <input type="text" class="txtfield" id="qualLastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                            </td>
 
                         </tr>
                     </table>
@@ -556,7 +559,28 @@
                             </td>
                         </tr>
                     </table>
+                    <!-- OBSERVED VALUES -->
+                    <table align="center" id="tbl_ObservedValue" style="display:none;">
+                        <tr class="maintable">
+                            <td class="labelcenter" width="270px"></td>
+                            <td class="labelcenter" width="600px"> Observed Value:</td>
+                            <td class="labelcenter" width="120px"> </td>
+                            <td class="labelcenter" width="120px"></td>
+                        </tr>
+                        <!--</table>
+        <table class="factors" align="center">-->
+                        <tr class="factors">
+                            <td width="270px">
+                            <td class="labelcenter" width="600px">
+                                <span class="personalizequalitative"><input type="text" id="observedValue" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;"></span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
                     <br>
+                    
+
                     <!-- DESCRIPTION & ASSIGNMENT ROLE -->
                     <table class="maintable" align="left">
                         <tr>

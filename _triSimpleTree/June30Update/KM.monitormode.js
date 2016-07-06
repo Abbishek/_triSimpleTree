@@ -1425,7 +1425,7 @@ function ReviewAndUpdateGoal(currentId) {
   currentId,
   "tri_cccareplangoal",
   "tri_actiontriggervalue,tri_range,tri_PatientID,tri_metricoperatortwo,tri_vitalsvaluetype,tri_MetricOperator,tri_qualitativetarget,tri_Metric,tri_targetvaluetwo,tri_typeofgoalcode,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_qualitativeaction,tri_activityrecurrencemultiplierabnormal,tri_activityrecurrencemultipliernormal,tri_PatientModifierId,tri_activitydescription,tri_LastTargetValue,tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_typeofgoalcode,tri_patientmodifier_tri_cccareplangoal/tri_name,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype/tri_name",
-  'tri_patientmodifier_tri_cccareplangoal,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype',
+  'tri_patientmodifier_tri_cccareplangoal,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype,tri_lastresult',
   function (result) {
       //alert(result.tri_name);
       var tri_actiontriggervalue = result.tri_actiontriggervalue;
@@ -1434,6 +1434,7 @@ function ReviewAndUpdateGoal(currentId) {
       var tri_CarePlanGoalState = result.tri_CarePlanGoalState.Value;
       var tri_LastGoalDate = result.tri_LastGoalDate;
       var tri_LastTargetValue = result.tri_LastTargetValue;
+      var tri_lastresult = result.tri_lastresult;
       var tri_LastResultDate = result.tri_LastResultDate;
       var tri_name = result.tri_name;
       var tri_NextDueDate = result.tri_NextDueDate;
@@ -1456,7 +1457,7 @@ function ReviewAndUpdateGoal(currentId) {
       var tri_patientmodifier_tri_cccareplangoal_tri_name = result.tri_patientmodifier_tri_cccareplangoal.tri_name;
       var tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype_tri_name = result.tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype.tri_name;
 
-      var strLstGoalDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastGoalDate);
+      /////////////////// var strLstGoalDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastGoalDate);
       var strNxtGoalDt = $.datepicker.formatDate('mm/dd/yy', result.tri_NextDueDate);
       var strLastTrgtVal = tri_LastTargetValue;
       // alert(tri_vitalsvaluetype);
@@ -1471,10 +1472,8 @@ function ReviewAndUpdateGoal(currentId) {
 
       $('.monitor-wrapper').hide();
       $('.sectiontitle_personalize').text(tri_name);
-      if (strLastTrgtVal !== null && strLastTrgtVal !=="") {
-          $('#lastresult_personalize').val(strLastTrgtVal).spinner({ step: 1.00, numberFormat: "n" ,disabled:true});
-      }
-      $('#lastresultdate_personalize').val(strLstGoalDt).datepicker({ disabled: true });
+     
+      ///////////////// $('#lastresultdate_personalize').val(strLstGoalDt).datepicker({ disabled: true });
       $('#nextresultdate_personalize').val(strNxtGoalDt).datepicker({ disabled: true });
       //$('#lastresultdate_personalize').datepicker();
       $('.personalizedropdownmenu').attr('id', tri_vitalsvaluetype + "_ULPRSNL");
@@ -1529,21 +1528,33 @@ function ReviewAndUpdateGoal(currentId) {
           
       }
 
-
-     
-
-
       switch (tri_typeofgoalcode) {
-          case 100000000:
+          case 100000000: // Qualitative
+              $('#qualLastresult_personalize').css('display', 'block');
+              $('#lastresult_personalize').css('display', 'none');
+
+              $('#tbl_ObservedValue').css('display', 'block');
               $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
               $('.personalizequalitative,.personalizetargetvalQual').show();
               $('.personalizequantitative').hide();
               $('.personalizegoalbutton').prop({ disabled: false });
+              $('#qualLastresult_personalize').val(tri_lastresult);
+              //$('#lastresultdate_personalize').css('display', 'none')
+              $('#observedValue').val('');
+              var strLstResultDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastResultDate);
+              $('#lastresultdate_personalize').val(strLstResultDt).datepicker({ disabled: true });
 
               break;
-          case 100000001:
+          case 100000001: // Quantitative
              // $('.personalizetargetval').val(tri_Metric).removeClass('qualitative').addClass('quantitative');
               // // $("#" + vMETRICselector).;
+              $('#lastresult_personalize').css('display', 'block');
+              $('#tbl_ObservedValue').css('display', 'none');
+
+              var strLstGoalDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastGoalDate);
+              $('#lastresultdate_personalize').val(strLstGoalDt).datepicker({ disabled: true });
+              $('#qualLastresult_personalize').css('display', 'none');
+
               $('.personalizegoalbutton').prop({ disabled: true });
               switch (tri_MetricOperator) {
                   case 167410000:
@@ -1619,11 +1630,16 @@ function ReviewAndUpdateGoal(currentId) {
               if (tri_range == true) {
                   $('.personalizerangeAnd,.personalizeoperatorTwo,.personalizetargetvalMetricTwo').show();
               };
-             //// GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_targetmetricoperator);
+              //// GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_targetmetricoperator);
+              if (strLastTrgtVal !== null && strLastTrgtVal !== "") {
+                  $('#lastresult_personalize').val(strLastTrgtVal).spinner({ step: 1.00, numberFormat: "n", disabled: true });
+              }
+
               break;
           case null:
               $('.personalizequantitative').hide();
               $('.personalizequalitative').show();
+              $('#qualLastresult_personalize').css('display', 'block');
               break;
       }
 
@@ -8728,6 +8744,8 @@ $(document).on('click', '.savebtn_prsnlize1', function () {
     var vQualTxt1= $('.personalizetargetvalQual').val();
     var vMetricOprtr2Txt1 = $('.personalizeoperatorTwo').text();
     var vGoalStateTxt1 = $('.personalizegoalbutton').text();
+    var vobservedValue = $('#observedValue').val();
+    var vLastResultDate = new Date();
 
     //alert(vGoalStateTxt1);
     if (parent.Xrm !== undefined) {
@@ -8760,14 +8778,14 @@ $(document).on('click', '.savebtn_prsnlize1', function () {
     //var vOsetValAssignmentRole = GetOsetValFromTextAssignmentRole(vAssignmentRoleTxt);
     //alert(vFreqNormalTxt1 + "===" + vFreqAbNormalTxt1 + "===" + vGoalStateTxt1);
     //alert(vOsetValMetricOperator1 + "===" + vOsetValMetricOperator21 + "===" + vTargetValueTxt1 + "===" + vTargetValue2Txt1);
-    GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1);
+    GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1,vobservedValue,vLastResultDate);
     //alert(strModfrId);
     //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
     lastVitalId = vVitalTypId1;
     IsWindowsWrapperClosed = true;
 });
 
-function GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState) {
+function GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState,vobservedValue,vLastResultDate) {
    var vModfrIdStr;
  // alert("hello")
     SDK.REST.retrieveMultipleRecords(
@@ -8783,7 +8801,7 @@ function GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOp
             if (tri_VitalValueTypeId === vVitalTypId && tri_patientmodifierId !== undefined && tri_patientmodifierId !== null && tri_patientmodifierId.length>0) {
                 vModfrIdStr = tri_patientmodifierId;
                 
-                UpdateCarePlanJoin(vVitalTypId, contactId, tri_patientmodifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState);
+                UpdateCarePlanJoin(vVitalTypId, contactId, tri_patientmodifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState,vobservedValue,vLastResultDate);
             };
         }
     },
@@ -9013,7 +9031,7 @@ function GetOsetValFromTextGoalState(vGoalStateTxt) {
     //alert(OprtrVal);
 }
 
-function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState) {
+function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState,vobservedValue,vLastResultDate) {
     //alert(contactId + "++" + modifierId + "++" + vVitalTypId);
     SDK.REST.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -9068,6 +9086,10 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
                         //tri_careplanjoin.tri_qualitativetarget = vTargetValueTxt;
                         if (vQualTxt !== null && vQualTxt !== "") {
                             tri_cccareplangoal.tri_qualitativetarget = vQualTxt;
+                        }
+                        if (vobservedValue !== null && vobservedValue !== "" && vobservedValue !== undefined) {
+                            tri_cccareplangoal.tri_lastresult = vobservedValue;
+                            tri_cccareplangoal.tri_LastResultDate = vLastResultDate;
                         }
                         break;
                     case 100000001:
