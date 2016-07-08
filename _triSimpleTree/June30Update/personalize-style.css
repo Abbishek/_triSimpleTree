@@ -315,3 +315,17 @@ hr.grey { border: 0; height: 1px; background: #CCC;}
     overflow:visible !important;
     width:220px !important;
 }
+
+.panelHeader {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 15px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    border-color: #aabcfe;
+    color: #039;
+    background-color: #f0f5f5;
+}

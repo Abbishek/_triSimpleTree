@@ -3024,10 +3024,10 @@ select[multiple].input-lg {
   border: 1px solid transparent;
   border-radius: 4px;
 
-  max-width: 220px !important;
+  /* max-width: 220px !important;
     overflow: hidden !important;
     white-space: pre !important;
-    text-overflow: ellipsis !important;
+    text-overflow: ellipsis !important;*/
 }
 .btn:focus,
 .btn:active:focus,
@@ -5468,7 +5468,7 @@ button.list-group-item-danger.active:focus {
   padding: 15px;
 }
 .panel-heading {
-  padding: 10px 15px;
+  padding: 0px 0px;
   border-bottom: 1px solid transparent;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
