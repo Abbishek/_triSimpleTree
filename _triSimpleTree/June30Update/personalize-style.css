@@ -317,7 +317,7 @@ hr.grey { border: 0; height: 1px; background: #CCC;}
 }
 
 .panelHeader {
-    font-family: Arial, sans-serif;
+    font-family: Segoe UI, Helvetica, Arial;
     font-size: 14px;
     font-weight: normal;
     padding: 10px 15px;
@@ -328,4 +328,8 @@ hr.grey { border: 0; height: 1px; background: #CCC;}
     border-color: #aabcfe;
     color: #039;
     background-color: #f0f5f5;
+}
+
+.panel-title a {
+    text-decoration:none !important;
 }

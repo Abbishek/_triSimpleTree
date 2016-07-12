@@ -6536,15 +6536,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6552,15 +6552,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6639,15 +6639,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6655,15 +6655,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6743,15 +6743,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6759,15 +6759,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6847,15 +6847,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6863,15 +6863,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6950,15 +6950,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -6966,15 +6966,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7053,15 +7053,15 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7069,15 +7069,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7155,16 +7155,16 @@ function DisplayPersonalizeMode(contactId) {
 
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7172,15 +7172,15 @@ function DisplayPersonalizeMode(contactId) {
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7259,31 +7259,31 @@ function DisplayPersonalizeMode(contactId) {
                 //<!-- MODIFIER DROP-DOWN -->    if(
                 '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
                 '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
                 '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
 
                 '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                '<li role="presentation" class="dropdown-header"><</li>' +
-                '<li role="presentation" class="dropdown-header">=</li>' +
-                 '<li role="presentation" class="dropdown-header">></li>' +
-                 '<li role="presentation" class="dropdown-header">>=</li>' +
-                 '<li role="presentation" class="dropdown-header"><=</li>' +
-                 '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                 '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                '</ul>' +
+                //'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
+                //'<li role="presentation" class="dropdown-header"><</li>' +
+                //'<li role="presentation" class="dropdown-header">=</li>' +
+                // '<li role="presentation" class="dropdown-header">></li>' +
+                // '<li role="presentation" class="dropdown-header">>=</li>' +
+                // '<li role="presentation" class="dropdown-header"><=</li>' +
+                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
+                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
+                //'</ul>' +
                 '</div>' +
                 //'</td>' +
                 //'<td class="labelcenter"  width="525px">' +//table2 column3
@@ -7352,17 +7352,17 @@ function DisplayPersonalizeMode(contactId) {
                        //'<table class="tg"><tr><th class="tg-typedetail" >Wrap Up</th></tr></table>' + vTblRowsWrapUp +
                        //'<table class="tg"><tr><th class="tg-typedetail" >Home Vitals</th></tr></table>' + vTblRowsHomeVitals +
                         CreateTooglePanels(vTblRowsSymptoms, 'Symptoms', 'panelSymptoms') +
-                        CreateTooglePanels(vTblRowsTestCare, 'Tests / Care', 'panelTestsCare') +
+                        CreateTooglePanels(vTblRowsTestCare, 'Tests/Care', 'panelTestsCare') +
+                        CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
                         CreateTooglePanels(vTblRowsMedications, 'Medications', 'panelMedications') +
                         CreateTooglePanels(vTblRowsActivity, 'Activity', 'panelActivity') +
                         CreateTooglePanels(vTblRowsNutrition, 'Nutrition', 'panelNutrition') +
-                        CreateTooglePanels(vTblRowsPyschoSocial, 'PsychoSocial', 'panelPsychoSocial') +
-                        CreateTooglePanels(vTblRowsWrapUp, 'Wrap', 'panelWrap') +
-                        CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
+                        CreateTooglePanels(vTblRowsPyschoSocial, 'Psycho-Social/Behavioral Health', 'panelPsychoSocial') +
+                        CreateTooglePanels(vTblRowsWrapUp, 'Wrap-Up', 'panelWrap') +
                         '<table class="maintable" >' +//table5 start
                         '<tr></tr>'+
                         '<tr><td><br>'+
-                        '<div class = "center-wrapper" ><div class="center-wrapper" >' +//SAVE CHANGES' +
+                        '<div class = "center-wrapper" ><div class="center-wrapper">' +//SAVE CHANGES' +
                         '<button class="btn btn-primary savebtn" type="button">Save Changes</button>' +
                         '</div>' +
                         '</td></tr></table>'+
@@ -8482,6 +8482,12 @@ $(document).on('click', '.savebtn', function () {
     //alert($(this).attr('id'));
     //var vVitalTypIdStr = $(this).attr('id');
     //var vVitalTypId = vVitalTypIdStr.replace("_SAVEBTN", "");
+    var PatientId1 = parent.Xrm.Page.data.entity.getId();
+    var PatientId2 = PatientId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
+    if (PatientId !== null && PatientId !== undefined && PatientId !== 0 && vitalTypeToSaveArray.length === 0) {
+        ClosePersonalizeWindow(PatientId);
+    }
 
     for (i = 0; i < vitalTypeToSaveArray.length; i++) {
         var vModfrName = $("#" + vitalTypeToSaveArray[i] + "_BTN").text();

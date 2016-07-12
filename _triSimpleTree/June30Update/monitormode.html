@@ -94,8 +94,7 @@
 
 
 <body>
-    <div style="display: table"><img style="float:left;padding-bottom:20px;" class="" src="../tri_imgs/logo_dh_small.png" /></div>
-    <div class="main-wrapper">
+    <div class="main-wrapper" style="clear:both;">
         <div class="monitor-wrapper">
 
             <div><button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button></div><br /><br />
@@ -402,8 +401,8 @@
                             </td>
                             <!--<td class="result-1" id="lastresult_personalize"></td>-->
                             <td class="result-1">
-                                <input type="text" class="txtfield" id="lastresult_personalize" style="background-color: #FAFAFA;display:none;">
-                                <input type="text" class="txtfield" id="qualLastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                                <input type="text" class="txtfield" disabled="disabled" id="lastresult_personalize" style="background-color: #FAFAFA;display:none;">
+                                <input type="text" class="txtfield" disabled="disabled" id="qualLastresult_personalize" style="background-color: #FAFAFA;display:none;">
                             </td>
 
                         </tr>
@@ -428,7 +427,7 @@
                     <table class="maintable" align="center">
                         <tr>
                             <td class="label-name"> Last Result Date:</td>
-                            <td class="result-1"><input type="text" class="txtfield" id="lastresultdate_personalize"></td>
+                            <td class="result-1"><input type="text" disabled="disabled" class="txtfield" id="lastresultdate_personalize"></td>
                             <td class="label-name"> Next Due Date:</td>
                             <td class="result-1"><input type="text" class="txtfield" id="nextresultdate_personalize"></td>
                             <td class="label-name"> Goal State:</td>
@@ -490,7 +489,7 @@
                                 <span class="personalizequantitative">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle personalizeoperatorOne" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu personalizeULoperatorOne">
+                                        <!--<ul class="dropdown-menu personalizeULoperatorOne">
                                             <li role="presentation" class="dropdown-header"><</li>
                                             <li role="presentation" class="dropdown-header">=</li>
                                             <li role="presentation" class="dropdown-header">></li>
@@ -498,12 +497,12 @@
                                             <li role="presentation" class="dropdown-header"><=</li>
                                             <li role="presentation" class="dropdown-header">% Increase</li>
                                             <li role="presentation" class="dropdown-header">% Decrease</li>
-                                        </ul>
+                                        </ul>-->
                                     </div>
                                     <input type="text" class="txtfield personalizetargetvalMetric" style="width:50px;text-align: left; padding-left: 10px; display:inline"><p class="personalizerangeAnd" style="display:inline;"> And </p>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle personalizeoperatorTwo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:inline"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu personalizeULoperatorTwo">
+                                        <!--<ul class="dropdown-menu personalizeULoperatorTwo">
                                             <li role="presentation" class="dropdown-header"><</li>
                                             <li role="presentation" class="dropdown-header">=</li>
                                             <li role="presentation" class="dropdown-header">></li>
@@ -511,7 +510,7 @@
                                             <li role="presentation" class="dropdown-header"><=</li>
                                             <li role="presentation" class="dropdown-header">% Increase</li>
                                             <li role="presentation" class="dropdown-header">% Decrease</li>
-                                        </ul>
+                                        </ul>-->
                                     </div>
                                     <input type="text" class="txtfield personalizetargetvalMetricTwo" style="width:50px;text-align: left; padding-left: 10px;display:inline;">
                                 </span>
@@ -651,8 +650,6 @@
         </div>
 
     </div>
-
-  
-
+    <div style="float: left; margin-top: 10px;"><img style="" src="../tri_imgs/logo_dh_small.png" /></div>
 </body>
 </html>
