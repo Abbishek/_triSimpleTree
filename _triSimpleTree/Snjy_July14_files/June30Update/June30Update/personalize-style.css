@@ -1,0 +1,335 @@
+﻿@charset "UTF-8";
+
+.main-wrapper
+{
+width: 100%;
+height:100%;
+background-color: #FFFFFF;
+font-family:Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif}
+
+.window-wrapper
+{
+width: 100%;
+height:100%;
+background-color: #FFFFFF;
+text-align:center;
+margin:0 auto;
+}
+
+.indicator-wrapper
+{
+width: 100%;
+/*width: 650px;*/
+min-width: 450px;
+height:25px;
+text-align:left;
+}
+
+/*.x-close {
+	height:40px; 
+	width:40px; 
+	border:1px solid #CCCCCC; 
+	line-height:40px; 
+	font-size:24px; 
+	font-weight:100;
+    text-align: center;
+	float:right
+	}
+	
+	.x-close:hover {
+		background-color:#CCCCCC;
+		color:#FFFFFF;
+		cursor:pointer;
+	}
+	
+	.bluebtn:hover {
+		background-color:#CCCCCC;
+		color:#FFFFFF;
+		cursor:pointer;
+	}*/
+	
+	
+.center-wrapper {
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.txtfield {
+	border-radius: 3px;
+	height: 33px;
+	/*width: 125px;*/
+	font-size:14px;
+	vertical-align:middle;
+	text-align:center;
+}
+
+.txtfieldquantitative {
+	border-radius: 3px;
+	height: 33px;
+	/*width: 125px;*/
+	font-size:14px;
+	vertical-align:middle;
+	text-align:center;
+
+}
+
+.label-name {
+	font-size:11px;
+	color: #666666;
+	font-weight: 600;
+	width: 100px;
+	padding: 5px;
+	text-align:left;
+}
+
+.labelcenter {
+	font-size:11px;
+	color: #666666;
+	font-weight: 600;
+	padding: 5px;
+	text-align: left;
+}
+
+
+.result-1 {
+	font-size: 16px;
+	font-weight: bold;
+	padding: 5px;
+	text-align:left;
+	min-width:100px;
+	max-width:200px;
+}
+
+.flag-box-big
+{
+/*width: 50px;*/
+height:25px;
+line-height: 30px;
+text-align:center;
+color: #ffffff;
+font-size:12px;
+margin: 0 auto;
+line-height:12px;
+font-family: Segoe UI, Helvetica, Arial;
+font-weight: bold;
+float:left;
+margin-right: 3px;
+cursor: pointer;
+padding-top: 5px;
+}
+
+.bluebtn {
+	background-color:#0072c6;
+	height:50px;
+	width:150px;
+	font-size: 16px;
+	color: #FFFFFF;
+	line-height: 50px;
+	text-align: center;
+	font-weight:200;
+	font-family:"Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+
+}
+
+.sectiontitle_personalize
+{
+min-width: 200px;
+height:30px;
+line-height: 32px;
+text-align:left;
+font-size:20px;
+font-family: Segoe UI, Helvetica, Arial;
+font-weight: 100;
+float: left;
+margin-left: 10px;
+margin-top: 0px;
+}
+
+
+.indicator-box-big:hover {
+  cursor: pointer;
+}
+
+
+
+.indicator-line
+{
+width: 100%;
+/*max-width: 800px;*/
+height:5px;
+float:left;
+padding-right: 0px;
+}
+
+
+
+
+.red
+{
+background-color: #dd3b31;
+}
+
+.orange
+{
+background-color: #ff7d09;
+}
+
+.green
+{
+background-color: #99cc00;
+}
+
+.grey
+{
+background-color: #666666;
+}
+
+.blue
+{
+background-color: #0072c6;
+}
+
+.redtxt
+{
+color: #dd3b31;
+}
+
+.orangetxt
+{
+color: #ff7d09;
+}
+
+.greentxt
+{
+color: #99cc00;
+}
+
+.bluetxt
+{
+color: #0072c6;
+}
+
+.greytxt
+{
+color: #666666;
+}
+
+
+.overduetxt
+{
+color: #a5a5a5;
+font-weight: bold;
+}
+
+/*.tile
+{
+   float: left;
+   width: 250px;
+   height: 250px;
+   margin: 5px;
+   padding: 0px;
+   background-color: white;
+   border: solid;
+   border-width: 0px;
+   border-color: #beb7bb;
+   font-family:"Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+}*/
+
+.maintable {
+   width: 100%;
+   /*max-width: 1500px;*/
+   border: none;
+   font-family: "Segoe UI", "Trebuchet MS", Verdana, sans-serif;
+   font-size:15px;
+   color: #333333;
+   background-color: #FFFFFF;
+   /*line-height: 14px;*/
+  
+}
+
+.factors {
+   width: 100%;
+   /*max-width: 1500px;*/
+   border: none;
+   font-family: "Segoe UI", "Trebuchet MS", Verdana, sans-serif;
+   font-size:15px;
+   color: #333333;
+   background-color: #FAFAFA;
+   /*line-height: 14px;*/
+  
+
+}
+
+
+
+hr.grey { border: 0; height: 1px; background: #CCC;}
+
+/*--------- Kendo DropDown ----------------*/
+
+.carePathDropdown {
+    display: inline-block !important;
+    background-color: #F7F7F7 !important;
+}
+
+.carePathDropdown span input {
+    min-width: 220px !important;
+    border: 1px solid #999999 !important;
+    cursor: pointer !important;
+    color: #333333 !important;
+    z-index: 9999 !important;
+    padding: 5px !important;
+    text-align: left;
+}
+
+#carePaths-list li {
+    border: 1px solid #999999 !important;
+    background-color: #fff !important;
+    cursor: pointer !important;
+    line-height: normal !important;
+    text-decoration: none !important;
+    display: block !important;
+    padding: 5px !important;
+    min-width: 220px !important;
+    z-index: 9999 !important;
+    text-align: left !important;
+    margin-left : -40px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#carePaths-list li:hover {
+    background-color: #fff !important;
+    cursor: pointer !important;
+    line-height: normal !important;
+    text-decoration: none !important;
+    display: block !important;
+    z-index: 9999 !important;
+}
+
+.k-window-actions {
+    display: none !important;
+}
+
+#carePaths-list{
+    overflow:visible !important;
+    width:220px !important;
+}
+
+.panelHeader {
+    font-family: Segoe UI, Helvetica, Arial;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 15px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    border-color: #aabcfe;
+    color: #039;
+    background-color: #f0f5f5;
+}
+
+.panel-title a {
+    text-decoration:none !important;
+}

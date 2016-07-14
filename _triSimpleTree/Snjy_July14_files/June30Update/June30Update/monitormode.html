@@ -3,9 +3,9 @@
 <head>
     <title>Monitor Mode HTML / CSS</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">
+    <link href="../tri_css/KMmonitormode_style.V2.css" rel="stylesheet" type="text/css">
     <link href="../tri_css/jquery_ui_1_11_4.custom.css" rel="stylesheet">
-    <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
+    <link href="../tri_css/KMpersonalize_style.V2.css" rel="stylesheet" type="text/css">
     <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">
     <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
     <script src="../tri_scripts/jquery_ui_1_11_4.custom.js" type="text/javascript"></script>
@@ -17,7 +17,7 @@
 
     <script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>
 
-    <script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
+    <script src="../tri_scripts/KM.monitormode.V2.js" type="text/javascript"> </script>
 
     <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
     <script src="../tri_scripts/kendo.js"></script>
@@ -371,20 +371,26 @@
         </div>
 
         <div class="window-wrapper">
-            <div style="float:right;">
-                <!-- Save Changes -->
-                <button class="btn btn-primary savebtn_prsnlize1" type="button">Save Changes</button>
-                <!-- X-CLOSE -->
-                <button type="button" class="btn btn-primary" id="windowwrapperclose" style="float:right;">Cancel</button><br /><br />
-            </div>
+
+            <!-- X-CLOSE -->
+            <button type="button" class="btn btn-primary" id="windowwrapperclose" style="float:right;">Close</button><br /><br />
+
+
+
+
             <!-- FLAG + Title -->
+
             <div class="indicator-wrapper">
 
                 <!--<div style="height:30px;padding:5px;" class="flag-box-big blue"> <br> </div>-->
 
                 <div class="sectiontitle_personalize"></div>
+
                 <div class="indicator-line blue">
                 </div>
+
+
+
                 <!-- Section Content -->
                 <!-- LAST RESULT -->
                 <div class="tablecontent">
@@ -399,18 +405,27 @@
                                 <input type="text" class="txtfield" disabled="disabled" id="qualLastresult_personalize " style="background-color: #FAFAFA;display:none;">
                             </td>
 
-                        <!--</tr>
-                    </table>-->
+                        </tr>
+                    </table>
+
+
+
+
                     <!-- RESULT SOURCE -->
-                    <!--<table class="maintable" align="center">
+                    <table class="maintable" align="center">
                         <tr>
                             <td class="label-name">Result Source:</td>
                             <td class="result-1" id="resultsource_personalize"></td>
                         </tr>
-                    </table>-->
+                    </table>
+
+
+
+
+
                     <!-- DATES -->
-                    <!--<table class="maintable" align="center">
-                        <tr>-->
+                    <table class="maintable" align="center">
+                        <tr>
                             <td class="label-name"> Last Result Date:</td>
                             <td class="result-1"><input type="text" disabled="disabled" class="txtfield" id="lastresultdate_personalize"></td>
                             <td class="label-name"> Next Due Date:</td>
@@ -429,31 +444,46 @@
                             </td>
                         </tr>
                     </table>
-                    <br>
+
+                    <br><br>
+
+
+
+
                     <!-- FACTORS & VALUES -->
-                    <table >
-                        <tr class="maintable" align="center">
-                            <td class="labelcenter" width="270px">Factor / Modifier:</td>
-                            <td class="labelcenter" width="600px"> Target Value:</td>
-                            <td class="labelcenter" width="220px"> In Range Frequency:</td>
-                            <td class="labelcenter" width="220px"> Out of Range Frequency:<br></td>
+                    <table class="maintable" align="center">
+                        <tr>
+                            <td class="labelcenter" width="90px">Factor / Modifier:</td>
+                            <td class="labelcenter" width="200px"> Target Value:</td>
+                            <td class="labelcenter" width="120px"> In Range Frequency:</td>
+                            <td class="labelcenter" width="120px"> Out of Range Frequency:<br></td>
                         </tr>
-                        <tr class="factors" align="center" >
-                            <td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">
+                    </table>
+
+                    <table class="factors" align="center">
+                        <tr>
+                            <td class="labelcenter" style="width:90px; padding-right:20px;">
+
+
+
+
+
                                 <!-- FACTOR DROP-DOWN -->
                                 <div class="btn-group" style="width: 90px;">
                                     <button type="button" class="btn btn-default dropdown-toggle personalizemodifierbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
                                     <ul class="dropdown-menu personalizedropdownmenu">
                                         <!--<li role="presentation" class="dropdown-header">18-25</li>
-                <li role="presentation" class="dropdown-header">15-18</li>-->
+                                        <li role="presentation" class="dropdown-header">15-18</li>-->
                                     </ul>
                                 </div>
 
                             </td>
                         </tr>
+
                         <tr>
                             <td width="270px">
                             <td class="labelcenter" width="600px">
+
                                 <!--<table align="center"><tr><td>-->
                                 <!-- MODIFIER DROP-DOWN -->
                                 <span class="personalizequantitative">
@@ -486,7 +516,7 @@
                                 </span>
                                 <span class="personalizequalitative"><input type="text" class="txtfield personalizetargetvalQual" style="width:450px;text-align: left; padding-left: 10px;"></span>
                             </td>
-                            <td width="220px">
+                            <td>
                                 <!--<td class="labelcenter"  width="525px">-->
                                 <!--<input type="text" class="txtfield personalizetargetval"  style="width:480px;text-align: left; padding-left: 10px;" ></td >-->
                                 <!--<td>-->
@@ -497,17 +527,17 @@
                                     <ul class="dropdown-menu personalizeULnormalrecurr">
                                         <li role="presentation" class="dropdown-header">Day</li>
                                         <li role="presentation" class="dropdown-header">Week</li>
-                                        <!--<li role="presentation" class="dropdown-header">Bi-Weekly</li>-->
+                                      <!--  <li role="presentation" class="dropdown-header">Bi-Weekly</li>-->
                                         <li role="presentation" class="dropdown-header">Month</li>
                                         <li role="presentation" class="dropdown-header">Quarter</li>
-                                        <!--<li role="presentation" class="dropdown-header">Every 6 Months</li>-->
+                                       <!-- <li role="presentation" class="dropdown-header">Every 6 Months</li>-->
                                         <li role="presentation" class="dropdown-header">Year</li>
-                                        <!--<li role="presentation" class="dropdown-header">3 times a day</li>-->
+                                      <!--  <li role="presentation" class="dropdown-header">3 times a day</li>-->
                                         <li role="presentation" class="dropdown-header">Every Encounter</li>
                                     </ul>
                                 </div>
                             </td>
-                            <td width="220px">
+                            <td>
                                 <input type="text" class="txtfieldquantitative personalizeabnormalmultiplier" style="width:45px;">
                                 <!-- MODIFIER DROP-DOWN -->
                                 <div class="btn-group" style="width:60px;">
@@ -515,12 +545,12 @@
                                     <ul class="dropdown-menu personalizeULabnormalrecurr">
                                         <li role="presentation" class="dropdown-header">Day</li>
                                         <li role="presentation" class="dropdown-header">Week</li>
-                                        <!--<li role="presentation" class="dropdown-header">Bi-Weekly</li>-->
+                                      <!--  <li role="presentation" class="dropdown-header">Bi-Weekly</li>-->
                                         <li role="presentation" class="dropdown-header">Month</li>
                                         <li role="presentation" class="dropdown-header">Quarter</li>
-                                        <!--<li role="presentation" class="dropdown-header">Every 6 Months</li>-->
+                                       <!-- <li role="presentation" class="dropdown-header">Every 6 Months</li>-->
                                         <li role="presentation" class="dropdown-header">Year</li>
-                                        <!--<li role="presentation" class="dropdown-header">3 times a day</li>-->
+                                    <!--    <li role="presentation" class="dropdown-header">3 times a day</li>-->
                                         <li role="presentation" class="dropdown-header">Every Encounter</li>
                                     </ul>
                                 </div>
@@ -533,8 +563,8 @@
                         <tr class="maintable">
                             <td class="labelcenter" width="270px"></td>
                             <td class="labelcenter" width="600px"> Observed Value:</td>
-                            <td class="labelcenter" width="220px"> </td>
-                            <td class="labelcenter" width="220px"></td>
+                            <td class="labelcenter" width="120px"> </td>
+                            <td class="labelcenter" width="120px"></td>
                         </tr>
                         <!--</table>
         <table class="factors" align="center">-->
@@ -543,27 +573,43 @@
                             <td class="labelcenter" width="600px">
                                 <span class="personalizequalitative"><input type="text" id="observedValue" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;"></span>
                             </td>
-                            <td width="220px"></td>
-                            <td width="220px"></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </table>
                     <br>
                     
 
                     <!-- DESCRIPTION & ASSIGNMENT ROLE -->
-                    <table>
-                        <tr class="maintable" align="left">
+                    <table class="maintable" align="left">
+                        <tr>
                             <td class="label-name" style="width:600px">Trigger Description:</td>
-                            <!-- <td class="label-name" style="width:175px">Assignment Role:</td>-->
+                           <!-- <td class="label-name" style="width:175px">Assignment Role:</td>-->
                         </tr>
                         <tr class="label-name"></tr>
-                        <tr class="factors" align="left">
-                            <td style="width:900px; padding-left:10px; padding-right: 0px;" colspan="4">
-                                <input type="text" class="txtfield personalizetriggeraction" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA">
+                    </table>
+                    <table class="factors" align="left">
+                        <tr>
+                            <td style="width:900px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield personalizetriggeraction" style="width:900px;text-align: left; padding-left: 10px;background-color:#FAFAFA"></td>
+                            <td style="width:320px; text-align:left;"></td>
+                            <td>
+                                <!-- ASSIGNMENT ROLE DROP-DOWN -->
+                               <!-- <div class="btn-group" style="width: 150px;">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li role="presentation" class="dropdown-header">Care Manager</li>
+                                        <li role="presentation" class="dropdown-header">Nurse</li>
+                                        <li role="presentation" class="dropdown-header">Dietician</li>
+                                        <li role="presentation" class="dropdown-header">Care Navigator</li>
+                                        <li role="presentation" class="dropdown-header">Physiatrist</li>
+                                        <li role="presentation" class="dropdown-header">Cardiologist</li>
+                                        <li role="presentation" class="dropdown-header">Physician</li>
+                                    </ul>
+                                </div>-->
                             </td>
                         </tr>
                     </table>
-                    <!--<br>
+                    <br>
                     <table class="maintable">
                         <tr></tr>
                         <tr>
@@ -576,7 +622,7 @@
                             </td>
                         </tr>
                     </table>
-                    <br>-->
+                    <br>
                 </div><br>
 
 
@@ -593,7 +639,7 @@
             <div class="carePathDropdown" style="float: left;">
                 <input class="txtfield" id="carePaths" style="width: 600px;" />
             </div>
-        <button type="button" class="btn btn-primary" id="closepersonalizewindow" style="float:right;">Cancel</button><br />
+        <button type="button" class="btn btn-primary" id="closepersonalizewindow" style="float:right;">Close</button><br />
         </div><br />
 
         <div class="Personalize-details">
@@ -604,6 +650,6 @@
         </div>
 
     </div>
-    <div style="float: left;"><img src="../tri_imgs/logo_dh_small.png" /></div>
+    <div style="float: left; margin-top: 10px;"><img style="" src="../tri_imgs/logo_dh_small.png" /></div>
 </body>
 </html>
