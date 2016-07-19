@@ -632,17 +632,18 @@ function getCPGoal(PatientId, indicatorBox, indicatorValue, goalSection) {
 
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
+                    
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -764,16 +765,17 @@ function getCPGoalSymptomsAll(PatientId) {
                                 var vMtrcOprtr1txt = "";
                                 vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
                                 
-                                if (tri_range == false) {
-                                    // alert(vMtrcOprtr1txt);
-                                    strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                                }
                                 if (tri_range == true) {
                                     var vMtrcOprtr2txt = "";
                                     vMtrcOprtr2txt =  GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);                             
                                     strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                                    vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                                }                      
+                                }
+                                else {
+                                    // alert(vMtrcOprtr1txt);
+                                    strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                }
+
                                 if (tri_LastTargetValue !== null) {
                                     strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                                 }
@@ -982,16 +984,17 @@ function getCPGoalSymptomsNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -1113,16 +1116,17 @@ function getCPGoalSymptomsMet(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -1244,16 +1248,17 @@ function getCPGoalSymptomsOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -1384,16 +1389,17 @@ function getCPGoalSymptomsOverDue(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -1862,16 +1868,17 @@ function getCPGoaltestcareAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -1992,16 +1999,17 @@ function getCPGoaltestcareNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -2122,16 +2130,17 @@ function getCPGoaltestcareOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -2250,16 +2259,17 @@ function getCPGoaltestcareMet(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -2387,16 +2397,17 @@ function getCPGoaltestcareOverDue(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -2516,16 +2527,17 @@ function getCPGoalvitalsAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -2643,16 +2655,17 @@ function getCPGoalvitalsNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -2770,16 +2783,17 @@ function getCPGoalvitalsOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -2895,17 +2909,18 @@ function getCPGoalvitalsMet(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                       
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -3030,16 +3045,17 @@ function getCPGoalvitalsOverDue(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -3159,16 +3175,17 @@ function getCPGoalmedicationsAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -3285,17 +3302,18 @@ function getCPGoalmedicationsNotMet(PatientId) {
 
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                    
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -3416,16 +3434,17 @@ function getCPGoalmedicationsOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -3544,16 +3563,17 @@ function getCPGoalmedicationsMet(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -3679,17 +3699,18 @@ function getCPGoalmedicationsOverDue(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                       
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -3805,16 +3826,17 @@ function getCPGoalactivityAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -3933,20 +3955,22 @@ function getCPGoalactivityNotMet(PatientId) {
 
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                    
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+
                      break;
 
                  case null:
@@ -4060,16 +4084,17 @@ function getCPGoalactivityOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -4185,16 +4210,17 @@ function getCPGoalactivityMet(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -4318,16 +4344,17 @@ function getCPGoalactivityOverDue(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -4446,16 +4473,17 @@ function getCPGoalnutritionAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -4575,16 +4603,17 @@ function getCPGoalnutritionNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -4705,16 +4734,17 @@ function getCPGoalnutritionOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -4833,17 +4863,18 @@ function getCPGoalnutritionMet(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                       
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -4971,17 +5002,18 @@ function getCPGoalnutritionOverDue(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                       
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -5101,16 +5133,17 @@ function getCPGoalpsychosocialAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -5231,16 +5264,17 @@ function getCPGoalpsychosocialNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -5362,16 +5396,17 @@ function getCPGoalpsychosocialOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -5490,17 +5525,18 @@ function getCPGoalpsychosocialMet(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                      
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -5625,16 +5661,17 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -5753,16 +5790,17 @@ function getCPGoalwrapupAll(PatientId) {
                     var vMtrcOprtr1txt = "";
                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == false) {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
+                    else {
+                        // alert(vMtrcOprtr1txt);
+                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                    }
+
                     if (tri_LastTargetValue !== null) {
                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
@@ -5885,16 +5923,17 @@ function getCPGoalwrapupNotMet(PatientId) {
                      var vMtrcOprtr1txt = "";
                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == false) {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
                      if (tri_range == true) {
                          var vMtrcOprtr2txt = "";
                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
+                     else {
+                         // alert(vMtrcOprtr1txt);
+                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                     }
+
                      if (tri_LastTargetValue !== null) {
                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                      }
@@ -6014,16 +6053,17 @@ function getCPGoalwrapupOpen(PatientId) {
                       var vMtrcOprtr1txt = "";
                       vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == false) {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
                       if (tri_range == true) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                          vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
+                      else {
+                          // alert(vMtrcOprtr1txt);
+                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                      }
+
                       if (tri_LastTargetValue !== null) {
                           strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                       }
@@ -6141,17 +6181,18 @@ function getCPGoalwrapupMet(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                        
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
@@ -6277,17 +6318,18 @@ function getCPGoalwrapupOverDue(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                        if (tri_range == false) {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                       
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
+
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
