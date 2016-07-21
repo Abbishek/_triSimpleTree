@@ -8615,12 +8615,46 @@ function () {
 
 }
 
+function AcknowledgementDialog() {
+    $("#alert-wrapper").dialog({
+        //  title: "jQuery Dialog Popup",
+        modal: true,
+        width: 400,
+        position: { my: "center top", at: "center top" },
+        show: { effect: "blind", duration: 800 },
+        hide: { effect: "blind", duration: 400 },
+    });
+}
 
+var saveCliced = false;
+var saveprsnlizeCliced = false;
+
+$(document).on('click', '.greybtn-alert', function () {
+    $("#alert-wrapper").dialog('close');
+});
+
+$(document).on('click', '.bluebtn-alert', function () {
+    $("#alert-wrapper").dialog('close');
+    if (saveCliced == true) {
+        saveCliced = false;
+        OnSaveClicked();
+    } else if (saveprsnlizeCliced == true) {
+        saveprsnlizeCliced = false;
+        OnSavePrsnlizeClicked();
+    }
+});
 
 $(document).on('click', '.savebtn', function () {
-    //alert($(this).attr('id'));
-    //var vVitalTypIdStr = $(this).attr('id');
-    //var vVitalTypId = vVitalTypIdStr.replace("_SAVEBTN", "");
+    saveCliced = true;
+    AcknowledgementDialog();
+});
+
+$(document).on('click', '.savebtn_prsnlize1', function () {
+    saveprsnlizeCliced = true;
+    AcknowledgementDialog();
+});
+
+function OnSaveClicked() {
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
     var PatientId2 = PatientId1.replace("{", "");
     var PatientId = PatientId2.replace("}", "");
@@ -8656,7 +8690,7 @@ $(document).on('click', '.savebtn', function () {
         }
 
         var vOsetValFreqNormal = "";
-        if (vFreqNormalTxt !== null && vFreqNormalTxt == "") {
+        if (vFreqNormalTxt !== null && vFreqNormalTxt !== "") {
             vOsetValFreqNormal = GetOsetValFromTextFreqNormal(vFreqNormalTxt);
         };
 
@@ -8665,82 +8699,68 @@ $(document).on('click', '.savebtn', function () {
             vOsetValFreqAbNormal = GetOsetValFromTextFreqAbNormal(vFreqAbNormalTxt);
         };
 
-
-        //var vOsetValAssignmentRole = GetOsetValFromTextAssignmentRole(vAssignmentRoleTxt);
-        //alert(vOsetValAssignmentRole);
         GetModfrIdFromName(vitalTypeToSaveArray[i], contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, "", vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, "");
-        //alert(strModfrId);
-        //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
-        //$(this).prop("disabled", true);
-        if (i === vitalTypeToSaveArray.length - 1)
-        {
+        if (i === vitalTypeToSaveArray.length - 1) {
             lastVitalId = vitalTypeToSaveArray[i];
         }
     }
     vitalTypeToSaveArray.length = 0;
     IsPersonalizeClosed = true;
-});
+}
 
-$(document).on('click', '.savebtn_prsnlize1', function () {
-        // alert($(this).attr('id'));
-        var vVitalTypIdStr1 = $(this).attr('id');
-        var vVitalTypId1 = vVitalTypIdStr1.replace("_PRSNLSAVEBTN", "");
-        var vModfrName1 = $('.personalizemodifierbutton').text();
-        var vMetricOprtrTxt1 = $('.personalizeoperatorOne').text();
-        var vTargetValueTxt1 = $('.personalizetargetvalMetric').val();
-        var vFreqNormalTxt1 = $('.personalizerecurrnormal').text();
-        var vFreqAbNormalTxt1 = $('.personalizerecurrabnormal').text();
-        //var vAssignmentRoleTxt = "Care Manager" //$("#" + vVitalTypId + "_ASSGNROLEBTN").text();
-        var vMultiplierNormalTxt1 = $('.personalizenormalmultiplier').val();
-        var vMultiplierAbormalTxt1 = $('.personalizeabnormalmultiplier').val();
+function OnSavePrsnlizeClicked() {
 
-        var vTargetValue2Txt1 = $('.personalizetargetvalMetricTwo').val();
-        var vQualTxt1 = $('.personalizetargetvalQual').val();
-        var vMetricOprtr2Txt1 = $('.personalizeoperatorTwo').text();
-        var vGoalStateTxt1 = $('.personalizegoalbutton').text();
-        var vobservedValue = $('#observedValue').val();
-        var vLastResultDate = new Date();
+    var vVitalTypIdStr1 = $('.savebtn_prsnlize1').attr('id');
+    var vVitalTypId1 = vVitalTypIdStr1.replace("_PRSNLSAVEBTN", "");
+    var vModfrName1 = $('.personalizemodifierbutton').text();
+    var vMetricOprtrTxt1 = $('.personalizeoperatorOne').text();
+    var vTargetValueTxt1 = $('.personalizetargetvalMetric').val();
+    var vFreqNormalTxt1 = $('.personalizerecurrnormal').text();
+    var vFreqAbNormalTxt1 = $('.personalizerecurrabnormal').text();
+    var vMultiplierNormalTxt1 = $('.personalizenormalmultiplier').val();
+    var vMultiplierAbormalTxt1 = $('.personalizeabnormalmultiplier').val();
 
-        //alert(vGoalStateTxt1);
-        if (parent.Xrm !== undefined) {
-            var contactId1 = parent.Xrm.Page.data.entity.getId();
-        };
+    var vTargetValue2Txt1 = $('.personalizetargetvalMetricTwo').val();
+    var vQualTxt1 = $('.personalizetargetvalQual').val();
+    var vMetricOprtr2Txt1 = $('.personalizeoperatorTwo').text();
+    var vGoalStateTxt1 = $('.personalizegoalbutton').text();
+    var vobservedValue = $('#observedValue').val();
+    var vLastResultDate = new Date();
 
-        var vOsetValMetricOperator1 = "";
-        if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
-            vOsetValMetricOperator1 = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
-        }
-        var vOsetValMetricOperator21 = "";
-        if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
-            vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr2(vMetricOprtr2Txt1);
-        }
+    //alert(vGoalStateTxt1);
+    if (parent.Xrm !== undefined) {
+        var contactId1 = parent.Xrm.Page.data.entity.getId();
+    };
 
-        var vOsetValFreqNormal1 = "";
-        if (vFreqNormalTxt1 !== null && vFreqNormalTxt1 !== "") {
-            vOsetValFreqNormal1 = GetOsetValFromTextFreqNormal(vFreqNormalTxt1);
-        };
+    var vOsetValMetricOperator1 = "";
+    if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
+        vOsetValMetricOperator1 = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
+    }
+    var vOsetValMetricOperator21 = "";
+    if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
+        vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr2(vMetricOprtr2Txt1);
+    }
 
-        var vOsetValFreqAbNormal1 = "";
-        if (vFreqAbNormalTxt1 !== null && vFreqAbNormalTxt1 !== "") {
-            vOsetValFreqAbNormal1 = GetOsetValFromTextFreqAbNormal(vFreqAbNormalTxt1);
-        };
+    var vOsetValFreqNormal1 = "";
+    if (vFreqNormalTxt1 !== null && vFreqNormalTxt1 !== "") {
+        vOsetValFreqNormal1 = GetOsetValFromTextFreqNormal(vFreqNormalTxt1);
+    };
 
-        var vOsetValGoalState1 = "";
-        if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
-            vOsetValGoalState1 = GetOsetValFromTextGoalState(vGoalStateTxt1);
-        };
-        //var vOsetValAssignmentRole = GetOsetValFromTextAssignmentRole(vAssignmentRoleTxt);
-        //alert(vFreqNormalTxt1 + "===" + vFreqAbNormalTxt1 + "===" + vGoalStateTxt1);
-        //alert(vOsetValMetricOperator1 + "===" + vOsetValMetricOperator21 + "===" + vTargetValueTxt1 + "===" + vTargetValue2Txt1);
-        GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1, vobservedValue, vLastResultDate);
-        //alert(strModfrId);
-        //alert(vModfrName + "-" + vMetricOprtrTxt + "-" + vTargetValueTxt + "-" + vFreqNormalTxt + "-" + vFreqAbNormalTxt + "-" + vAssignmentRoleTxt + "-" + vMultiplierNormalTxt + "-" + vMultiplierAbormalTxt);
-        lastVitalId = vVitalTypId1;
-        IsDataChanged = false;
-        IsWindowsWrapperClosed = true;
-    
-    
-});
+    var vOsetValFreqAbNormal1 = "";
+    if (vFreqAbNormalTxt1 !== null && vFreqAbNormalTxt1 !== "") {
+        vOsetValFreqAbNormal1 = GetOsetValFromTextFreqAbNormal(vFreqAbNormalTxt1);
+    };
+
+    var vOsetValGoalState1 = "";
+    if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
+        vOsetValGoalState1 = GetOsetValFromTextGoalState(vGoalStateTxt1);
+    };
+
+    GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1, vobservedValue, vLastResultDate);
+    lastVitalId = vVitalTypId1;
+    IsDataChanged = false;
+    IsWindowsWrapperClosed = true;
+}
 
 function GetModfrIdFromName(vVitalTypId, contactId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vOsetValFreqNormal, vOsetValFreqAbNormal, vOsetValAssignmentRole, vMultiplierNormalTxt, vMultiplierAbormalTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState,vobservedValue,vLastResultDate) {
    var vModfrIdStr;

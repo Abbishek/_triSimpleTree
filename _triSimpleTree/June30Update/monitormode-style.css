@@ -485,3 +485,7 @@ display:none;
 		color:#FFFFFF;
 		cursor:pointer;
 	}
+
+ .ui-dialog .ui-dialog-titlebar {
+            display: none !important;
+        }
