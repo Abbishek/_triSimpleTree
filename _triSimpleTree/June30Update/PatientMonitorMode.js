@@ -138,7 +138,7 @@ function GetCarePlanfromPatitentId(PatientId) {
 "    <attribute name='tri_careplanid' />" +
 //"    <attribute name='tri_careplanactionid' />" +
 //"    <attribute name='tri_careplanissueid' />" +
-//"    <attribute name='tri_careplangoalid' />" +
+"    <attribute name='tri_careplangoalid' />" +
 //"    <attribute name='tri_careplanjoinid' />" +
 "    <attribute name='tri_planname' />" +
 //"    <attribute name='tri_issuename' />" +

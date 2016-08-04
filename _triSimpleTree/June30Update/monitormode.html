@@ -86,13 +86,19 @@
     </style>
 
 </head>
-
-
 <body>
     <div class="main-wrapper" style="clear:both;">
         <div class="monitor-wrapper">
+            <div id="planFilter" class="btn-group" style="width: 70%;">
+                <div style="min-width: 100px; width: auto; padding: 3px; max-width: 90%; min-width: 50px; min-height: 35px" type="button" class="btn btn-default dropdown-toggle planFilterbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                <ul class="dropdown-menu planFilterdropdownmenu" style="height: 200px; overflow-y: scroll !important;"></ul>
+                <button class="btn btn-primary" type="button" id="btnFilterRefresh" style="margin-left:5px;">Refresh</button>
+            </div>
 
-            <div><button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button></div><br /><br />
+            <div style="display: inline;">
+            <button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button>
+            </div>
+            <br /><br />
 
             <table class="tg">
                 <tr>
@@ -562,7 +568,6 @@
 
     </div>
     <div style="float: left;"><img src="../tri_imgs/logo_dh_small.png" /></div>
-
     <div class="alert-wrapper" id="alert-wrapper" style="display:none;">
         <!-- ALERT Body -->
         <div class="alert" style="text-align:center; margin: 0 auto;">

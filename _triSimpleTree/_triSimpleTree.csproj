@@ -76,7 +76,6 @@
     <Content Include="June30Update\bootstrap.css" />
     <Content Include="June30Update\KM.monitormode.js" />
     <Content Include="KM.monitormode%281%29.js" />
-    <Content Include="June30Update\KM.monitormode1.js" />
     <Content Include="June30Update\monitormode-style.css" />
     <Content Include="June30Update\monitormode.html" />
     <Content Include="June30Update\PatientMonitorMode.js" />

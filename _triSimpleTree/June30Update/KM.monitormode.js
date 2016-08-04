@@ -142,6 +142,15 @@ var isCarePlanUpdated = true;
 var IsPersonalizeClosed = false;
 var IsWindowsWrapperClosed = false;
 
+var vitalTypeToSaveArray = [];
+var lastVitalId = "";
+var IsDataChanged = false;
+var IsObservedValueAndFactorModifierChanged = false;
+var IsOtherValuesChanged = false;
+var saveCliced = false;
+var saveprsnlizeCliced = false;
+//var monitormodeCarePlangoalIds = [];
+
 $(document).ready(function () {
     //if (parent.Xrm.Page.data.entity.getId() == null) {
     //    parent.Xrm.Utility.openEntityForm("Health360 Core")
@@ -166,30 +175,35 @@ $(document).ready(function () {
         $('.tablecontent_symptoms_all').toggle('slow');
         $('.indicator-line_symptoms').removeClass("red orange green grey");
         $('.indicator-line_symptoms').addClass("blue");
+        $('.maintable_symptoms_all').show('slow');
     });
     $('.indicator-box-small_symptoms_red').click(function () {
         $('.tablecontent_symptoms_all,.tablecontent_symptoms_orange,.tablecontent_symptoms_green,.tablecontent_symptoms_grey').hide();
         $('.tablecontent_symptoms_red').toggle('slow');
         $('.indicator-line_symptoms').removeClass("blue orange green grey");
         $('.indicator-line_symptoms').addClass("red");
+        $('.maintable_symptoms_red').show('slow');
     });
     $('.indicator-box-small_symptoms_orange').click(function () {
         $('.tablecontent_symptoms_all,.tablecontent_symptoms_red,.tablecontent_symptoms_green,.tablecontent_symptoms_grey').hide();
         $('.tablecontent_symptoms_orange').toggle('slow');
         $('.indicator-line_symptoms').removeClass("red blue green grey");
         $('.indicator-line_symptoms').addClass("orange");
+        $('.maintable_symptoms_orange').show('slow');
     });
     $('.indicator-box-small_symptoms_green').click(function () {
         $('.tablecontent_symptoms_all,.tablecontent_symptoms_red,.tablecontent_symptoms_orange,.tablecontent_symptoms_grey').hide();
         $('.tablecontent_symptoms_green').toggle('slow');
         $('.indicator-line_symptoms').removeClass("red orange blue grey");
         $('.indicator-line_symptoms').addClass("green");
+        $('.maintable_symptoms_green').show('slow');
     });
     $('.indicator-box-small_symptoms_grey').click(function () {
         $('.tablecontent_symptoms_all,.tablecontent_symptoms_red,.tablecontent_symptoms_green,.tablecontent_symptoms_orange').hide();
         $('.tablecontent_symptoms_grey').toggle('slow');
         $('.indicator-line_symptoms').removeClass("red orange green blue");
         $('.indicator-line_symptoms').addClass("grey");
+        $('.maintable_symptoms_grey').show('slow');
     });
     //----testcare
     $('.indicator-box-big_testcare_all').click(function () {
@@ -197,30 +211,35 @@ $(document).ready(function () {
         $('.tablecontent_testcare_all').toggle('slow');
         $('.indicator-line_testcare').removeClass("red orange green grey");
         $('.indicator-line_testcare').addClass("blue");
+        $('.maintable_testcare_all').show('slow');
     });
     $('.indicator-box-small_testcare_red').click(function () {
         $('.tablecontent_testcare_all,.tablecontent_testcare_orange,.tablecontent_testcare_green,.tablecontent_testcare_grey').hide();
         $('.tablecontent_testcare_red').toggle('slow');
         $('.indicator-line_testcare').removeClass("blue orange green grey");
         $('.indicator-line_testcare').addClass("red");
+        $('.maintable_testcare_red').show('slow');
     });
     $('.indicator-box-small_testcare_orange').click(function () {
         $('.tablecontent_testcare_all,.tablecontent_testcare_red,.tablecontent_testcare_green,.tablecontent_testcare_grey').hide();
         $('.tablecontent_testcare_orange').toggle('slow');
         $('.indicator-line_testcare').removeClass("red blue green grey");
         $('.indicator-line_testcare').addClass("orange");
+        $('.maintable_testcare_orange').show('slow');
     });
     $('.indicator-box-small_testcare_green').click(function () {
         $('.tablecontent_testcare_all,.tablecontent_testcare_red,.tablecontent_testcare_orange,.tablecontent_testcare_grey').hide();
         $('.tablecontent_testcare_green').toggle('slow');
         $('.indicator-line_testcare').removeClass("red orange blue grey");
         $('.indicator-line_testcare').addClass("green");
+        $('.maintable_testcare_green').show('slow');
     });
     $('.indicator-box-small_testcare_grey').click(function () {
         $('.tablecontent_testcare_all,.tablecontent_testcare_red,.tablecontent_testcare_green,.tablecontent_testcare_orange').hide();
         $('.tablecontent_testcare_grey').toggle('slow');
         $('.indicator-line_testcare').removeClass("red orange green blue");
         $('.indicator-line_testcare').addClass("grey");
+        $('.maintable_testcare_grey').show('slow');
     });
     //-----vitals
     $('.indicator-box-big_vitals_all').click(function () {
@@ -228,30 +247,35 @@ $(document).ready(function () {
         $('.tablecontent_vitals_all').toggle('slow');
         $('.indicator-line_vitals').removeClass("red orange green grey");
         $('.indicator-line_vitals').addClass("blue");
+        $('.maintable_vitals_all').show('slow');
     });
     $('.indicator-box-small_vitals_red').click(function () {
         $('.tablecontent_vitals_all,.tablecontent_vitals_orange,.tablecontent_vitals_green,.tablecontent_vitals_grey').hide();
         $('.tablecontent_vitals_red').toggle('slow');
         $('.indicator-line_vitals').removeClass("blue orange green grey");
         $('.indicator-line_vitals').addClass("red");
+        $('.maintable_vitals_red').show('slow');
     });
     $('.indicator-box-small_vitals_orange').click(function () {
         $('.tablecontent_vitals_all,.tablecontent_vitals_red,.tablecontent_vitals_green,.tablecontent_vitals_grey').hide();
         $('.tablecontent_vitals_orange').toggle('slow');
         $('.indicator-line_vitals').removeClass("red blue green grey");
         $('.indicator-line_vitals').addClass("orange");
+        $('.maintable_vitals_orange').show('slow');
     });
     $('.indicator-box-small_vitals_green').click(function () {
         $('.tablecontent_vitals_all,.tablecontent_vitals_red,.tablecontent_vitals_orange,.tablecontent_vitals_grey').hide();
         $('.tablecontent_vitals_green').toggle('slow');
         $('.indicator-line_vitals').removeClass("red orange blue grey");
         $('.indicator-line_vitals').addClass("green");
+        $('.maintable_vitals_green').show('slow');
     });
     $('.indicator-box-small_vitals_grey').click(function () {
         $('.tablecontent_vitals_all,.tablecontent_vitals_red,.tablecontent_vitals_green,.tablecontent_vitals_orange').hide();
         $('.tablecontent_vitals_grey').toggle('slow');
         $('.indicator-line_vitals').removeClass("red orange green blue");
         $('.indicator-line_vitals').addClass("grey");
+        $('.maintable_vitals_grey').show('slow');
     });
     //----medications
     $('.indicator-box-big_medications_all').click(function () {
@@ -259,30 +283,35 @@ $(document).ready(function () {
         $('.tablecontent_medications_all').toggle('slow');
         $('.indicator-line_medications').removeClass("red orange green grey");
         $('.indicator-line_medications').addClass("blue");
+        $('.maintable_medications_all').show('slow');
     });
     $('.indicator-box-small_medications_red').click(function () {
         $('.tablecontent_medications_all,.tablecontent_medications_orange,.tablecontent_medications_green,.tablecontent_medications_grey').hide();
         $('.tablecontent_medications_red').toggle('slow');
         $('.indicator-line_medications').removeClass("blue orange green grey");
         $('.indicator-line_medications').addClass("red");
+        $('.maintable_medications_red').show('slow');
     });
     $('.indicator-box-small_medications_orange').click(function () {
         $('.tablecontent_medications_all,.tablecontent_medications_red,.tablecontent_medications_green,.tablecontent_medications_grey').hide();
         $('.tablecontent_medications_orange').toggle('slow');
         $('.indicator-line_medications').removeClass("red blue green grey");
         $('.indicator-line_medications').addClass("orange");
+        $('.maintable_medications_orange').show('slow');
     });
     $('.indicator-box-small_medications_green').click(function () {
         $('.tablecontent_medications_all,.tablecontent_medications_red,.tablecontent_medications_orange,.tablecontent_medications_grey').hide();
         $('.tablecontent_medications_green').toggle('slow');
         $('.indicator-line_medications').removeClass("red orange blue grey");
         $('.indicator-line_medications').addClass("green");
+        $('.maintable_medications_green').show('slow');
     });
     $('.indicator-box-small_medications_grey').click(function () {
         $('.tablecontent_medications_all,.tablecontent_medications_red,.tablecontent_medications_green,.tablecontent_medications_orange').hide();
         $('.tablecontent_medications_grey').toggle('slow');
         $('.indicator-line_medications').removeClass("red orange green blue");
         $('.indicator-line_medications').addClass("grey");
+        $('.maintable_medications_grey').show('slow');
     });
     //----activity
     $('.indicator-box-big_activity_all').click(function () {
@@ -290,30 +319,35 @@ $(document).ready(function () {
         $('.tablecontent_activity_all').toggle('slow');
         $('.indicator-line_activity').removeClass("red orange green grey");
         $('.indicator-line_activity').addClass("blue");
+        $('.maintable_activity_all').show('slow');
     });
     $('.indicator-box-small_activity_red').click(function () {
         $('.tablecontent_activity_all,.tablecontent_activity_orange,.tablecontent_activity_green,.tablecontent_activity_grey').hide();
         $('.tablecontent_activity_red').toggle('slow');
         $('.indicator-line_activity').removeClass("blue orange green grey");
         $('.indicator-line_activity').addClass("red");
+        $('.maintable_activity_red').show('slow');
     });
     $('.indicator-box-small_activity_orange').click(function () {
         $('.tablecontent_activity_all,.tablecontent_activity_red,.tablecontent_activity_green,.tablecontent_activity_grey').hide();
         $('.tablecontent_activity_orange').toggle('slow');
         $('.indicator-line_activity').removeClass("red blue green grey");
         $('.indicator-line_activity').addClass("orange");
+        $('.maintable_activity_orange').show('slow');
     });
     $('.indicator-box-small_activity_green').click(function () {
         $('.tablecontent_activity_all,.tablecontent_activity_red,.tablecontent_activity_orange,.tablecontent_activity_grey').hide();
         $('.tablecontent_activity_green').toggle('slow');
         $('.indicator-line_activity').removeClass("red orange blue grey");
         $('.indicator-line_activity').addClass("green");
+        $('.maintable_activity_green').show('slow');
     });
     $('.indicator-box-small_activity_grey').click(function () {
         $('.tablecontent_activity_all,.tablecontent_activity_red,.tablecontent_activity_green,.tablecontent_activity_orange').hide();
         $('.tablecontent_activity_grey').toggle('slow');
         $('.indicator-line_activity').removeClass("red orange green blue");
         $('.indicator-line_activity').addClass("grey");
+        $('.maintable_activity_grey').show('slow');
     });
     //----nutrition
     $('.indicator-box-big_nutrition_all').click(function () {
@@ -321,30 +355,35 @@ $(document).ready(function () {
         $('.tablecontent_nutrition_all').toggle('slow');
         $('.indicator-line_nutrition').removeClass("red orange green grey");
         $('.indicator-line_nutrition').addClass("blue");
+        $('.maintable_nutrition_all').show('slow');
     });
     $('.indicator-box-small_nutrition_red').click(function () {
         $('.tablecontent_nutrition_all,.tablecontent_nutrition_orange,.tablecontent_nutrition_green,.tablecontent_nutrition_grey').hide();
         $('.tablecontent_nutrition_red').toggle('slow');
         $('.indicator-line_nutrition').removeClass("blue orange green grey");
         $('.indicator-line_nutrition').addClass("red");
+        $('.maintable_nutrition_red').show('slow');
     });
     $('.indicator-box-small_nutrition_orange').click(function () {
         $('.tablecontent_nutrition_all,.tablecontent_nutrition_red,.tablecontent_nutrition_green,.tablecontent_nutrition_grey').hide();
         $('.tablecontent_nutrition_orange').toggle('slow');
         $('.indicator-line_nutrition').removeClass("red blue green grey");
         $('.indicator-line_nutrition').addClass("orange");
+        $('.maintable_nutrition_orange').show('slow');
     });
     $('.indicator-box-small_nutrition_green').click(function () {
         $('.tablecontent_nutrition_all,.tablecontent_nutrition_red,.tablecontent_nutrition_orange,.tablecontent_nutrition_grey').hide();
         $('.tablecontent_nutrition_green').toggle('slow');
         $('.indicator-line_nutrition').removeClass("red orange blue grey");
         $('.indicator-line_nutrition').addClass("green");
+        $('.maintable_nutrition_green').show('slow');
     });
     $('.indicator-box-small_nutrition_grey').click(function () {
         $('.tablecontent_nutrition_all,.tablecontent_nutrition_red,.tablecontent_nutrition_green,.tablecontent_nutrition_orange').hide();
         $('.tablecontent_nutrition_grey').toggle('slow');
         $('.indicator-line_nutrition').removeClass("red orange green blue");
         $('.indicator-line_nutrition').addClass("grey");
+        $('.maintable_nutrition_grey').show('slow');
     });
     //----psychosocial
     $('.indicator-box-big_psychosocial_all').click(function () {
@@ -352,30 +391,35 @@ $(document).ready(function () {
         $('.tablecontent_psychosocial_all').toggle('slow');
         $('.indicator-line_psychosocial').removeClass("red orange green grey");
         $('.indicator-line_psychosocial').addClass("blue");
+        $('.maintable_psychosocial_all').show('slow');
     });
     $('.indicator-box-small_psychosocial_red').click(function () {
         $('.tablecontent_psychosocial_all,.tablecontent_psychosocial_orange,.tablecontent_psychosocial_green,.tablecontent_psychosocial_grey').hide();
         $('.tablecontent_psychosocial_red').toggle('slow');
         $('.indicator-line_psychosocial').removeClass("blue orange green grey");
         $('.indicator-line_psychosocial').addClass("red");
+        $('.maintable_psychosocial_red').show('slow');
     });
     $('.indicator-box-small_psychosocial_orange').click(function () {
         $('.tablecontent_psychosocial_all,.tablecontent_psychosocial_red,.tablecontent_psychosocial_green,.tablecontent_psychosocial_grey').hide();
         $('.tablecontent_psychosocial_orange').toggle('slow');
         $('.indicator-line_psychosocial').removeClass("red blue green grey");
         $('.indicator-line_psychosocial').addClass("orange");
+        $('.maintable_psychosocial_orange').show('slow');
     });
     $('.indicator-box-small_psychosocial_green').click(function () {
         $('.tablecontent_psychosocial_all,.tablecontent_psychosocial_red,.tablecontent_psychosocial_orange,.tablecontent_psychosocial_grey').hide();
         $('.tablecontent_psychosocial_green').toggle('slow');
         $('.indicator-line_psychosocial').removeClass("red orange blue grey");
         $('.indicator-line_psychosocial').addClass("green");
+        $('.maintable_psychosocial_green').show('slow');
     });
     $('.indicator-box-small_psychosocial_grey').click(function () {
         $('.tablecontent_psychosocial_all,.tablecontent_psychosocial_red,.tablecontent_psychosocial_green,.tablecontent_psychosocial_orange').hide();
         $('.tablecontent_psychosocial_grey').toggle('slow');
         $('.indicator-line_psychosocial').removeClass("red orange green blue");
         $('.indicator-line_psychosocial').addClass("grey");
+        $('.maintable_psychosocial_grey').show('slow');
     });
     //----wrapup
     $('.indicator-box-big_wrapup_all').click(function () {
@@ -383,30 +427,35 @@ $(document).ready(function () {
         $('.tablecontent_wrapup_all').toggle('slow');
         $('.indicator-line_wrapup').removeClass("red orange green grey");
         $('.indicator-line_wrapup').addClass("blue");
+        $('.maintable_wrapup_all').show('slow');
     });
     $('.indicator-box-small_wrapup_red').click(function () {
         $('.tablecontent_wrapup_all,.tablecontent_wrapup_orange,.tablecontent_wrapup_green,.tablecontent_wrapup_grey').hide();
         $('.tablecontent_wrapup_red').toggle('slow');
         $('.indicator-line_wrapup').removeClass("blue orange green grey");
         $('.indicator-line_wrapup').addClass("red");
+        $('.maintable_wrapup_red').show('slow');
     });
     $('.indicator-box-small_wrapup_orange').click(function () {
         $('.tablecontent_wrapup_all,.tablecontent_wrapup_red,.tablecontent_wrapup_green,.tablecontent_wrapup_grey').hide();
         $('.tablecontent_wrapup_orange').toggle('slow');
         $('.indicator-line_wrapup').removeClass("red blue green grey");
         $('.indicator-line_wrapup').addClass("orange");
+        $('.maintable_wrapup_orange').show('slow');
     });
     $('.indicator-box-small_wrapup_green').click(function () {
         $('.tablecontent_wrapup_all,.tablecontent_wrapup_red,.tablecontent_wrapup_orange,.tablecontent_wrapup_grey').hide();
         $('.tablecontent_wrapup_green').toggle('slow');
         $('.indicator-line_wrapup').removeClass("red orange blue grey");
         $('.indicator-line_wrapup').addClass("green");
+        $('.maintable_wrapup_green').show('slow');
     });
     $('.indicator-box-small_wrapup_grey').click(function () {
         $('.tablecontent_wrapup_all,.tablecontent_wrapup_red,.tablecontent_wrapup_green,.tablecontent_wrapup_orange').hide();
         $('.tablecontent_wrapup_grey').toggle('slow');
         $('.indicator-line_wrapup').removeClass("red orange green blue");
         $('.indicator-line_wrapup').addClass("grey");
+        $('.maintable_wrapup_grey').show('slow');
     });
 
 
@@ -454,9 +503,12 @@ $(document).ready(function () {
         else {
             IsDataChanged = false;
             CloseWindowWrapper(PatientId);
-            
         }
+
     });
+
+
+
 }); //document ready function closes here
 
 function ClosePersonalizeWindow(PatientId) {
@@ -464,17 +516,19 @@ function ClosePersonalizeWindow(PatientId) {
     $('.Personalize-details,.personalize-section').hide();
     $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
     $('.monitor-wrapper').show('slow');
+    monitormodeCarePlangoalIds.length = 0;
+    IsRefreshedClicked = false;
     DisplayMonitorMode(PatientId);
-   
 }
 
 function CloseWindowWrapper(PatientId) {
     $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
     // $('.window-wrapper').hide('slow');
     $('.window-wrapper').css('display', 'none');
+    monitormodeCarePlangoalIds.length = 0;
+    IsRefreshedClicked = false;
     DisplayMonitorMode(PatientId);
     $('.monitor-wrapper').show('slow');
- 
 }
 
 function DisplayMonitorMode(PatientId) {
@@ -543,8 +597,114 @@ function DisplayMonitorMode(PatientId) {
     //----wrapup
     $('.indicator-line_wrapup').removeClass("red orange green grey");
     $('.indicator-line_wrapup').addClass("blue");
+
+    UpdateVitalFilters(PatientId);
 }
-        
+
+var IsRefreshedClicked = false;
+var monitormodeCarePlangoalIds = [];
+var CarePlans;
+
+function UpdateVitalFilters(PatientId) {
+    if (!IsRefreshedClicked) {
+        $('.planFilterbutton').html('All Plans Selected');
+        $('#planFilter ul').html('');
+        $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" name="All"><span>Select All</span></li>');
+
+        var allPlans = GetCarePlanfromPatitentId(PatientId);
+        CarePlans = Enumerable.From(allPlans)
+        .Where(function (y) { return y.attributes.tri_careplangoalid !== null && y.attributes.tri_careplangoalid !== undefined && y.attributes.tri_careplangoalid.id !== "" })
+        .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id, 'careplangoalid': x.attributes.tri_careplangoalid.id }; })
+        .ToArray();
+
+        // Get Distinct CarePlans
+        var distinctCarePlansTextArray = Enumerable.From(CarePlans)
+                                          .Select(function (x) { return x; })
+                                          .Distinct(function (y) { return y.text; })
+                                          .ToArray();
+
+        for (var i = 0; i < distinctCarePlansTextArray.length; i++) {
+            $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" id="' + distinctCarePlansTextArray[i].value + "_VITALFLTRID" + '" name="' + distinctCarePlansTextArray[i].text + '"><span>' + distinctCarePlansTextArray[i].text + '</span></li>');
+        }
+    }
+}
+
+$(document).on('click', '#btnFilterRefresh', function () {
+    // Add code to hide indicator
+    $('.maintable_symptoms_all,.maintable_symptoms_red,.maintable_symptoms_orange,.maintable_symptoms_green, .maintable_symptoms_grey,.maintable_testcare_all,.maintable_testcare_red,.maintable_testcare_orange,.maintable_testcare_green, .maintable_testcare_grey,.maintable_vitals_all,.maintable_vitals_red,.maintable_vitals_orange,.maintable_vitals_green, .maintable_vitals_grey,.maintable_medications_all,.maintable_medications_red,.maintable_medications_orange,.maintable_medications_green, .maintable_medications_grey,.maintable_activity_all,.maintable_activity_red,.maintable_activity_orange,.maintable_activity_green, .maintable_activity_grey,.maintable_nutrition_all, .maintable_nutrition_red,.maintable_nutrition_orange,.maintable_nutrition_green, .maintable_nutrition_grey,.maintable_psychosocial_all, .maintable_psychosocial_red,.maintable_psychosocial_orange,.maintable_psychosocial_green, .maintable_psychosocial_grey, .maintable_wrapup_all, .maintable_wrapup_red,.maintable_wrapup_orange,.maintable_wrapup_green, .maintable_wrapup_grey').hide();
+
+    IsRefreshedClicked = true;
+    monitormodeCarePlangoalIds.length = 0;
+    $('#planFilter ul li input').each(function () {
+        if (!$(this).is(':checked') && $(this)[0].id !== undefined && $(this)[0].id !== null && $(this)[0].id !== "") {
+            var planId = $(this)[0].id.replace("_VITALFLTRID", "");
+            var carePlanGoalIds = Enumerable.From(CarePlans)
+                               .Where(function (x) { return x.value === planId })
+                               .Select(function (y) { return y.careplangoalid; })
+                               .ToArray();
+            for (var i = 0; i < carePlanGoalIds.length; i++) {
+                monitormodeCarePlangoalIds.push(carePlanGoalIds[i]);
+            }
+        }
+    });
+
+    var PatientId1 = parent.Xrm.Page.data.entity.getId();
+    var PatientId2 = PatientId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
+    DisplayMonitorMode(PatientId);
+});
+
+$(document).on('click', '#planFilter ul li input', function () {
+    var btnPlanFilteHtml = $('.planFilterbutton').html();
+    if ($(this)[0].name === "All") {
+        var btntext = "";
+        var allselectedchecked = false;
+        if ($(this).is(':checked')) {
+            btntext = "All Plans Selected";
+            allselectedchecked = true;
+        }
+        $('.planFilterbutton').html(btntext);
+        $('#planFilter ul li').each(function () {
+            $($(this)[0].children[0]).prop('checked', allselectedchecked);
+        });
+    }
+    else if (btnPlanFilteHtml.indexOf($(this)[0].name) > -1) {
+        if (!$(this).is(':checked')) {
+            $('.planFilterbutton').children().remove('span:contains(' + $(this)[0].name + ')');
+        }
+        else if ($(this).is(':checked')) {
+            // this scenario should not occur 
+        }
+    }
+    else if (!btnPlanFilteHtml.indexOf($(this)[0].name) > -1) {
+        if ($(this).is(':checked')) {
+            btnPlanFilteHtml = btnPlanFilteHtml + '<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>';
+            $('.planFilterbutton').html(btnPlanFilteHtml);
+        }
+        else if (!$(this).is(':checked')) {
+            var planName = $(this)[0].name;
+            $('.planFilterbutton').html('');
+            btnPlanFilteHtml = $('.planFilterbutton').html();
+            $('#planFilter ul li').each(function () {
+                if ($($(this)[0].children[0]).is(':checked') && $(this)[0].children[0].name !== planName && $(this)[0].children[0].name !== "All") {
+                    btnPlanFilteHtml = btnPlanFilteHtml + '<span class="closespan">' + $(this)[0].children[0].name + '<a class="closefilter">X</a></span>';
+                    $('.planFilterbutton').html(btnPlanFilteHtml);
+                }
+                else if (planName !== "All") {
+                    $($(this)[0].children[0]).prop('checked', false);
+                }
+            });
+        }
+    }
+});
+
+$(document).on('click', 'a.closefilter', function () {
+    var closeParentText = $(this).parent().text();
+    closeParentText = closeParentText.substr(0, closeParentText.length - 1);
+    $('.planFilterbutton').children().remove('span:contains(' + closeParentText + ')');
+    $('#planFilter ul li').find('input[name*="' + closeParentText + '"]').prop('checked', false);
+});
+
 function getJoinsForContact(PatientId) {
     //alert(PatientId);
     SDK.JQuery.retrieveMultipleRecords(
@@ -586,9 +746,9 @@ function getCPGoal(PatientId, indicatorBox, indicatorValue, goalSection) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -660,7 +820,7 @@ function getCPGoal(PatientId, indicatorBox, indicatorValue, goalSection) {
             }
 
             if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
             }
 
             switch (tri_CarePlanGoalState) {
@@ -707,6 +867,7 @@ function getCPGoalSymptomsAll(PatientId) {
     $('.indicator-box-big_symptoms_all').show();
     $('.indicator-box-big_symptoms_all').text('');
     intTotalSymptoms = "";
+    var intSymptomsCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -718,9 +879,9 @@ function getCPGoalSymptomsAll(PatientId) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -741,82 +902,69 @@ function getCPGoalSymptomsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            intTotalSymptoms = "ALL " + results.length + "";
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intSymptomsCount = intSymptomsCount + 1;
+                intTotalSymptoms = "ALL " + intSymptomsCount + "";
+                // intTotalSymptoms = "ALL " + results.length + "";
+                $('.indicator-box-big_symptoms_all').text(intTotalSymptoms);
+                strTargetVal = "";
+                strLastTargetVal = "";
+                strLastGoalDt = "";
+                strNextDueDt = "";
+                strGoalId = tri_cccareplangoalId;
+                vtxtColor = "";
 
-            $('.indicator-box-big_symptoms_all').text(intTotalSymptoms);
-            
-                        strTargetVal = "";
-                        strLastTargetVal = "";
-                        strLastGoalDt = "";
-                        strNextDueDt = "";
-                        strGoalId = tri_cccareplangoalId;
-                        vtxtColor = "";
-
-                        switch (tri_typeofgoalcode) {
-                            case 100000000:
-                                
-                                strTargetVal = results[i].tri_qualitativetarget;
-                                strLastTargetVal = tri_lastresult;
-
-                                break;
-
-                            case 100000001:
-                                
-                                var vMtrcOprtr1txt = "";
-                                vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                                
-                                if (tri_range == true) {
-                                    var vMtrcOprtr2txt = "";
-                                    vMtrcOprtr2txt =  GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);                             
-                                    strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                                   vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                                }
-                                else {
-                                    // alert(vMtrcOprtr1txt);
-                                    strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                                }
-
-                                if (tri_LastTargetValue !== null) {
-                                    strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                                }
-
-                                break;
-
-                            case null:                                
-                                strTargetVal = results[i].tri_qualitativetarget;
-                                break;
-                        }  
-                       
-                        if (tri_LastGoalDate !== null) {
-                             strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                switch (tri_typeofgoalcode) {
+                    case 100000000:
+                        strTargetVal = results[i].tri_qualitativetarget;
+                        strLastTargetVal = tri_lastresult;
+                        break;
+                    case 100000001:
+                        var vMtrcOprtr1txt = "";
+                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                        if (tri_range == true) {
+                            var vMtrcOprtr2txt = "";
+                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
-             
-                        if (tri_NextDueDate !== null) {
-                            strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
                         }
+                        if (tri_LastTargetValue !== null) {
+                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                        }
+                        break;
+                    case null:
+                        strTargetVal = results[i].tri_qualitativetarget;
+                        break;
+                }
 
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-                    
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-                    
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-                   
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
+                if (tri_LastGoalDate !== null) {
+                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                }
 
+                if (tri_NextDueDate !== null) {
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                }
+
+                switch (tri_CarePlanGoalState) {
+                    case 167410000:
+                        vtxtColor = "#ff7d09";//orange
+                        break;
+                    case 167410001:
+                        vtxtColor = "#99cc00";//green
+                        break;
+                    case 167410002:
+                        vtxtColor = "#dd3b31";//red
+                        break;
+                    case 167410003:
+                        vtxtColor = "#ff7d09";//orange
+                        break;
+                }
+                getVitalNameAndAppendTag("maintable_symptoms_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
             }
-
-      getVitalNameAndAppendTag("maintable_symptoms_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-                    
-                 
         }
     },
     function (error) {
@@ -871,15 +1019,16 @@ function GetMetricOperatorTextBasedOnVal(OprtrVal) {
 }
 
 function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor) {
- 
-    if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "") {
-        $('.' + AppendClassName).html('');
+
+    $('.' + AppendClassName).html('');
+
+    if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "") { // filter change
+        //if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "" && (monitormodeCarePlangoalIds.indexOf(tri_vitalsvaluetype) == -1)) { // filter change
 
         SDK.JQuery.retrieveMultipleRecords(
         "tri_vitalsvaluetype",
         "?$select=tri_name&$filter=tri_vitalsvaluetypeId eq (guid'" + tri_vitalsvaluetype + "')",
         function (results) {
-            //alert( results.length);
             for (var i = 0; i < results.length; i++) {
                 var tri_name = results[i].tri_name;
             }
@@ -900,13 +1049,9 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
                             '<tr>' +
                             '<td colspan="6" style=" font-size:1px;"><hr class="grey"></td>' +
                             '</tr>'
-            //alert(tagSymptomsAll);
+
             $('.' + AppendClassName).append(tagSymptomsAll);
-
             $('.txtfieldquantitative').spinner();
-
-
-
         },
         function (error) {
             alert(error.message);
@@ -925,6 +1070,7 @@ function getCPGoalSymptomsNotMet(PatientId) {
     $('.indicator-box-small_symptoms_red').show();
     $('.indicator-box-small_symptoms_red').text('');
     intTotalSymptomsNotMet = "";
+    var intSymptomsCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
@@ -936,9 +1082,9 @@ function getCPGoalSymptomsNotMet(PatientId) {
              var tri_activitydescription = results[i].tri_activitydescription;
              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
              var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
              var tri_GoalSelected = results[i].tri_GoalSelected;
              var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -959,83 +1105,88 @@ function getCPGoalSymptomsNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             intTotalSymptomsNotMet = " " + results.length + " ";
 
-             $('.indicator-box-small_symptoms_red').text(intTotalSymptomsNotMet);
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intSymptomsCount = intSymptomsCount + 1;
+                 intTotalSymptomsNotMet = " " + intSymptomsCount + "";
+
+                 // intTotalSymptomsNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_symptoms_red').text(intTotalSymptomsNotMet);
 
 
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
 
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
 
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
 
-                     break;
+                         break;
 
-                 case 100000001:
+                     case 100000001:
 
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
 
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
 
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_symptoms_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
              }
-             
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_symptoms_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
          }
      },
      function (error) {
@@ -1057,6 +1208,7 @@ function getCPGoalSymptomsMet(PatientId) {
     $('.indicator-box-small_symptoms_green').show();
     $('.indicator-box-small_symptoms_green').text('');
     intTotalSymptomsMet = "";
+    var intSymptomsCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -1068,9 +1220,9 @@ function getCPGoalSymptomsMet(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -1091,83 +1243,87 @@ function getCPGoalSymptomsMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalSymptomsMet = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intSymptomsCount = intSymptomsCount + 1;
+                    intTotalSymptomsMet = " " + intSymptomsCount + "";
 
-                $('.indicator-box-small_symptoms_green').text(intTotalSymptomsMet);
+                    // intTotalSymptomsMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_symptoms_green').text(intTotalSymptomsMet);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_symptoms_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_symptoms_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -1189,6 +1345,7 @@ function getCPGoalSymptomsOpen(PatientId) {
     $('.indicator-box-small_symptoms_orange').show();
     $('.indicator-box-small_symptoms_orange').text('');
     intTotalSymptomsOpen = "";
+    var intSymptomsCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
@@ -1200,9 +1357,9 @@ function getCPGoalSymptomsOpen(PatientId) {
               var tri_activitydescription = results[i].tri_activitydescription;
               var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
               var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
               var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
               var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
               var tri_GoalSelected = results[i].tri_GoalSelected;
               var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -1223,84 +1380,88 @@ function getCPGoalSymptomsOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              intTotalSymptomsOpen = " " + results.length + " ";
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intSymptomsCount = intSymptomsCount + 1;
+                  intTotalSymptomsOpen = " " + intSymptomsCount + "";
 
-              $('.indicator-box-small_symptoms_orange').text(intTotalSymptomsOpen);
+                  //              intTotalSymptomsOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_symptoms_orange').text(intTotalSymptomsOpen);
 
 
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
 
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
 
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
 
-                      break;
+                          break;
 
-                  case 100000001:
+                      case 100000001:
 
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
 
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
 
-                      break;
+                          break;
 
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_symptoms_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
               }
-              
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_symptoms_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
           }
       },
       function (error) {
@@ -1322,6 +1483,7 @@ function getCPGoalSymptomsOverDue(PatientId) {
     $('.indicator-box-small_symptoms_grey').show();
     $('.indicator-box-small_symptoms_grey').text('');
     intTotalSymptomsOverDue = "";
+    var intSymptomsCount = 0;
 
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
@@ -1341,9 +1503,9 @@ function getCPGoalSymptomsOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -1364,83 +1526,85 @@ function getCPGoalSymptomsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalSymptomsOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intSymptomsCount = intSymptomsCount + 1;
+                    intTotalSymptomsOverDue = " " + intSymptomsCount + "";
 
-                $('.indicator-box-small_symptoms_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalSymptomsOverDue);
+                    // intTotalSymptomsOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_symptoms_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalSymptomsOverDue);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+                    getVitalNameAndAppendTag("maintable_symptoms_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_symptoms_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -1458,6 +1622,21 @@ function getCPGoalSymptomsOverDue(PatientId) {
 
 function errorHandler(error) {
     alert(error.message);
+}
+
+function SetNextDuedate(NextDueDate, GoalState, InrangeFreq, OutrangeFreq){
+    var nextDueDateValue;
+    // goal_state is 'Met' or 'Open' and in range freq = every encounter or goal-STate = not met, and out of range freq is every encounter
+    if(((GoalState === 167410001 || GoalState === 167410000) && InrangeFreq === 167410007) 
+        || (GoalState === 167410002 && OutrangeFreq === 167410007))
+    {
+        nextDueDateValue = "Every Encounter";
+    }
+    else
+    {
+        nextDueDateValue = $.datepicker.formatDate('mm/dd/yy', NextDueDate);
+    }
+    return nextDueDateValue;
 }
 
 function retrievePatient(PatientId) {
@@ -1709,6 +1888,7 @@ function ReviewAndUpdateGoal(currentId) {
               break;
       }
 
+      $('.personalizenormalmultiplier').show();
       switch (tri_activityrecurrence) {
           case 1:
               $('.personalizerecurrnormal').text("Day");
@@ -1745,9 +1925,11 @@ function ReviewAndUpdateGoal(currentId) {
           case 167410007:
               $('.personalizerecurrnormal').text("Every Encounter");
               $('.personalizerecurrnormal').val(167410007);
+              $('.personalizenormalmultiplier').hide();
               break;
       }
 
+      $('.personalizeabnormalmultiplier').show();
       switch (tri_activityrecurrenceabnormal) {
           case 1:
               $('.personalizerecurrabnormal').text("Day");
@@ -1784,6 +1966,7 @@ function ReviewAndUpdateGoal(currentId) {
           case 167410007:
               $('.personalizerecurrabnormal').text("Every Encounter");
               $('.personalizerecurrabnormal').val(167410007);
+              $('.personalizeabnormalmultiplier').hide();
               break;
       }
       
@@ -1809,6 +1992,7 @@ function getCPGoaltestcareAll(PatientId) {
     $('.indicator-box-big_testcare_all').show();
     $('.indicator-box-big_testcare_all').text('');
     intTotaltestcare = "";
+    var intTestcareCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -1820,9 +2004,9 @@ function getCPGoaltestcareAll(PatientId) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -1843,400 +2027,14 @@ function getCPGoaltestcareAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            intTotaltestcare = "ALL " + results.length + "";
-
-            $('.indicator-box-big_testcare_all').text(intTotaltestcare);
-
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-           
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
-
-            }
-
-            getVitalNameAndAppendTag("maintable_testcare_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-        }
-    },
-    function (error) {
-        alert(error.message);
-    },
-    function () {
-        //On Complete - Do Something
-        if (intTotaltestcare === null || intTotaltestcare === undefined || intTotaltestcare === "") {
-            $('.indicator-box-big_testcare_all').text('');
-            $('.indicator-box-big_testcare_all').hide();
-        }
-    }
-);
-}
-
-function getCPGoaltestcareNotMet(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_testcare_red').show();
-    $('.indicator-box-small_testcare_red').text('');
-    intTotaltestcareNotMet = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-     "tri_cccareplangoal",
-     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-     function (results) {
-
-         for (var i = 0; i < results.length; i++) {
-             var vVitalName = "";
-             var tri_activitydescription = results[i].tri_activitydescription;
-             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-             var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
-             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-             var tri_GoalSelected = results[i].tri_GoalSelected;
-             var tri_LastGoalDate = results[i].tri_LastGoalDate;
-             var tri_LastResultDate = results[i].tri_LastResultDate;
-             var tri_LastTargetValue = results[i].tri_LastTargetValue;
-             var tri_lastresult = results[i].tri_lastresult;
-             var tri_Metric = results[i].tri_Metric;
-             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-             var tri_name = results[i].tri_name;
-             var tri_NextDueDate = results[i].tri_NextDueDate;
-             var tri_qualitativeaction = results[i].tri_qualitativeaction;
-             var tri_qualitativetarget = results[i].tri_qualitativetarget;
-             var tri_range = results[i].tri_range;
-             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-             intTotaltestcareNotMet = " " + results.length + " ";
-
-             $('.indicator-box-small_testcare_red').text(intTotaltestcareNotMet);
-
-
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
-
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
-
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
-
-                     break;
-
-                 case 100000001:
-
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
-
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
-
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
-             }
-           
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_testcare_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-         }
-     },
-     function (error) {
-         alert(error.message);
-     },
-     function () {
-         //On Complete - Do Something
-         if (intTotaltestcareNotMet === null || intTotaltestcareNotMet === undefined || intTotaltestcareNotMet === "") {
-             $('.indicator-box-small_testcare_red').text('');
-             $('.indicator-box-small_testcare_red').hide();
-         }
-     }
- );
-}
-
-function getCPGoaltestcareOpen(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_testcare_orange').show();
-    $('.indicator-box-small_testcare_orange').text('');
-    intTotaltestcareOpen = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-      "tri_cccareplangoal",
-      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-      function (results) {
-
-          for (var i = 0; i < results.length; i++) {
-              var vVitalName = "";
-              var tri_activitydescription = results[i].tri_activitydescription;
-              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-              var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
-              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-              var tri_GoalSelected = results[i].tri_GoalSelected;
-              var tri_LastGoalDate = results[i].tri_LastGoalDate;
-              var tri_LastResultDate = results[i].tri_LastResultDate;
-              var tri_LastTargetValue = results[i].tri_LastTargetValue;
-              var tri_lastresult = results[i].tri_lastresult;
-              var tri_Metric = results[i].tri_Metric;
-              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-              var tri_name = results[i].tri_name;
-              var tri_NextDueDate = results[i].tri_NextDueDate;
-              var tri_qualitativeaction = results[i].tri_qualitativeaction;
-              var tri_qualitativetarget = results[i].tri_qualitativetarget;
-              var tri_range = results[i].tri_range;
-              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-              intTotaltestcareOpen = " " + results.length + " ";
-
-              $('.indicator-box-small_testcare_orange').text(intTotaltestcareOpen);
-
-
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
-
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
-
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
-
-                      break;
-
-                  case 100000001:
-
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
-
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
-
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
-              }
             
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intTestcareCount = intTestcareCount + 1;
+                intTotaltestcare = "ALL " + intTestcareCount + "";
 
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
+                // intTotaltestcare = "ALL " + results.length + "";
 
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_testcare_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-          }
-      },
-      function (error) {
-          alert(error.message);
-      },
-      function () {
-          //On Complete - Do Something
-          if (intTotaltestcareOpen === null || intTotaltestcareOpen === undefined || intTotaltestcareOpen === "") {
-              $('.indicator-box-small_testcare_orange').text('');
-              $('.indicator-box-small_testcare_orange').hide();
-          }
-      }
-  );
-}
-
-function getCPGoaltestcareMet(PatientId) {
-    $('.indicator-box-small_testcare_green').show();
-    $('.indicator-box-small_testcare_green').text('');
-    intTotaltestcareMet = "";
-    SDK.JQuery.retrieveMultipleRecords(
-        "tri_cccareplangoal",
-        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-        function (results) {
-
-            for (var i = 0; i < results.length; i++) {
-                var vVitalName = "";
-                var tri_activitydescription = results[i].tri_activitydescription;
-                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-                var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
-                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-                var tri_GoalSelected = results[i].tri_GoalSelected;
-                var tri_LastGoalDate = results[i].tri_LastGoalDate;
-                var tri_LastResultDate = results[i].tri_LastResultDate;
-                var tri_LastTargetValue = results[i].tri_LastTargetValue;
-                var tri_lastresult = results[i].tri_lastresult;
-                var tri_Metric = results[i].tri_Metric;
-                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-                var tri_name = results[i].tri_name;
-                var tri_NextDueDate = results[i].tri_NextDueDate;
-                var tri_qualitativeaction = results[i].tri_qualitativeaction;
-                var tri_qualitativetarget = results[i].tri_qualitativetarget;
-                var tri_range = results[i].tri_range;
-                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-                intTotaltestcareMet = " " + results.length + " ";
-
-                $('.indicator-box-small_testcare_green').text(intTotaltestcareMet);
+                $('.indicator-box-big_testcare_all').text(intTotaltestcare);
 
 
                 strTargetVal = "";
@@ -2263,7 +2061,7 @@ function getCPGoaltestcareMet(PatientId) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -2279,14 +2077,14 @@ function getCPGoaltestcareMet(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-               
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -2308,9 +2106,416 @@ function getCPGoaltestcareMet(PatientId) {
 
                 }
 
-                getVitalNameAndAppendTag("maintable_testcare_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+                getVitalNameAndAppendTag("maintable_testcare_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+            }
+
+        }
+    },
+    function (error) {
+        alert(error.message);
+    },
+    function () {
+        //On Complete - Do Something
+        if (intTotaltestcare === null || intTotaltestcare === undefined || intTotaltestcare === "") {
+            $('.indicator-box-big_testcare_all').text('');
+            $('.indicator-box-big_testcare_all').hide();
+        }
+    }
+);
+}
+
+function getCPGoaltestcareNotMet(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_testcare_red').show();
+    $('.indicator-box-small_testcare_red').text('');
+    intTotaltestcareNotMet = "";
+    var intTestcareCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+     "tri_cccareplangoal",
+     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+     function (results) {
+
+         for (var i = 0; i < results.length; i++) {
+             var vVitalName = "";
+             var tri_activitydescription = results[i].tri_activitydescription;
+             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+             var tri_activitydueon = results[i].tri_activitydueon;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+             var tri_GoalSelected = results[i].tri_GoalSelected;
+             var tri_LastGoalDate = results[i].tri_LastGoalDate;
+             var tri_LastResultDate = results[i].tri_LastResultDate;
+             var tri_LastTargetValue = results[i].tri_LastTargetValue;
+             var tri_lastresult = results[i].tri_lastresult;
+             var tri_Metric = results[i].tri_Metric;
+             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+             var tri_name = results[i].tri_name;
+             var tri_NextDueDate = results[i].tri_NextDueDate;
+             var tri_qualitativeaction = results[i].tri_qualitativeaction;
+             var tri_qualitativetarget = results[i].tri_qualitativetarget;
+             var tri_range = results[i].tri_range;
+             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intTestcareCount = intTestcareCount + 1;
+                 intTotaltestcareNotMet = " " + intTestcareCount + "";
+
+                 //intTotaltestcareNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_testcare_red').text(intTotaltestcareNotMet);
 
 
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
+
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
+
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
+
+                         break;
+
+                     case 100000001:
+
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
+
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
+
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_testcare_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+             }
+
+         }
+     },
+     function (error) {
+         alert(error.message);
+     },
+     function () {
+         //On Complete - Do Something
+         if (intTotaltestcareNotMet === null || intTotaltestcareNotMet === undefined || intTotaltestcareNotMet === "") {
+             $('.indicator-box-small_testcare_red').text('');
+             $('.indicator-box-small_testcare_red').hide();
+         }
+     }
+ );
+}
+
+function getCPGoaltestcareOpen(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_testcare_orange').show();
+    $('.indicator-box-small_testcare_orange').text('');
+    intTotaltestcareOpen = "";
+    var intTestcareCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+      "tri_cccareplangoal",
+      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+      function (results) {
+
+          for (var i = 0; i < results.length; i++) {
+              var vVitalName = "";
+              var tri_activitydescription = results[i].tri_activitydescription;
+              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+              var tri_activitydueon = results[i].tri_activitydueon;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+              var tri_GoalSelected = results[i].tri_GoalSelected;
+              var tri_LastGoalDate = results[i].tri_LastGoalDate;
+              var tri_LastResultDate = results[i].tri_LastResultDate;
+              var tri_LastTargetValue = results[i].tri_LastTargetValue;
+              var tri_lastresult = results[i].tri_lastresult;
+              var tri_Metric = results[i].tri_Metric;
+              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+              var tri_name = results[i].tri_name;
+              var tri_NextDueDate = results[i].tri_NextDueDate;
+              var tri_qualitativeaction = results[i].tri_qualitativeaction;
+              var tri_qualitativetarget = results[i].tri_qualitativetarget;
+              var tri_range = results[i].tri_range;
+              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intTestcareCount = intTestcareCount + 1;
+                  intTotaltestcareOpen = " " + intTestcareCount + "";
+
+                  // intTotaltestcareOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_testcare_orange').text(intTotaltestcareOpen);
+
+
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
+
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
+
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
+
+                          break;
+
+                      case 100000001:
+
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
+
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
+
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_testcare_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+              }
+          }
+      },
+      function (error) {
+          alert(error.message);
+      },
+      function () {
+          //On Complete - Do Something
+          if (intTotaltestcareOpen === null || intTotaltestcareOpen === undefined || intTotaltestcareOpen === "") {
+              $('.indicator-box-small_testcare_orange').text('');
+              $('.indicator-box-small_testcare_orange').hide();
+          }
+      }
+  );
+}
+
+function getCPGoaltestcareMet(PatientId) {
+    $('.indicator-box-small_testcare_green').show();
+    $('.indicator-box-small_testcare_green').text('');
+    intTotaltestcareMet = "";
+    var intTestcareCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+        "tri_cccareplangoal",
+        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000001 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+        function (results) {
+
+            for (var i = 0; i < results.length; i++) {
+                var vVitalName = "";
+                var tri_activitydescription = results[i].tri_activitydescription;
+                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+                var tri_activitydueon = results[i].tri_activitydueon;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+                var tri_GoalSelected = results[i].tri_GoalSelected;
+                var tri_LastGoalDate = results[i].tri_LastGoalDate;
+                var tri_LastResultDate = results[i].tri_LastResultDate;
+                var tri_LastTargetValue = results[i].tri_LastTargetValue;
+                var tri_lastresult = results[i].tri_lastresult;
+                var tri_Metric = results[i].tri_Metric;
+                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+                var tri_name = results[i].tri_name;
+                var tri_NextDueDate = results[i].tri_NextDueDate;
+                var tri_qualitativeaction = results[i].tri_qualitativeaction;
+                var tri_qualitativetarget = results[i].tri_qualitativetarget;
+                var tri_range = results[i].tri_range;
+                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intTestcareCount = intTestcareCount + 1;
+                    intTotaltestcareMet = " " + intTestcareCount + "";
+
+                    // intTotaltestcareMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_testcare_green').text(intTotaltestcareMet);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_testcare_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+                }
             }
         },
         function (error) {
@@ -2338,6 +2543,7 @@ function getCPGoaltestcareOverDue(PatientId) {
     $('.indicator-box-small_testcare_grey').show();
     $('.indicator-box-small_testcare_grey').text('');
     intTotaltestcareOverDue = "";
+    var intTestcareCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -2349,9 +2555,9 @@ function getCPGoaltestcareOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -2372,83 +2578,86 @@ function getCPGoaltestcareOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotaltestcareOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intTestcareCount = intTestcareCount + 1;
+                    intTotaltestcareOverDue = " " + intTestcareCount + "";
+                    // intTotaltestcareOverDue = " " + results.length + " ";
 
-                $('.indicator-box-small_testcare_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotaltestcareOverDue);
+                    $('.indicator-box-small_testcare_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotaltestcareOverDue);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_testcare_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_testcare_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -2468,6 +2677,7 @@ function getCPGoalvitalsAll(PatientId) {
     $('.indicator-box-big_vitals_all').show();
     $('.indicator-box-big_vitals_all').text('');
     intTotalvitals = "";
+    var intVitalAllCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -2479,9 +2689,9 @@ function getCPGoalvitalsAll(PatientId) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -2502,392 +2712,13 @@ function getCPGoalvitalsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            intTotalvitals = "ALL " + results.length + "";
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intVitalAllCount = intVitalAllCount + 1;
+                intTotalvitals = "ALL " + intVitalAllCount + "";
 
-            $('.indicator-box-big_vitals_all').text(intTotalvitals);
+                // intTotalvitals = "ALL " + results.length + "";
 
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-           
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
-
-            }
-            getVitalNameAndAppendTag("maintable_vitals_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-        }
-    },
-    function (error) {
-        alert(error.message);
-    },
-    function () {
-        //On Complete - Do Something
-        if (intTotalvitals === null || intTotalvitals === undefined || intTotalvitals === "") {
-            $('.indicator-box-big_vitals_all').text('');
-            $('.indicator-box-big_vitals_all').hide();
-        }
-    }
-);
-}
-
-function getCPGoalvitalsNotMet(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_vitals_red').show();
-    $('.indicator-box-small_vitals_red').text('');
-    intTotalvitalsNotMet = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-     "tri_cccareplangoal",
-     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-     function (results) {
-
-         for (var i = 0; i < results.length; i++) {
-             var vVitalName = "";
-             var tri_activitydescription = results[i].tri_activitydescription;
-             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-             var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
-             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-             var tri_GoalSelected = results[i].tri_GoalSelected;
-             var tri_LastGoalDate = results[i].tri_LastGoalDate;
-             var tri_LastResultDate = results[i].tri_LastResultDate;
-             var tri_LastTargetValue = results[i].tri_LastTargetValue;
-             var tri_lastresult = results[i].tri_lastresult;
-             var tri_Metric = results[i].tri_Metric;
-             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-             var tri_name = results[i].tri_name;
-             var tri_NextDueDate = results[i].tri_NextDueDate;
-             var tri_qualitativeaction = results[i].tri_qualitativeaction;
-             var tri_qualitativetarget = results[i].tri_qualitativetarget;
-             var tri_range = results[i].tri_range;
-             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-             intTotalvitalsNotMet = " " + results.length + " ";
-
-             $('.indicator-box-small_vitals_red').text(intTotalvitalsNotMet);
-
-
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
-
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
-
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
-
-                     break;
-
-                 case 100000001:
-
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
-
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
-
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
-             }
-             
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-             getVitalNameAndAppendTag("maintable_vitals_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-         }
-     },
-     function (error) {
-         alert(error.message);
-     },
-     function () {
-         //On Complete - Do Something
-         if (intTotalvitalsNotMet === null || intTotalvitalsNotMet === undefined || intTotalvitalsNotMet === "") {
-             $('.indicator-box-small_vitals_red').text('');
-             $('.indicator-box-small_vitals_red').hide();
-         }
-     }
- );
-}
-
-function getCPGoalvitalsOpen(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_vitals_orange').show();
-    $('.indicator-box-small_vitals_orange').text('');
-    intTotalvitalsOpen = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-      "tri_cccareplangoal",
-      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-      function (results) {
-
-          for (var i = 0; i < results.length; i++) {
-              var vVitalName = "";
-              var tri_activitydescription = results[i].tri_activitydescription;
-              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-              var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
-              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-              var tri_GoalSelected = results[i].tri_GoalSelected;
-              var tri_LastGoalDate = results[i].tri_LastGoalDate;
-              var tri_LastResultDate = results[i].tri_LastResultDate;
-              var tri_LastTargetValue = results[i].tri_LastTargetValue;
-              var tri_lastresult = results[i].tri_lastresult;
-              var tri_Metric = results[i].tri_Metric;
-              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-              var tri_name = results[i].tri_name;
-              var tri_NextDueDate = results[i].tri_NextDueDate;
-              var tri_qualitativeaction = results[i].tri_qualitativeaction;
-              var tri_qualitativetarget = results[i].tri_qualitativetarget;
-              var tri_range = results[i].tri_range;
-              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-              intTotalvitalsOpen = " " + results.length + " ";
-
-              $('.indicator-box-small_vitals_orange').text(intTotalvitalsOpen);
-
-
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
-
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
-
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
-
-                      break;
-
-                  case 100000001:
-
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
-
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
-
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
-              }
-              
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-              getVitalNameAndAppendTag("maintable_vitals_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-          }
-      },
-      function (error) {
-          alert(error.message);
-      },
-      function () {
-          //On Complete - Do Something
-          if (intTotalvitalsOpen === null || intTotalvitalsOpen === undefined || intTotalvitalsOpen === "") {
-              $('.indicator-box-small_vitals_orange').text('');
-              $('.indicator-box-small_vitals_orange').hide();
-          }
-      }
-  );
-}
-
-function getCPGoalvitalsMet(PatientId) {
-    $('.indicator-box-small_vitals_green').show();
-    $('.indicator-box-small_vitals_green').text('');
-    intTotalvitalsMet = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-        "tri_cccareplangoal",
-        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-        function (results) {
-
-            for (var i = 0; i < results.length; i++) {
-                var vVitalName = "";
-                var tri_activitydescription = results[i].tri_activitydescription;
-                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-                var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
-                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-                var tri_GoalSelected = results[i].tri_GoalSelected;
-                var tri_LastGoalDate = results[i].tri_LastGoalDate;
-                var tri_LastResultDate = results[i].tri_LastResultDate;
-                var tri_LastTargetValue = results[i].tri_LastTargetValue;
-                var tri_lastresult = results[i].tri_lastresult;
-                var tri_Metric = results[i].tri_Metric;
-                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-                var tri_name = results[i].tri_name;
-                var tri_NextDueDate = results[i].tri_NextDueDate;
-                var tri_qualitativeaction = results[i].tri_qualitativeaction;
-                var tri_qualitativetarget = results[i].tri_qualitativetarget;
-                var tri_range = results[i].tri_range;
-                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-                intTotalvitalsMet = " " + results.length + " ";
-
-                $('.indicator-box-small_vitals_green').text(intTotalvitalsMet);
+                $('.indicator-box-big_vitals_all').text(intTotalvitals);
 
 
                 strTargetVal = "";
@@ -2909,12 +2740,12 @@ function getCPGoalvitalsMet(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                       
+
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -2930,14 +2761,14 @@ function getCPGoalvitalsMet(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-                
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -2958,7 +2789,410 @@ function getCPGoalvitalsMet(PatientId) {
                         break;
 
                 }
-                getVitalNameAndAppendTag("maintable_vitals_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+                getVitalNameAndAppendTag("maintable_vitals_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+            }
+        }
+    },
+    function (error) {
+        alert(error.message);
+    },
+    function () {
+        //On Complete - Do Something
+        if (intTotalvitals === null || intTotalvitals === undefined || intTotalvitals === "") {
+            $('.indicator-box-big_vitals_all').text('');
+            $('.indicator-box-big_vitals_all').hide();
+        }
+    }
+);
+}
+
+function getCPGoalvitalsNotMet(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_vitals_red').show();
+    $('.indicator-box-small_vitals_red').text('');
+    intTotalvitalsNotMet = "";
+    var intVitalAllCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+     "tri_cccareplangoal",
+     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+     function (results) {
+
+         for (var i = 0; i < results.length; i++) {
+             var vVitalName = "";
+             var tri_activitydescription = results[i].tri_activitydescription;
+             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+             var tri_activitydueon = results[i].tri_activitydueon;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+             var tri_GoalSelected = results[i].tri_GoalSelected;
+             var tri_LastGoalDate = results[i].tri_LastGoalDate;
+             var tri_LastResultDate = results[i].tri_LastResultDate;
+             var tri_LastTargetValue = results[i].tri_LastTargetValue;
+             var tri_lastresult = results[i].tri_lastresult;
+             var tri_Metric = results[i].tri_Metric;
+             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+             var tri_name = results[i].tri_name;
+             var tri_NextDueDate = results[i].tri_NextDueDate;
+             var tri_qualitativeaction = results[i].tri_qualitativeaction;
+             var tri_qualitativetarget = results[i].tri_qualitativetarget;
+             var tri_range = results[i].tri_range;
+             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intVitalAllCount = intVitalAllCount + 1;
+                 intTotalvitalsNotMet = " " + intVitalAllCount + "";
+
+                 // intTotalvitalsNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_vitals_red').text(intTotalvitalsNotMet);
+
+
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
+
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
+
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
+
+                         break;
+
+                     case 100000001:
+
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
+
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
+
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+                 getVitalNameAndAppendTag("maintable_vitals_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+             }
+         }
+     },
+     function (error) {
+         alert(error.message);
+     },
+     function () {
+         //On Complete - Do Something
+         if (intTotalvitalsNotMet === null || intTotalvitalsNotMet === undefined || intTotalvitalsNotMet === "") {
+             $('.indicator-box-small_vitals_red').text('');
+             $('.indicator-box-small_vitals_red').hide();
+         }
+     }
+ );
+}
+
+function getCPGoalvitalsOpen(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_vitals_orange').show();
+    $('.indicator-box-small_vitals_orange').text('');
+    intTotalvitalsOpen = "";
+    var intVitalAllCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+      "tri_cccareplangoal",
+      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+      function (results) {
+
+          for (var i = 0; i < results.length; i++) {
+              var vVitalName = "";
+              var tri_activitydescription = results[i].tri_activitydescription;
+              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+              var tri_activitydueon = results[i].tri_activitydueon;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+              var tri_GoalSelected = results[i].tri_GoalSelected;
+              var tri_LastGoalDate = results[i].tri_LastGoalDate;
+              var tri_LastResultDate = results[i].tri_LastResultDate;
+              var tri_LastTargetValue = results[i].tri_LastTargetValue;
+              var tri_lastresult = results[i].tri_lastresult;
+              var tri_Metric = results[i].tri_Metric;
+              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+              var tri_name = results[i].tri_name;
+              var tri_NextDueDate = results[i].tri_NextDueDate;
+              var tri_qualitativeaction = results[i].tri_qualitativeaction;
+              var tri_qualitativetarget = results[i].tri_qualitativetarget;
+              var tri_range = results[i].tri_range;
+              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intVitalAllCount = intVitalAllCount + 1;
+                  intTotalvitalsOpen = " " + intVitalAllCount + "";
+
+                  // intTotalvitalsOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_vitals_orange').text(intTotalvitalsOpen);
+
+
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
+
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
+
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
+
+                          break;
+
+                      case 100000001:
+
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
+
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
+
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+                  getVitalNameAndAppendTag("maintable_vitals_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+              }
+          }
+      },
+      function (error) {
+          alert(error.message);
+      },
+      function () {
+          //On Complete - Do Something
+          if (intTotalvitalsOpen === null || intTotalvitalsOpen === undefined || intTotalvitalsOpen === "") {
+              $('.indicator-box-small_vitals_orange').text('');
+              $('.indicator-box-small_vitals_orange').hide();
+          }
+      }
+  );
+}
+
+function getCPGoalvitalsMet(PatientId) {
+    $('.indicator-box-small_vitals_green').show();
+    $('.indicator-box-small_vitals_green').text('');
+    intTotalvitalsMet = "";
+    var intVitalAllCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+        "tri_cccareplangoal",
+        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000007 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+        function (results) {
+
+            for (var i = 0; i < results.length; i++) {
+                var vVitalName = "";
+                var tri_activitydescription = results[i].tri_activitydescription;
+                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+                var tri_activitydueon = results[i].tri_activitydueon;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+                var tri_GoalSelected = results[i].tri_GoalSelected;
+                var tri_LastGoalDate = results[i].tri_LastGoalDate;
+                var tri_LastResultDate = results[i].tri_LastResultDate;
+                var tri_LastTargetValue = results[i].tri_LastTargetValue;
+                var tri_lastresult = results[i].tri_lastresult;
+                var tri_Metric = results[i].tri_Metric;
+                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+                var tri_name = results[i].tri_name;
+                var tri_NextDueDate = results[i].tri_NextDueDate;
+                var tri_qualitativeaction = results[i].tri_qualitativeaction;
+                var tri_qualitativetarget = results[i].tri_qualitativetarget;
+                var tri_range = results[i].tri_range;
+                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intVitalAllCount = intVitalAllCount + 1;
+                    intTotalvitalsMet = " " + intVitalAllCount + "";
+
+                    // intTotalvitalsMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_vitals_green').text(intTotalvitalsMet);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+                    getVitalNameAndAppendTag("maintable_vitals_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+                }
             }
         },
         function (error) {
@@ -2986,6 +3220,7 @@ function getCPGoalvitalsOverDue(PatientId) {
     $('.indicator-box-small_vitals_grey').show();
     $('.indicator-box-small_vitals_grey').text('');
     intTotalvitalsOverDue = "";
+    var intVitalAllCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
@@ -3020,83 +3255,87 @@ function getCPGoalvitalsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results_vitalsod[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results_vitalsod[i].tri_cccareplangoalId;
 
-                intTotalvitalsOverDue = " " + results_vitalsod.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intVitalAllCount = intVitalAllCount + 1;
+                    intTotalvitalsOverDue = " " + intVitalAllCount + "";
 
-                $('.indicator-wrapper_vitals >.indicator-box-small_vitals_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalvitalsOverDue);
+                    // intTotalvitalsOverDue = " " + results_vitalsod.length + " ";
+
+                    $('.indicator-wrapper_vitals >.indicator-box-small_vitals_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalvitalsOverDue);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results_vitalsod[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results_vitalsod[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results_vitalsod[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results_vitalsod[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_vitals_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_vitals_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -3116,6 +3355,7 @@ function getCPGoalmedicationsAll(PatientId) {
     $('.indicator-box-big_medications_all').show();
     $('.indicator-box-big_medications_all').text('');
     intTotalmedications = "";
+    var intMedicationsCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
@@ -3127,9 +3367,9 @@ function getCPGoalmedicationsAll(PatientId) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -3150,397 +3390,13 @@ function getCPGoalmedicationsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            intTotalmedications = "ALL " + results.length + "";
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intMedicationsCount = intMedicationsCount + 1;
+                intTotalmedications = "ALL " + intMedicationsCount + "";
 
-            $('.indicator-box-big_medications_all').text(intTotalmedications);
+               // intTotalmedications = "ALL " + results.length + "";
 
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-          
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
-
-            }
-            getVitalNameAndAppendTag("maintable_medications_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-        }
-    },
-    function (error) {
-        alert(error.message);
-    },
-    function () {
-        //On Complete - Do Something
-        if (intTotalmedications === null || intTotalmedications === undefined || intTotalmedications === "") {
-            $('.indicator-box-big_medications_all').text('');
-            $('.indicator-box-big_medications_all').hide();
-        }
-    }
-);
-}
-
-function getCPGoalmedicationsNotMet(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_medications_red').show();
-    $('.indicator-box-small_medications_red').text('');
-    intTotalmedicationsNotMet = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-     "tri_cccareplangoal",
-     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-     function (results) {
-
-         for (var i = 0; i < results.length; i++) {
-             var vVitalName = "";
-             var tri_activitydescription = results[i].tri_activitydescription;
-             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-             var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
-             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-             var tri_GoalSelected = results[i].tri_GoalSelected;
-             var tri_LastGoalDate = results[i].tri_LastGoalDate;
-             var tri_LastResultDate = results[i].tri_LastResultDate;
-             var tri_LastTargetValue = results[i].tri_LastTargetValue;
-             var tri_lastresult = results[i].tri_lastresult;
-             var tri_Metric = results[i].tri_Metric;
-             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-             var tri_name = results[i].tri_name;
-             var tri_NextDueDate = results[i].tri_NextDueDate;
-             var tri_qualitativeaction = results[i].tri_qualitativeaction;
-             var tri_qualitativetarget = results[i].tri_qualitativetarget;
-             var tri_range = results[i].tri_range;
-             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-             intTotalmedicationsNotMet = " " + results.length + " ";
-
-             $('.indicator-box-small_medications_red').text(intTotalmedicationsNotMet);
-
-
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
-
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
-
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
-
-                     break;
-
-                 case 100000001:
-
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                    
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
-
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
-
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
-             }
-           
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_medications_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-         }
-     },
-     function (error) {
-         alert(error.message);
-     },
-     function () {
-         //On Complete - Do Something
-         if (intTotalmedicationsNotMet === null || intTotalmedicationsNotMet === undefined || intTotalmedicationsNotMet === "") {
-             $('.indicator-box-small_medications_red').text('');
-             $('.indicator-box-small_medications_red').hide();
-         }
-     }
- );
-}
-
-function getCPGoalmedicationsOpen(PatientId) {
-    //alert(PatientId);
-    $('.indicator-box-small_medications_orange').show();
-    $('.indicator-box-small_medications_orange').text('');
-    intTotalmedicationsOpen = "";
-
-    SDK.JQuery.retrieveMultipleRecords(
-      "tri_cccareplangoal",
-      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-      function (results) {
-
-          for (var i = 0; i < results.length; i++) {
-              var vVitalName = "";
-              var tri_activitydescription = results[i].tri_activitydescription;
-              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-              var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
-              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-              var tri_GoalSelected = results[i].tri_GoalSelected;
-              var tri_LastGoalDate = results[i].tri_LastGoalDate;
-              var tri_LastResultDate = results[i].tri_LastResultDate;
-              var tri_LastTargetValue = results[i].tri_LastTargetValue;
-              var tri_lastresult = results[i].tri_lastresult;
-              var tri_Metric = results[i].tri_Metric;
-              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-              var tri_name = results[i].tri_name;
-              var tri_NextDueDate = results[i].tri_NextDueDate;
-              var tri_qualitativeaction = results[i].tri_qualitativeaction;
-              var tri_qualitativetarget = results[i].tri_qualitativetarget;
-              var tri_range = results[i].tri_range;
-              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-              intTotalmedicationsOpen = " " + results.length + " ";
-
-              $('.indicator-box-small_medications_orange').text(intTotalmedicationsOpen);
-
-
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
-
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
-
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
-
-                      break;
-
-                  case 100000001:
-
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
-
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
-
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
-              }
-          
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_medications_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-          }
-      },
-      function (error) {
-          alert(error.message);
-      },
-      function () {
-          //On Complete - Do Something
-          if (intTotalmedicationsOpen === null || intTotalmedicationsOpen === undefined || intTotalmedicationsOpen === "") {
-              $('.indicator-box-small_medications_orange').text('');
-              $('.indicator-box-small_medications_orange').hide();
-          }
-      }
-  );
-}
-
-function getCPGoalmedicationsMet(PatientId) {
-    $('.indicator-box-small_medications_green').show();
-    $('.indicator-box-small_medications_green').text('');
-    intTotalmedicationsMet = "";
-    SDK.JQuery.retrieveMultipleRecords(
-        "tri_cccareplangoal",
-        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-        function (results) {
-
-            for (var i = 0; i < results.length; i++) {
-                var vVitalName = "";
-                var tri_activitydescription = results[i].tri_activitydescription;
-                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-                var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
-                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-                var tri_GoalSelected = results[i].tri_GoalSelected;
-                var tri_LastGoalDate = results[i].tri_LastGoalDate;
-                var tri_LastResultDate = results[i].tri_LastResultDate;
-                var tri_LastTargetValue = results[i].tri_LastTargetValue;
-                var tri_lastresult = results[i].tri_lastresult;
-                var tri_Metric = results[i].tri_Metric;
-                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-                var tri_name = results[i].tri_name;
-                var tri_NextDueDate = results[i].tri_NextDueDate;
-                var tri_qualitativeaction = results[i].tri_qualitativeaction;
-                var tri_qualitativetarget = results[i].tri_qualitativetarget;
-                var tri_range = results[i].tri_range;
-                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-                intTotalmedicationsMet = " " + results.length + " ";
-
-                $('.indicator-box-small_medications_green').text(intTotalmedicationsMet);
+                $('.indicator-box-big_medications_all').text(intTotalmedications);
 
 
                 strTargetVal = "";
@@ -3567,7 +3423,7 @@ function getCPGoalmedicationsMet(PatientId) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -3583,14 +3439,14 @@ function getCPGoalmedicationsMet(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-               
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -3611,10 +3467,415 @@ function getCPGoalmedicationsMet(PatientId) {
                         break;
 
                 }
+                getVitalNameAndAppendTag("maintable_medications_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+            }
+        }
+    },
+    function (error) {
+        alert(error.message);
+    },
+    function () {
+        //On Complete - Do Something
+        if (intTotalmedications === null || intTotalmedications === undefined || intTotalmedications === "") {
+            $('.indicator-box-big_medications_all').text('');
+            $('.indicator-box-big_medications_all').hide();
+        }
+    }
+);
+}
 
-                getVitalNameAndAppendTag("maintable_medications_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+function getCPGoalmedicationsNotMet(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_medications_red').show();
+    $('.indicator-box-small_medications_red').text('');
+    intTotalmedicationsNotMet = "";
+    var intMedicationsCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+     "tri_cccareplangoal",
+     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+     function (results) {
+
+         for (var i = 0; i < results.length; i++) {
+             var vVitalName = "";
+             var tri_activitydescription = results[i].tri_activitydescription;
+             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+             var tri_activitydueon = results[i].tri_activitydueon;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+             var tri_GoalSelected = results[i].tri_GoalSelected;
+             var tri_LastGoalDate = results[i].tri_LastGoalDate;
+             var tri_LastResultDate = results[i].tri_LastResultDate;
+             var tri_LastTargetValue = results[i].tri_LastTargetValue;
+             var tri_lastresult = results[i].tri_lastresult;
+             var tri_Metric = results[i].tri_Metric;
+             var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+             var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+             var tri_name = results[i].tri_name;
+             var tri_NextDueDate = results[i].tri_NextDueDate;
+             var tri_qualitativeaction = results[i].tri_qualitativeaction;
+             var tri_qualitativetarget = results[i].tri_qualitativetarget;
+             var tri_range = results[i].tri_range;
+             var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+             var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+             var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intMedicationsCount = intMedicationsCount + 1;
+                 intTotalmedicationsNotMet = " " + intMedicationsCount + "";
+
+                 // intTotalmedicationsNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_medications_red').text(intTotalmedicationsNotMet);
+
+
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
+
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
+
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
+
+                         break;
+
+                     case 100000001:
+
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
+
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
+
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_medications_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+             }
+         }
+     },
+     function (error) {
+         alert(error.message);
+     },
+     function () {
+         //On Complete - Do Something
+         if (intTotalmedicationsNotMet === null || intTotalmedicationsNotMet === undefined || intTotalmedicationsNotMet === "") {
+             $('.indicator-box-small_medications_red').text('');
+             $('.indicator-box-small_medications_red').hide();
+         }
+     }
+ );
+}
+
+function getCPGoalmedicationsOpen(PatientId) {
+    //alert(PatientId);
+    $('.indicator-box-small_medications_orange').show();
+    $('.indicator-box-small_medications_orange').text('');
+    intTotalmedicationsOpen = "";
+    var intMedicationsCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+      "tri_cccareplangoal",
+      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+      function (results) {
+
+          for (var i = 0; i < results.length; i++) {
+              var vVitalName = "";
+              var tri_activitydescription = results[i].tri_activitydescription;
+              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+              var tri_activitydueon = results[i].tri_activitydueon;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+              var tri_GoalSelected = results[i].tri_GoalSelected;
+              var tri_LastGoalDate = results[i].tri_LastGoalDate;
+              var tri_LastResultDate = results[i].tri_LastResultDate;
+              var tri_LastTargetValue = results[i].tri_LastTargetValue;
+              var tri_lastresult = results[i].tri_lastresult;
+              var tri_Metric = results[i].tri_Metric;
+              var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+              var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+              var tri_name = results[i].tri_name;
+              var tri_NextDueDate = results[i].tri_NextDueDate;
+              var tri_qualitativeaction = results[i].tri_qualitativeaction;
+              var tri_qualitativetarget = results[i].tri_qualitativetarget;
+              var tri_range = results[i].tri_range;
+              var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+              var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+              var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intMedicationsCount = intMedicationsCount + 1;
+                  intTotalmedicationsOpen = " " + intMedicationsCount + "";
+
+                  // intTotalmedicationsOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_medications_orange').text(intTotalmedicationsOpen);
+
+
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
+
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
+
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
+
+                          break;
+
+                      case 100000001:
+
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
+
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
+
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_medications_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+              }
+          }
+      },
+      function (error) {
+          alert(error.message);
+      },
+      function () {
+          //On Complete - Do Something
+          if (intTotalmedicationsOpen === null || intTotalmedicationsOpen === undefined || intTotalmedicationsOpen === "") {
+              $('.indicator-box-small_medications_orange').text('');
+              $('.indicator-box-small_medications_orange').hide();
+          }
+      }
+  );
+}
+
+function getCPGoalmedicationsMet(PatientId) {
+    $('.indicator-box-small_medications_green').show();
+    $('.indicator-box-small_medications_green').text('');
+    intTotalmedicationsMet = "";
+    var intMedicationsCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+        "tri_cccareplangoal",
+        "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+        function (results) {
+
+            for (var i = 0; i < results.length; i++) {
+                var vVitalName = "";
+                var tri_activitydescription = results[i].tri_activitydescription;
+                var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+                var tri_activitydueon = results[i].tri_activitydueon;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+                var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+                var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+                var tri_GoalSelected = results[i].tri_GoalSelected;
+                var tri_LastGoalDate = results[i].tri_LastGoalDate;
+                var tri_LastResultDate = results[i].tri_LastResultDate;
+                var tri_LastTargetValue = results[i].tri_LastTargetValue;
+                var tri_lastresult = results[i].tri_lastresult;
+                var tri_Metric = results[i].tri_Metric;
+                var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+                var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+                var tri_name = results[i].tri_name;
+                var tri_NextDueDate = results[i].tri_NextDueDate;
+                var tri_qualitativeaction = results[i].tri_qualitativeaction;
+                var tri_qualitativetarget = results[i].tri_qualitativetarget;
+                var tri_range = results[i].tri_range;
+                var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+                var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+                var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+                var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+                var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intMedicationsCount = intMedicationsCount + 1;
+                    intTotalmedicationsMet = " " + intMedicationsCount + "";
+
+                    // intTotalmedicationsMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_medications_green').text(intTotalmedicationsMet);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_medications_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+                }
             }
         },
         function (error) {
@@ -3642,6 +3903,8 @@ function getCPGoalmedicationsOverDue(PatientId) {
     $('.indicator-box-small_medications_grey').show();
     $('.indicator-box-small_medications_grey').text('');
     intTotalmedicationsOverDue = "";
+    var intMedicationsCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000002 and tri_NextDueDate le datetime'" + dateMsg + "'  and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3652,9 +3915,9 @@ function getCPGoalmedicationsOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -3675,9 +3938,146 @@ function getCPGoalmedicationsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalmedicationsOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intMedicationsCount = intMedicationsCount + 1;
+                    intTotalmedicationsOverDue = " " + intMedicationsCount + "";
 
-                $('.indicator-box-small_medications_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalmedicationsOverDue);
+                    // intTotalmedicationsOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_medications_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalmedicationsOverDue);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+                    getVitalNameAndAppendTag("maintable_medications_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+                }
+            }
+        },
+        function (error) {
+            alert(error.message);
+        },
+        function () {
+            //On Complete - Do Something
+            if (intTotalmedicationsOverDue === null || intTotalmedicationsOverDue === undefined || intTotalmedicationsOverDue === "") {
+                $('.indicator-box-small_medications_grey').text('');
+                $('.indicator-box-small_medications_grey').hide();
+            }
+        }
+    );
+}
+
+function getCPGoalactivityAll(PatientId) {
+    $('.indicator-box-big_activity_all').show();
+    $('.indicator-box-big_activity_all').text('');
+    intTotalactivity = "";
+    var intActivityCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+    "tri_cccareplangoal",
+    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+    function (results) {
+
+        for (var i = 0; i < results.length; i++) {
+            var vVitalName = "";
+            var tri_activitydescription = results[i].tri_activitydescription;
+            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+            var tri_activitydueon = results[i].tri_activitydueon;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+            var tri_GoalSelected = results[i].tri_GoalSelected;
+            var tri_LastGoalDate = results[i].tri_LastGoalDate;
+            var tri_LastResultDate = results[i].tri_LastResultDate;
+            var tri_LastTargetValue = results[i].tri_LastTargetValue;
+            var tri_lastresult = results[i].tri_lastresult;
+            var tri_Metric = results[i].tri_Metric;
+            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+            var tri_name = results[i].tri_name;
+            var tri_NextDueDate = results[i].tri_NextDueDate;
+            var tri_qualitativeaction = results[i].tri_qualitativeaction;
+            var tri_qualitativetarget = results[i].tri_qualitativetarget;
+            var tri_range = results[i].tri_range;
+            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intActivityCount = intActivityCount + 1;
+                intTotalactivity = "ALL " + intActivityCount + "";
+
+                // intTotalactivity = "ALL " + results.length + "";
+
+                $('.indicator-box-big_activity_all').text(intTotalactivity);
 
 
                 strTargetVal = "";
@@ -3699,12 +4099,12 @@ function getCPGoalmedicationsOverDue(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                       
+
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -3720,14 +4120,14 @@ function getCPGoalmedicationsOverDue(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-              
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -3748,136 +4148,10 @@ function getCPGoalmedicationsOverDue(PatientId) {
                         break;
 
                 }
-                getVitalNameAndAppendTag("maintable_medications_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-            }
-        },
-        function (error) {
-            alert(error.message);
-        },
-        function () {
-            //On Complete - Do Something
-            if (intTotalmedicationsOverDue === null || intTotalmedicationsOverDue === undefined || intTotalmedicationsOverDue === "") {
-                $('.indicator-box-small_medications_grey').text('');
-                $('.indicator-box-small_medications_grey').hide();
-            }
-        }
-    );
-}
 
-function getCPGoalactivityAll(PatientId) {
-    $('.indicator-box-big_activity_all').show();
-    $('.indicator-box-big_activity_all').text('');
-    intTotalactivity = "";
-    SDK.JQuery.retrieveMultipleRecords(
-    "tri_cccareplangoal",
-    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-    function (results) {
-
-        for (var i = 0; i < results.length; i++) {
-            var vVitalName = "";
-            var tri_activitydescription = results[i].tri_activitydescription;
-            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-            var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
-            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-            var tri_GoalSelected = results[i].tri_GoalSelected;
-            var tri_LastGoalDate = results[i].tri_LastGoalDate;
-            var tri_LastResultDate = results[i].tri_LastResultDate;
-            var tri_LastTargetValue = results[i].tri_LastTargetValue;
-            var tri_lastresult = results[i].tri_lastresult;
-            var tri_Metric = results[i].tri_Metric;
-            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-            var tri_name = results[i].tri_name;
-            var tri_NextDueDate = results[i].tri_NextDueDate;
-            var tri_qualitativeaction = results[i].tri_qualitativeaction;
-            var tri_qualitativetarget = results[i].tri_qualitativetarget;
-            var tri_range = results[i].tri_range;
-            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-            intTotalactivity = "ALL " + results.length + "";
-
-            $('.indicator-box-big_activity_all').text(intTotalactivity);
-
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-       
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
+                getVitalNameAndAppendTag("maintable_activity_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
 
             }
-
-            getVitalNameAndAppendTag("maintable_activity_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
         }
     },
     function (error) {
@@ -3898,6 +4172,8 @@ function getCPGoalactivityNotMet(PatientId) {
     $('.indicator-box-small_activity_red').show();
     $('.indicator-box-small_activity_red').text('');
     intTotalactivityNotMet = "";
+    var intActivityCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -3908,9 +4184,9 @@ function getCPGoalactivityNotMet(PatientId) {
              var tri_activitydescription = results[i].tri_activitydescription;
              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
              var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
              var tri_GoalSelected = results[i].tri_GoalSelected;
              var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -3931,81 +4207,86 @@ function getCPGoalactivityNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             intTotalactivityNotMet = " " + results.length + " ";
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intActivityCount = intActivityCount + 1;
+                 intTotalactivityNotMet = " " + intActivityCount + "";
 
-             $('.indicator-box-small_activity_red').text(intTotalactivityNotMet);
+                 // intTotalactivityNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_activity_red').text(intTotalactivityNotMet);
 
 
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
 
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
 
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
 
-                     break;
+                         break;
 
-                 case 100000001:
+                     case 100000001:
 
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                    
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
 
-                     break;
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
 
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
+                         break;
+
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+                 getVitalNameAndAppendTag("maintable_activity_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
              }
-           
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-             getVitalNameAndAppendTag("maintable_activity_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
          }
      },
      function (error) {
@@ -4026,6 +4307,8 @@ function getCPGoalactivityOpen(PatientId) {
     $('.indicator-box-small_activity_orange').show();
     $('.indicator-box-small_activity_orange').text('');
     intTotalactivityOpen = "";
+    var intActivityCount = 0;
+    
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4036,9 +4319,9 @@ function getCPGoalactivityOpen(PatientId) {
               var tri_activitydescription = results[i].tri_activitydescription;
               var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
               var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
               var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
               var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
               var tri_GoalSelected = results[i].tri_GoalSelected;
               var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4059,80 +4342,85 @@ function getCPGoalactivityOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              intTotalactivityOpen = " " + results.length + " ";
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intActivityCount = intActivityCount + 1;
+                  intTotalactivityOpen = " " + intActivityCount + "";
 
-              $('.indicator-box-small_activity_orange').text(intTotalactivityOpen);
+                  // intTotalactivityOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_activity_orange').text(intTotalactivityOpen);
 
 
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
 
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
 
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
 
-                      break;
+                          break;
 
-                  case 100000001:
+                      case 100000001:
 
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
 
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
 
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+                  getVitalNameAndAppendTag("maintable_activity_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
               }
-           
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-              getVitalNameAndAppendTag("maintable_activity_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
           }
       },
       function (error) {
@@ -4152,6 +4440,8 @@ function getCPGoalactivityMet(PatientId) {
     $('.indicator-box-small_activity_green').show();
     $('.indicator-box-small_activity_green').text('');
     intTotalactivityMet = "";
+    var intActivityCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000003 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4162,9 +4452,9 @@ function getCPGoalactivityMet(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4185,80 +4475,85 @@ function getCPGoalactivityMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalactivityMet = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intActivityCount = intActivityCount + 1;
+                    intTotalactivityMet = " " + intActivityCount + "";
 
-                $('.indicator-box-small_activity_green').text(intTotalactivityMet);
+                    // intTotalactivityMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_activity_green').text(intTotalactivityMet);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+                    getVitalNameAndAppendTag("maintable_activity_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
                 }
-              
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-                getVitalNameAndAppendTag("maintable_activity_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
             }
         },
         function (error) {
@@ -4278,6 +4573,8 @@ function getCPGoalactivityOverDue(PatientId) {
     $('.indicator-box-small_activity_grey').show();
     $('.indicator-box-small_activity_grey').text('');
     intTotalactivityOverDue = "";
+    var intActivityCount = 0;
+    
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -4296,9 +4593,9 @@ function getCPGoalactivityOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4319,83 +4616,87 @@ function getCPGoalactivityOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalactivityOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intActivityCount = intActivityCount + 1;
+                    intTotalactivityOverDue = " " + intActivityCount + "";
 
-                $('.indicator-box-small_activity_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalactivityOverDue);
+                    // intTotalactivityOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_activity_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalactivityOverDue);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_activity_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_activity_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -4415,6 +4716,8 @@ function getCPGoalnutritionAll(PatientId) {
     $('.indicator-box-big_nutrition_all').show();
     $('.indicator-box-big_nutrition_all').text('');
     intTotalnutrition = "";
+    var intNutritionCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4425,9 +4728,9 @@ function getCPGoalnutritionAll(PatientId) {
             var tri_activitydescription = results[i].tri_activitydescription;
             var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
             var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
             var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
             var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
             var tri_GoalSelected = results[i].tri_GoalSelected;
             var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4448,82 +4751,86 @@ function getCPGoalnutritionAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            intTotalnutrition = "ALL " + results.length + "";
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intNutritionCount = intNutritionCount + 1;
+                intTotalnutrition = "ALL " + intNutritionCount + "";
 
-            $('.indicator-box-big_nutrition_all').text(intTotalnutrition);
+                // intTotalnutrition = "ALL " + results.length + "";
+
+                $('.indicator-box-big_nutrition_all').text(intTotalnutrition);
 
 
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
+                strTargetVal = "";
+                strLastTargetVal = "";
+                strLastGoalDt = "";
+                strNextDueDt = "";
+                strGoalId = tri_cccareplangoalId;
+                vtxtColor = "";
 
-            switch (tri_typeofgoalcode) {
-                case 100000000:
+                switch (tri_typeofgoalcode) {
+                    case 100000000:
 
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
+                        strTargetVal = results[i].tri_qualitativetarget;
+                        strLastTargetVal = tri_lastresult;
 
-                    break;
+                        break;
 
-                case 100000001:
+                    case 100000001:
 
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                        var vMtrcOprtr1txt = "";
+                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
+                        if (tri_range == true) {
+                            var vMtrcOprtr2txt = "";
+                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                        }
+                        else {
+                            // alert(vMtrcOprtr1txt);
+                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        }
 
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
+                        if (tri_LastTargetValue !== null) {
+                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                        }
+                        break;
 
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
+                    case null:
+                        strTargetVal = results[i].tri_qualitativetarget;
+                        break;
+                }
+
+
+                if (tri_LastGoalDate !== null) {
+                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                }
+
+                if (tri_NextDueDate !== null) {
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                }
+
+                switch (tri_CarePlanGoalState) {
+                    case 167410000:
+                        vtxtColor = "#ff7d09";//orange
+
+                        break;
+                    case 167410001:
+                        vtxtColor = "#99cc00";//green
+
+                        break;
+                    case 167410002:
+                        vtxtColor = "#dd3b31";//red
+
+                        break;
+                    case 167410003:
+                        vtxtColor = "#ff7d09";//orange
+                        break;
+
+                }
+
+                getVitalNameAndAppendTag("maintable_nutrition_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
             }
-           
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
-
-            }
-
-            getVitalNameAndAppendTag("maintable_nutrition_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
 
         }
     },
@@ -4545,6 +4852,8 @@ function getCPGoalnutritionNotMet(PatientId) {
     $('.indicator-box-small_nutrition_red').show();
     $('.indicator-box-small_nutrition_red').text('');
     intTotalnutritionNotMet = "";
+    var intNutritionCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4555,9 +4864,9 @@ function getCPGoalnutritionNotMet(PatientId) {
              var tri_activitydescription = results[i].tri_activitydescription;
              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
              var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
              var tri_GoalSelected = results[i].tri_GoalSelected;
              var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4578,82 +4887,86 @@ function getCPGoalnutritionNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             intTotalnutritionNotMet = " " + results.length + " ";
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intNutritionCount = intNutritionCount + 1;
+                 intTotalnutritionNotMet = " " + intNutritionCount + "";
 
-             $('.indicator-box-small_nutrition_red').text(intTotalnutritionNotMet);
+                 //intTotalnutritionNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_nutrition_red').text(intTotalnutritionNotMet);
 
 
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
 
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
 
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
 
-                     break;
+                         break;
 
-                 case 100000001:
+                     case 100000001:
 
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
 
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
 
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_nutrition_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
              }
-            
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_nutrition_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
 
          }
      },
@@ -4675,6 +4988,7 @@ function getCPGoalnutritionOpen(PatientId) {
     $('.indicator-box-small_nutrition_orange').text('');
     $('.indicator-box-small_nutrition_orange').show();
     intTotalnutritionOpen = "";
+    var intNutritionCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
@@ -4686,9 +5000,9 @@ function getCPGoalnutritionOpen(PatientId) {
               var tri_activitydescription = results[i].tri_activitydescription;
               var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
               var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
               var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
               var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
               var tri_GoalSelected = results[i].tri_GoalSelected;
               var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4709,83 +5023,87 @@ function getCPGoalnutritionOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              intTotalnutritionOpen = " " + results.length + " ";
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intNutritionCount = intNutritionCount + 1;
+                  intTotalnutritionOpen = " " + intNutritionCount + "";
 
-              $('.indicator-box-small_nutrition_orange').text(intTotalnutritionOpen);
+                  // intTotalnutritionOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_nutrition_orange').text(intTotalnutritionOpen);
 
 
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
 
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
 
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
 
-                      break;
+                          break;
 
-                  case 100000001:
+                      case 100000001:
 
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
 
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
 
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_nutrition_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
               }
-              
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_nutrition_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
           }
       },
       function (error) {
@@ -4806,6 +5124,8 @@ function getCPGoalnutritionMet(PatientId) {
     $('.indicator-box-small_nutrition_green').show();
     $('.indicator-box-small_nutrition_green').text('');
     intTotalnutritionMet = "";
+    var intNutritionCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4816,9 +5136,9 @@ function getCPGoalnutritionMet(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4839,83 +5159,87 @@ function getCPGoalnutritionMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalnutritionMet = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intNutritionCount = intNutritionCount + 1;
+                    intTotalnutritionMet = " " + intNutritionCount + "";
 
-                $('.indicator-box-small_nutrition_green').text(intTotalnutritionMet);
+                    // intTotalnutritionMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_nutrition_green').text(intTotalnutritionMet);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                       
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_nutrition_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-                
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_nutrition_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -4945,6 +5269,8 @@ function getCPGoalnutritionOverDue(PatientId) {
     $('.indicator-box-small_nutrition_grey').show();
     $('.indicator-box-small_nutrition_grey').text('');
     intTotalnutritionOverDue = "";
+    var intNutritionCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000004 and tri_NextDueDate le datetime'" + dateMsg + "'  and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -4955,9 +5281,9 @@ function getCPGoalnutritionOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -4978,9 +5304,150 @@ function getCPGoalnutritionOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalnutritionOverDue = " " + results.length + " ";
 
-                $('.indicator-box-small_nutrition_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalnutritionOverDue);
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intNutritionCount = intNutritionCount + 1;
+                    intTotalnutritionOverDue = " " + intNutritionCount + "";
+
+                    // intTotalnutritionOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_nutrition_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalnutritionOverDue);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_nutrition_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+                }
+            }
+        },
+        function (error) {
+            alert(error.message);
+        },
+        function () {
+            //On Complete - Do Something
+            if (intTotalnutritionOverDue === null || intTotalnutritionOverDue === undefined || intTotalnutritionOverDue === "") {
+                $('.indicator-box-small_nutrition_grey').text('');
+                $('.indicator-box-small_nutrition_grey').hide();
+            }
+
+        }
+    );
+}
+
+function getCPGoalpsychosocialAll(PatientId) {
+    $('.indicator-box-big_psychosocial_all').show();
+    $('.indicator-box-big_psychosocial_all').text('');
+    intTotalpsychosocial = "";
+    var intPsychosocialCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+    "tri_cccareplangoal",
+    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+    function (results) {
+
+        for (var i = 0; i < results.length; i++) {
+            var vVitalName = "";
+            var tri_activitydescription = results[i].tri_activitydescription;
+            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+            var tri_activitydueon = results[i].tri_activitydueon;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+            var tri_GoalSelected = results[i].tri_GoalSelected;
+            var tri_LastGoalDate = results[i].tri_LastGoalDate;
+            var tri_LastResultDate = results[i].tri_LastResultDate;
+            var tri_LastTargetValue = results[i].tri_LastTargetValue;
+            var tri_lastresult = results[i].tri_lastresult;
+            var tri_Metric = results[i].tri_Metric;
+            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+            var tri_name = results[i].tri_name;
+            var tri_NextDueDate = results[i].tri_NextDueDate;
+            var tri_qualitativeaction = results[i].tri_qualitativeaction;
+            var tri_qualitativetarget = results[i].tri_qualitativetarget;
+            var tri_range = results[i].tri_range;
+            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intPsychosocialCount = intPsychosocialCount + 1;
+                intTotalpsychosocial = "ALL " + intPsychosocialCount + "";
+
+                // intTotalpsychosocial = "ALL " + results.length + "";
+
+                $('.indicator-box-big_psychosocial_all').text(intTotalpsychosocial);
 
 
                 strTargetVal = "";
@@ -4993,7 +5460,7 @@ function getCPGoalnutritionOverDue(PatientId) {
                 switch (tri_typeofgoalcode) {
                     case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget
+                        strTargetVal = results[i].tri_qualitativetarget;
                         strLastTargetVal = tri_lastresult;
 
                         break;
@@ -5002,12 +5469,12 @@ function getCPGoalnutritionOverDue(PatientId) {
 
                         var vMtrcOprtr1txt = "";
                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                       
+
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -5023,14 +5490,14 @@ function getCPGoalnutritionOverDue(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-             
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -5052,138 +5519,8 @@ function getCPGoalnutritionOverDue(PatientId) {
 
                 }
 
-                getVitalNameAndAppendTag("maintable_nutrition_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
+                getVitalNameAndAppendTag("maintable_psychosocial_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
             }
-        },
-        function (error) {
-            alert(error.message);
-        },
-        function () {
-            //On Complete - Do Something
-            if (intTotalnutritionOverDue === null || intTotalnutritionOverDue === undefined || intTotalnutritionOverDue === "") {
-                $('.indicator-box-small_nutrition_grey').text('');
-                $('.indicator-box-small_nutrition_grey').hide();
-            }
-
-        }
-    );
-}
-
-function getCPGoalpsychosocialAll(PatientId) {
-    $('.indicator-box-big_psychosocial_all').show();
-    $('.indicator-box-big_psychosocial_all').text('');
-    intTotalpsychosocial = "";
-    SDK.JQuery.retrieveMultipleRecords(
-    "tri_cccareplangoal",
-    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-    function (results) {
-
-        for (var i = 0; i < results.length; i++) {
-            var vVitalName = "";
-            var tri_activitydescription = results[i].tri_activitydescription;
-            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-            var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
-            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-            var tri_GoalSelected = results[i].tri_GoalSelected;
-            var tri_LastGoalDate = results[i].tri_LastGoalDate;
-            var tri_LastResultDate = results[i].tri_LastResultDate;
-            var tri_LastTargetValue = results[i].tri_LastTargetValue;
-            var tri_lastresult = results[i].tri_lastresult;
-            var tri_Metric = results[i].tri_Metric;
-            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-            var tri_name = results[i].tri_name;
-            var tri_NextDueDate = results[i].tri_NextDueDate;
-            var tri_qualitativeaction = results[i].tri_qualitativeaction;
-            var tri_qualitativetarget = results[i].tri_qualitativetarget;
-            var tri_range = results[i].tri_range;
-            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-            intTotalpsychosocial = "ALL " + results.length + "";
-
-            $('.indicator-box-big_psychosocial_all').text(intTotalpsychosocial);
-
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-           
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
-
-            }
-
-            getVitalNameAndAppendTag("maintable_psychosocial_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
 
         }
     },
@@ -5206,6 +5543,8 @@ function getCPGoalpsychosocialNotMet(PatientId) {
     $('.indicator-box-small_psychosocial_red').show();
     $('.indicator-box-small_psychosocial_red').text();
     intTotalpsychosocialNotMet = "";
+    var intPsychosocialCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5216,9 +5555,9 @@ function getCPGoalpsychosocialNotMet(PatientId) {
              var tri_activitydescription = results[i].tri_activitydescription;
              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
              var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
              var tri_GoalSelected = results[i].tri_GoalSelected;
              var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -5239,82 +5578,86 @@ function getCPGoalpsychosocialNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             intTotalpsychosocialNotMet = " " + results.length + " ";
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intPsychosocialCount = intPsychosocialCount + 1;
+                 intTotalpsychosocialNotMet = " " + intPsychosocialCount + "";
 
-             $('.indicator-box-small_psychosocial_red').text(intTotalpsychosocialNotMet);
+                 //  intTotalpsychosocialNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_psychosocial_red').text(intTotalpsychosocialNotMet);
 
 
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
 
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
 
-                     strTargetVal = results[i].tri_qualitativetarget
-                     strLastTargetVal = tri_lastresult;
+                         strTargetVal = results[i].tri_qualitativetarget
+                         strLastTargetVal = tri_lastresult;
 
-                     break;
+                         break;
 
-                 case 100000001:
+                     case 100000001:
 
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
 
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
 
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_psychosocial_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
              }
-           
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_psychosocial_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
 
          }
      },
@@ -5337,6 +5680,7 @@ function getCPGoalpsychosocialOpen(PatientId) {
     $('.indicator-box-small_psychosocial_orange').show();
     $('.indicator-box-small_psychosocial_orange').text('');
     intTotalpsychosocialOpen = "";
+    var intPsychosocialCount = 0;
 
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
@@ -5348,9 +5692,9 @@ function getCPGoalpsychosocialOpen(PatientId) {
               var tri_activitydescription = results[i].tri_activitydescription;
               var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
               var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
               var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
               var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
               var tri_GoalSelected = results[i].tri_GoalSelected;
               var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -5371,83 +5715,88 @@ function getCPGoalpsychosocialOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              intTotalpsychosocialOpen = " " + results.length + " ";
 
-              $('.indicator-box-small_psychosocial_orange').text(intTotalpsychosocialOpen);
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intPsychosocialCount = intPsychosocialCount + 1;
+                  intTotalpsychosocialOpen = " " + intPsychosocialCount + "";
+
+                  // intTotalpsychosocialOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_psychosocial_orange').text(intTotalpsychosocialOpen);
 
 
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
 
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
 
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
 
-                      break;
+                          break;
 
-                  case 100000001:
+                      case 100000001:
 
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
 
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
 
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_psychosocial_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
               }
-            
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_psychosocial_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
           }
       },
       function (error) {
@@ -5468,6 +5817,8 @@ function getCPGoalpsychosocialMet(PatientId) {
     $('.indicator-box-small_psychosocial_green').show();
     $('.indicator-box-small_psychosocial_green').text('');
     intTotalpsychosocialMet = "";
+    var intPsychosocialCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000005 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5478,9 +5829,9 @@ function getCPGoalpsychosocialMet(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -5501,80 +5852,85 @@ function getCPGoalpsychosocialMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalpsychosocialMet = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intPsychosocialCount = intPsychosocialCount + 1;
+                    intTotalpsychosocialMet = " " + intPsychosocialCount + "";
 
-                $('.indicator-box-small_psychosocial_green').text(intTotalpsychosocialMet);
+                    // intTotalpsychosocialMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_psychosocial_green').text(intTotalpsychosocialMet);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                      
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+                    getVitalNameAndAppendTag("maintable_psychosocial_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
                 }
-               
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-                getVitalNameAndAppendTag("maintable_psychosocial_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
             }
         },
         function (error) {
@@ -5595,6 +5951,8 @@ function getCPGoalpsychosocialOverDue(PatientId) {
     $('.indicator-box-small_psychosocial_grey').show();
     $('.indicator-box-small_psychosocial_grey').text('');
     intTotalpsychosocialOverDue = "";
+    var intPsychosocialCount = 0;
+
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -5613,9 +5971,9 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -5636,9 +5994,149 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalpsychosocialOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intPsychosocialCount = intPsychosocialCount + 1;
+                    intTotalpsychosocialOverDue = " " + intPsychosocialCount + "";
 
-                $('.indicator-box-small_psychosocial_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalpsychosocialOverDue);
+                    // intTotalpsychosocialOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_psychosocial_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalpsychosocialOverDue);
+
+
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
+
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
+
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
+
+                            break;
+
+                        case 100000001:
+
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
+
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_psychosocial_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
+                }
+            }
+        },
+        function (error) {
+            alert(error.message);
+        },
+        function () {
+            //On Complete - Do Something
+            if (intTotalpsychosocialOverDue === null || intTotalpsychosocialOverDue === undefined || intTotalpsychosocialOverDue === "") {
+                $('.indicator-box-small_psychosocial_grey').text('');
+                $('.indicator-box-small_psychosocial_grey').hide();
+            }
+        }
+    );
+}
+
+function getCPGoalwrapupAll(PatientId) {
+    $('.indicator-box-big_wrapup_all').show();
+    $('.indicator-box-big_wrapup_all').text('');
+    intTotalwrapup = "";
+    var intWrapCount = 0;
+
+    SDK.JQuery.retrieveMultipleRecords(
+    "tri_cccareplangoal",
+    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
+    function (results) {
+
+        for (var i = 0; i < results.length; i++) {
+            var vVitalName = "";
+            var tri_activitydescription = results[i].tri_activitydescription;
+            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
+            var tri_activitydueon = results[i].tri_activitydueon;
+            var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
+            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
+            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
+            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
+            var tri_GoalSelected = results[i].tri_GoalSelected;
+            var tri_LastGoalDate = results[i].tri_LastGoalDate;
+            var tri_LastResultDate = results[i].tri_LastResultDate;
+            var tri_LastTargetValue = results[i].tri_LastTargetValue;
+            var tri_lastresult = results[i].tri_lastresult;
+            var tri_Metric = results[i].tri_Metric;
+            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
+            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
+            var tri_name = results[i].tri_name;
+            var tri_NextDueDate = results[i].tri_NextDueDate;
+            var tri_qualitativeaction = results[i].tri_qualitativeaction;
+            var tri_qualitativetarget = results[i].tri_qualitativetarget;
+            var tri_range = results[i].tri_range;
+            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
+            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
+            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
+            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
+            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
+            
+            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                intWrapCount = intWrapCount + 1;
+                intTotalwrapup = "ALL " + intWrapCount + "";
+
+                // intTotalwrapup = "ALL " + results.length + "";
+
+                $('.indicator-box-big_wrapup_all').text(intTotalwrapup);
 
 
                 strTargetVal = "";
@@ -5665,7 +6163,7 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
@@ -5681,14 +6179,14 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                         strTargetVal = results[i].tri_qualitativetarget;
                         break;
                 }
-                
+
 
                 if (tri_LastGoalDate !== null) {
                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
                 }
 
                 if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
+                    strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
                 }
 
                 switch (tri_CarePlanGoalState) {
@@ -5710,138 +6208,9 @@ function getCPGoalpsychosocialOverDue(PatientId) {
 
                 }
 
-                getVitalNameAndAppendTag("maintable_psychosocial_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
-            }
-        },
-        function (error) {
-            alert(error.message);
-        },
-        function () {
-            //On Complete - Do Something
-            if (intTotalpsychosocialOverDue === null || intTotalpsychosocialOverDue === undefined || intTotalpsychosocialOverDue === "") {
-                $('.indicator-box-small_psychosocial_grey').text('');
-                $('.indicator-box-small_psychosocial_grey').hide();
-            }
-        }
-    );
-}
-
-function getCPGoalwrapupAll(PatientId) {
-    $('.indicator-box-big_wrapup_all').show();
-    $('.indicator-box-big_wrapup_all').text('');
-    intTotalwrapup = "";
-    SDK.JQuery.retrieveMultipleRecords(
-    "tri_cccareplangoal",
-    "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
-    function (results) {
-
-        for (var i = 0; i < results.length; i++) {
-            var vVitalName = "";
-            var tri_activitydescription = results[i].tri_activitydescription;
-            var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
-            var tri_activitydueon = results[i].tri_activitydueon;
-            var tri_activityrecurrence = results[i].tri_activityrecurrence;
-            var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-            var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
-            var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
-            var tri_GoalSelected = results[i].tri_GoalSelected;
-            var tri_LastGoalDate = results[i].tri_LastGoalDate;
-            var tri_LastResultDate = results[i].tri_LastResultDate;
-            var tri_LastTargetValue = results[i].tri_LastTargetValue;
-            var tri_lastresult = results[i].tri_lastresult;
-            var tri_Metric = results[i].tri_Metric;
-            var tri_MetricOperator = results[i].tri_MetricOperator.Value;
-            var tri_metricoperatortwo = results[i].tri_metricoperatortwo.Value;
-            var tri_name = results[i].tri_name;
-            var tri_NextDueDate = results[i].tri_NextDueDate;
-            var tri_qualitativeaction = results[i].tri_qualitativeaction;
-            var tri_qualitativetarget = results[i].tri_qualitativetarget;
-            var tri_range = results[i].tri_range;
-            var tri_targetmetricoperator = results[i].tri_targetmetricoperator;
-            var tri_targetvaluetwo = results[i].tri_targetvaluetwo;
-            var tri_typeofgoalcode = results[i].tri_typeofgoalcode.Value;
-            var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
-            var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
-            intTotalwrapup = "ALL " + results.length + "";
-
-            $('.indicator-box-big_wrapup_all').text(intTotalwrapup);
-
-
-            strTargetVal = "";
-            strLastTargetVal = "";
-            strLastGoalDt = "";
-            strNextDueDt = "";
-            strGoalId = tri_cccareplangoalId;
-            vtxtColor = "";
-
-            switch (tri_typeofgoalcode) {
-                case 100000000:
-
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    strLastTargetVal = tri_lastresult;
-
-                    break;
-
-                case 100000001:
-
-                    var vMtrcOprtr1txt = "";
-                    vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-
-                    if (tri_range == true) {
-                        var vMtrcOprtr2txt = "";
-                        vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                       vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    else {
-                        // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                    }
-
-                    if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                    }
-                    break;
-
-                case null:
-                    strTargetVal = results[i].tri_qualitativetarget;
-                    break;
-            }
-            
-
-            if (tri_LastGoalDate !== null) {
-                strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-            }
-
-            if (tri_NextDueDate !== null) {
-                strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-            }
-
-            switch (tri_CarePlanGoalState) {
-                case 167410000:
-                    vtxtColor = "#ff7d09";//orange
-
-                    break;
-                case 167410001:
-                    vtxtColor = "#99cc00";//green
-
-                    break;
-                case 167410002:
-                    vtxtColor = "#dd3b31";//red
-
-                    break;
-                case 167410003:
-                    vtxtColor = "#ff7d09";//orange
-                    break;
+                getVitalNameAndAppendTag("maintable_wrapup_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
 
             }
-
-            getVitalNameAndAppendTag("maintable_wrapup_all", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
         }
     },
     function (error) {
@@ -5865,6 +6234,8 @@ function getCPGoalwrapupNotMet(PatientId) {
     $('.indicator-box-small_wrapup_red').show();
     $('.indicator-box-small_wrapup_red').text('');
     intTotalwrapupNotMet = "";
+    var intWrapCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
      "tri_cccareplangoal",
      "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410002 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -5875,9 +6246,9 @@ function getCPGoalwrapupNotMet(PatientId) {
              var tri_activitydescription = results[i].tri_activitydescription;
              var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
              var tri_activitydueon = results[i].tri_activitydueon;
-             var tri_activityrecurrence = results[i].tri_activityrecurrence;
+             var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
              var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+             var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
              var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
              var tri_GoalSelected = results[i].tri_GoalSelected;
              var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -5898,82 +6269,86 @@ function getCPGoalwrapupNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             intTotalwrapupNotMet = " " + results.length + " ";
+             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                 intWrapCount = intWrapCount + 1;
+                 intTotalwrapupNotMet = " " + intWrapCount + "";
 
-             $('.indicator-box-small_wrapup_red').text(intTotalwrapupNotMet);
+                 // intTotalwrapupNotMet = " " + results.length + " ";
+
+                 $('.indicator-box-small_wrapup_red').text(intTotalwrapupNotMet);
 
 
-             strTargetVal = "";
-             strLastTargetVal = "";
-             strLastGoalDt = "";
-             strNextDueDt = "";
-             strGoalId = tri_cccareplangoalId;
-             vtxtColor = "";
+                 strTargetVal = "";
+                 strLastTargetVal = "";
+                 strLastGoalDt = "";
+                 strNextDueDt = "";
+                 strGoalId = tri_cccareplangoalId;
+                 vtxtColor = "";
 
-             switch (tri_typeofgoalcode) {
-                 case 100000000:
+                 switch (tri_typeofgoalcode) {
+                     case 100000000:
 
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     strLastTargetVal = tri_lastresult;
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         strLastTargetVal = tri_lastresult;
 
-                     break;
+                         break;
 
-                 case 100000001:
+                     case 100000001:
 
-                     var vMtrcOprtr1txt = "";
-                     vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                         var vMtrcOprtr1txt = "";
+                         vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                     if (tri_range == true) {
-                         var vMtrcOprtr2txt = "";
-                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     else {
-                         // alert(vMtrcOprtr1txt);
-                         strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                     }
+                         if (tri_range == true) {
+                             var vMtrcOprtr2txt = "";
+                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         else {
+                             // alert(vMtrcOprtr1txt);
+                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                         }
 
-                     if (tri_LastTargetValue !== null) {
-                         strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                     }
-                     break;
+                         if (tri_LastTargetValue !== null) {
+                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                         }
+                         break;
 
-                 case null:
-                     strTargetVal = results[i].tri_qualitativetarget;
-                     break;
+                     case null:
+                         strTargetVal = results[i].tri_qualitativetarget;
+                         break;
+                 }
+
+
+                 if (tri_LastGoalDate !== null) {
+                     strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                 }
+
+                 if (tri_NextDueDate !== null) {
+                     strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                 }
+
+                 switch (tri_CarePlanGoalState) {
+                     case 167410000:
+                         vtxtColor = "#ff7d09";//orange
+
+                         break;
+                     case 167410001:
+                         vtxtColor = "#99cc00";//green
+
+                         break;
+                     case 167410002:
+                         vtxtColor = "#dd3b31";//red
+
+                         break;
+                     case 167410003:
+                         vtxtColor = "#ff7d09";//orange
+                         break;
+
+                 }
+
+                 getVitalNameAndAppendTag("maintable_wrapup_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
              }
-             
-
-             if (tri_LastGoalDate !== null) {
-                 strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-             }
-
-             if (tri_NextDueDate !== null) {
-                 strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-             }
-
-             switch (tri_CarePlanGoalState) {
-                 case 167410000:
-                     vtxtColor = "#ff7d09";//orange
-
-                     break;
-                 case 167410001:
-                     vtxtColor = "#99cc00";//green
-
-                     break;
-                 case 167410002:
-                     vtxtColor = "#dd3b31";//red
-
-                     break;
-                 case 167410003:
-                     vtxtColor = "#ff7d09";//orange
-                     break;
-
-             }
-
-             getVitalNameAndAppendTag("maintable_wrapup_red", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
 
          }
      },
@@ -5995,6 +6370,8 @@ function getCPGoalwrapupOpen(PatientId) {
     $('.indicator-box-small_wrapup_orange').show();
     $('.indicator-box-small_wrapup_orange').text('');
     intTotalwrapupOpen = "";
+    var intWrapCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
       "tri_cccareplangoal",
       "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410000 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -6005,9 +6382,9 @@ function getCPGoalwrapupOpen(PatientId) {
               var tri_activitydescription = results[i].tri_activitydescription;
               var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
               var tri_activitydueon = results[i].tri_activitydueon;
-              var tri_activityrecurrence = results[i].tri_activityrecurrence;
+              var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
               var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+              var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
               var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
               var tri_GoalSelected = results[i].tri_GoalSelected;
               var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -6028,83 +6405,87 @@ function getCPGoalwrapupOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              intTotalwrapupOpen = " " + results.length + " ";
+              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                  intWrapCount = intWrapCount + 1;
+                  intTotalwrapupOpen = " " + intWrapCount + "";
 
-              $('.indicator-box-small_wrapup_orange').text(intTotalwrapupOpen);
+                  // intTotalwrapupOpen = " " + results.length + " ";
+
+                  $('.indicator-box-small_wrapup_orange').text(intTotalwrapupOpen);
 
 
-              strTargetVal = "";
-              strLastTargetVal = "";
-              strLastGoalDt = "";
-              strNextDueDt = "";
-              strGoalId = tri_cccareplangoalId;
-              vtxtColor = "";
+                  strTargetVal = "";
+                  strLastTargetVal = "";
+                  strLastGoalDt = "";
+                  strNextDueDt = "";
+                  strGoalId = tri_cccareplangoalId;
+                  vtxtColor = "";
 
-              switch (tri_typeofgoalcode) {
-                  case 100000000:
+                  switch (tri_typeofgoalcode) {
+                      case 100000000:
 
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult;
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          strLastTargetVal = tri_lastresult;
 
-                      break;
+                          break;
 
-                  case 100000001:
+                      case 100000001:
 
-                      var vMtrcOprtr1txt = "";
-                      vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
+                          var vMtrcOprtr1txt = "";
+                          vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                      if (tri_range == true) {
-                          var vMtrcOprtr2txt = "";
-                          vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                         vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      else {
-                          // alert(vMtrcOprtr1txt);
-                          strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                      }
+                          if (tri_range == true) {
+                              var vMtrcOprtr2txt = "";
+                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          else {
+                              // alert(vMtrcOprtr1txt);
+                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                          }
 
-                      if (tri_LastTargetValue !== null) {
-                          strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                      }
-                      break;
+                          if (tri_LastTargetValue !== null) {
+                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                          }
+                          break;
 
-                  case null:
-                      strTargetVal = results[i].tri_qualitativetarget;
-                      break;
+                      case null:
+                          strTargetVal = results[i].tri_qualitativetarget;
+                          break;
+                  }
+
+
+                  if (tri_LastGoalDate !== null) {
+                      strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                  }
+
+                  if (tri_NextDueDate !== null) {
+                      strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                  }
+
+                  switch (tri_CarePlanGoalState) {
+                      case 167410000:
+                          vtxtColor = "#ff7d09";//orange
+
+                          break;
+                      case 167410001:
+                          vtxtColor = "#99cc00";//green
+
+                          break;
+                      case 167410002:
+                          vtxtColor = "#dd3b31";//red
+
+                          break;
+                      case 167410003:
+                          vtxtColor = "#ff7d09";//orange
+                          break;
+
+                  }
+
+                  getVitalNameAndAppendTag("maintable_wrapup_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
               }
-              
-
-              if (tri_LastGoalDate !== null) {
-                  strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-              }
-
-              if (tri_NextDueDate !== null) {
-                  strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-              }
-
-              switch (tri_CarePlanGoalState) {
-                  case 167410000:
-                      vtxtColor = "#ff7d09";//orange
-
-                      break;
-                  case 167410001:
-                      vtxtColor = "#99cc00";//green
-
-                      break;
-                  case 167410002:
-                      vtxtColor = "#dd3b31";//red
-
-                      break;
-                  case 167410003:
-                      vtxtColor = "#ff7d09";//orange
-                      break;
-
-              }
-
-              getVitalNameAndAppendTag("maintable_wrapup_orange", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
           }
       },
       function (error) {
@@ -6124,6 +6505,8 @@ function getCPGoalwrapupMet(PatientId) {
     $('.indicator-box-small_wrapup_green').show();
     $('.indicator-box-small_wrapup_green').text('');
     intTotalwrapupMet = "";
+    var intWrapCount = 0;
+
     SDK.JQuery.retrieveMultipleRecords(
         "tri_cccareplangoal",
         "?$select=tri_cccareplangoalId,tri_CarePlanGoalState,tri_activitydescription,tri_lastresult,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + PatientId + "') and tri_GoalSection/Value eq 100000006 and  tri_CarePlanGoalState/Value eq 167410001 and tri_GoalSelected eq true&$orderby=tri_vitalsvaluetype asc",// and tri_CarePlanGoalState/Value eq 167410000",
@@ -6134,9 +6517,9 @@ function getCPGoalwrapupMet(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
@@ -6157,83 +6540,87 @@ function getCPGoalwrapupMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalwrapupMet = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intWrapCount = intWrapCount + 1;
+                    intTotalwrapupMet = " " + intWrapCount + "";
 
-                $('.indicator-box-small_wrapup_green').text(intTotalwrapupMet);
+                    // intTotalwrapupMet = " " + results.length + " ";
+
+                    $('.indicator-box-small_wrapup_green').text(intTotalwrapupMet);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                        
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_wrapup_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-                
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_wrapup_green", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -6253,6 +6640,8 @@ function getCPGoalwrapupOverDue(PatientId) {
     $('.indicator-box-small_wrapup_grey').show();
     $('.indicator-box-small_wrapup_grey').text('');
     intTotalwrapupOverDue = "";
+    var intWrapCount = 0;
+
     var dateNowPlus7 = new Date();
     //var date2 = new Date().toISOString().substr(0, 19);
     dateNowPlus7.setDate(dateNowPlus7.getDate() + 7);
@@ -6271,14 +6660,13 @@ function getCPGoalwrapupOverDue(PatientId) {
                 var tri_activitydescription = results[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results[i].tri_activitydueon;
-                var tri_activityrecurrence = results[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results[i].tri_GoalSelected;
                 var tri_LastGoalDate = results[i].tri_LastGoalDate;
                 var tri_LastResultDate = results[i].tri_LastResultDate;
-                var tri_LastTargetValue = results[i].tri_LastTargetValue;
                 var tri_lastresult = results[i].tri_lastresult;
                 var tri_Metric = results[i].tri_Metric;
                 var tri_MetricOperator = results[i].tri_MetricOperator.Value;
@@ -6294,83 +6682,87 @@ function getCPGoalwrapupOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                intTotalwrapupOverDue = " " + results.length + " ";
+                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                    intWrapCount = intWrapCount + 1;
+                    intTotalwrapupOverDue = " " + intWrapCount + "";
 
-                $('.indicator-box-small_wrapup_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">'+intTotalwrapupOverDue);
+                    // intTotalwrapupOverDue = " " + results.length + " ";
+
+                    $('.indicator-box-small_wrapup_grey').html('<img class="symptomoverdueimg" src="../tri_imgs/KMcalendar.png" width="14">' + intTotalwrapupOverDue);
 
 
-                strTargetVal = "";
-                strLastTargetVal = "";
-                strLastGoalDt = "";
-                strNextDueDt = "";
-                strGoalId = tri_cccareplangoalId;
-                vtxtColor = "";
+                    strTargetVal = "";
+                    strLastTargetVal = "";
+                    strLastGoalDt = "";
+                    strNextDueDt = "";
+                    strGoalId = tri_cccareplangoalId;
+                    vtxtColor = "";
 
-                switch (tri_typeofgoalcode) {
-                    case 100000000:
+                    switch (tri_typeofgoalcode) {
+                        case 100000000:
 
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        strLastTargetVal = tri_lastresult;
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            strLastTargetVal = tri_lastresult;
 
-                        break;
+                            break;
 
-                    case 100000001:
+                        case 100000001:
 
-                        var vMtrcOprtr1txt = "";
-                        vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
-                       
-                        if (tri_range == true) {
-                            var vMtrcOprtr2txt = "";
-                            vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        else {
-                            // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
-                        }
+                            var vMtrcOprtr1txt = "";
+                            vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
-                        if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
-                        }
-                        break;
+                            if (tri_range == true) {
+                                var vMtrcOprtr2txt = "";
+                                vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            else {
+                                // alert(vMtrcOprtr1txt);
+                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            }
 
-                    case null:
-                        strTargetVal = results[i].tri_qualitativetarget;
-                        break;
+                            if (tri_LastTargetValue !== null) {
+                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            }
+                            break;
+
+                        case null:
+                            strTargetVal = results[i].tri_qualitativetarget;
+                            break;
+                    }
+
+
+                    if (tri_LastGoalDate !== null) {
+                        strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
+                    }
+
+                    if (tri_NextDueDate !== null) {
+                        strNextDueDt = SetNextDuedate(tri_NextDueDate,tri_CarePlanGoalState,tri_activityrecurrence,tri_activityrecurrenceabnormal);
+                    }
+
+                    switch (tri_CarePlanGoalState) {
+                        case 167410000:
+                            vtxtColor = "#ff7d09";//orange
+
+                            break;
+                        case 167410001:
+                            vtxtColor = "#99cc00";//green
+
+                            break;
+                        case 167410002:
+                            vtxtColor = "#dd3b31";//red
+
+                            break;
+                        case 167410003:
+                            vtxtColor = "#ff7d09";//orange
+                            break;
+
+                    }
+
+                    getVitalNameAndAppendTag("maintable_wrapup_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
+
                 }
-                
-
-                if (tri_LastGoalDate !== null) {
-                    strLastGoalDt = $.datepicker.formatDate('mm/dd/yy', tri_LastGoalDate);
-                }
-
-                if (tri_NextDueDate !== null) {
-                    strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
-                }
-
-                switch (tri_CarePlanGoalState) {
-                    case 167410000:
-                        vtxtColor = "#ff7d09";//orange
-
-                        break;
-                    case 167410001:
-                        vtxtColor = "#99cc00";//green
-
-                        break;
-                    case 167410002:
-                        vtxtColor = "#dd3b31";//red
-
-                        break;
-                    case 167410003:
-                        vtxtColor = "#ff7d09";//orange
-                        break;
-
-                }
-
-                getVitalNameAndAppendTag("maintable_wrapup_grey", tri_vitalsvaluetype, strTargetVal, strLastTargetVal, strLastGoalDt, strNextDueDt, strGoalId, vtxtColor);
-
-
             }
         },
         function (error) {
@@ -6424,6 +6816,7 @@ function GetSectionName(OptionSetVal) {
     return vSectnName;
     
 }
+
 function gotoAddCarePlan() {
 
     IsDataChanged = false;
@@ -6520,12 +6913,11 @@ function gotoAddCarePlan() {
                 // get the newly added CarePlan Data
                 // Recheck this logic
                 var carePlanJoinData = GetCarePlanfromPatitentId(contactId)
-                // Enumerable.From(GetCarePlanfromPatitentIdandCarePlanName(contactId, carePlan))
                 var addedCarePlan = Enumerable.From(carePlanJoinData)
                     .Where(function (x) { return x.attributes.tri_planname.value === selectedCarePath })
                     .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id }; })
                     .ToArray();
-                debugger;
+
                 // Check if added careplanjoin records were created, then update the UI & dropdown 
                 if (addedCarePlan !== undefined && addedCarePlan !== null && addedCarePlan.length > 0) {
                     // Get Distinct CarePlans
@@ -7522,17 +7914,14 @@ $(document).on('keyup click', 'input[type=text]', function () {
     //EnableSaveChangesButton(inputId);
     AddVitaTypeToSave(inputId);
     IsDataChanged = true;
+
+    if (this.id.indexOf("observedValue") > -1) {
+        IsObservedValueAndFactorModifierChanged = true;
+    }
+    else {
+        IsOtherValuesChanged = true;
+    }
 });
-
-//$(document).on('click', 'a.ui-spinner-button ui-spinner-up ui-corner-tr', function () {
-//    alert("hello up");
-//    var inputId = $(this).prev().id;
-//    //EnableSaveChangesButton(inputId);
-//    AddVitaTypeToSave(inputId);
-//    IsDataChanged = true;
-//});
-
-
 
 $(document).on('click', '.ui-spinner-button', function () {
     var vSiblingId = $(this).siblings('input').attr('id')
@@ -7549,21 +7938,9 @@ $(document).on('click', '.ui-spinner-button', function () {
 
 
 
-//$(document).on('click', 'a.ui-spinner-button ui-spinner-down ui-corner-br', function () {
-//    alert("hello down");
-//    var inputId = $(this).prev().prev().id;
-//    //EnableSaveChangesButton(inputId);
-//    AddVitaTypeToSave(inputId);
-//    IsDataChanged = true;
-//});
-
-var vitalTypeToSaveArray = [];
-var lastVitalId = "";
-var IsDataChanged = false;
-
 function AddVitaTypeToSave(inputId) {
 
-    if (inputId !== null && inputId !== undefined && inputId.length > 0) {
+    if (inputId !== null && inputId !== undefined && inputId.length > 0 && inputId !== "observedValue") {
         var vitalId = $(inputId.substring(0, 36)).selector;
 
         var IndexOfVitalTypeId = vitalTypeToSaveArray.indexOf(vitalId);
@@ -7749,7 +8126,6 @@ function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contac
     //}; //top if ends here
 }
 
-
 function GetSelectedGoalForCurrentVitalType(tri_vitalsvaluetypeid, contactId) {
     //alert(tri_vitalsvaluetypeid);
     var vBTNselector = tri_vitalsvaluetypeid + "_BTN";
@@ -7852,8 +8228,16 @@ function (results) {
 
                 $("#" + vMULTIPLIER_NORMALselector).val(tri_activityrecurrencemultipliernormal);//append  metric
                 $("#" + vMULTIPLIER_NORMALselector).spinner();//append  metric
+                if (tri_activityrecurrence === 167410007) {
+                    $("#" + vMULTIPLIER_NORMALselector).hide();
+                }
+
                 $("#" + vMULTIPLIER_ABNORMALselector).val(tri_activityrecurrencemultiplierabnormal);//append  metric
                 $("#" + vMULTIPLIER_ABNORMALselector).spinner();//append  metric
+                if (tri_activityrecurrenceabnormal === 167410007) {
+                    $("#" + vMULTIPLIER_ABNORMALselector).hide();
+                }
+
                 $("#" + vQUAL_ACTIONselector).val(tri_qualitativeaction).prop('readonly', true);//append  metric, make readonly and change  background color to grey
 
 
@@ -7883,143 +8267,177 @@ function () {
 );
     }//if condition closes here
 }
+
 $(document).on('click', '.dropdown-menu li', function () {
     var vParentUL = $(this).parent('ul').attr('id');
     var vModId = $(this).attr('id');
-    var vULguid = vParentUL.substr(vParentUL.indexOf("_"), vParentUL.length);
-    var vBTNid = "";
-    //alert(vULguid);
-   switch (vULguid) {
-        case "_UL":
-             vBTNid = vParentUL.replace(vULguid, "_BTN");
-             var vVitalTypeId = vParentUL.replace("_UL", "");
 
-             if (parent.Xrm !== undefined) {
-                 var contactId = parent.Xrm.Page.data.entity.getId();
-             }
-             
-             GetGoalForCurrentModifier(vModId, vVitalTypeId, contactId, $(this).text(), "personalize");
+    if (vParentUL !== null && vParentUL !== undefined) {
+        var vULguid = vParentUL.substr(vParentUL.indexOf("_"), vParentUL.length);
+        var vBTNid = "";
+        //alert(vULguid);
+        switch (vULguid) {
+            case "_UL":
+                vBTNid = vParentUL.replace(vULguid, "_BTN");
+                var vVitalTypeId = vParentUL.replace("_UL", "");
 
-            //$("#" + vBTNid).text($(this).text());
-            //$("#" + vBTNid).val($(this).text());
-             break;
-       case "_ULPRNLGOAL":
-           var vThisLiId = ($(this).attr('id'));
-           switch (vThisLiId) {
-               case "ULPRNLGOAL_OPEN":
-                   $('.personalizegoalbutton').text("Open");
-                   $('.personalizegoalbutton').val("Open");
-                   $('.indicator-line,.flag-box-big').addClass("orange").removeClass("red grey green blue");
-                   break;
-               case "ULPRNLGOAL_MET":
-                   $('.personalizegoalbutton').text("Met");
-                   $('.personalizegoalbutton').val("Met");
-                   $('.indicator-line,.flag-box-big').addClass("green").removeClass("red grey orange blue");
-                   break;
-               case "ULPRNLGOAL_NOTMET":
-                   $('.personalizegoalbutton').text("Not Met");
-                   $('.personalizegoalbutton').val("Not Met");
-                   $('.indicator-line,.flag-box-big').addClass("red").removeClass("orange grey green blue");
-                   break;
-               case "ULPRNLGOAL_CLOSED":
-                   $('.personalizegoalbutton').text("Closed, Cancelled");
-                   $('.personalizegoalbutton').val("Closed, Cancelled");
-                   $('.indicator-line,.flag-box-big').addClass('orange').removeClass("red grey green blue");
-                   break;
-           }
-           break;
-        case "_PRSNLUL":
-            vBTNid = vParentUL.replace(vULguid, "_BTN");
-            var vVitalTypeId = vParentUL.replace("_PRSNLUL", "");
+                if (parent.Xrm !== undefined) {
+                    var contactId = parent.Xrm.Page.data.entity.getId();
+                }
 
-            if (parent.Xrm !== undefined) {
-                var contactId = parent.Xrm.Page.data.entity.getId();
-            }
+                GetGoalForCurrentModifier(vModId, vVitalTypeId, contactId, $(this).text(), "personalize");
 
-            GetGoalForCurrentModifier(vModId, vVitalTypeId, contactId, $(this).text(),"personalize");
+                //$("#" + vBTNid).text($(this).text());
+                //$("#" + vBTNid).val($(this).text());
+                break;
+            case "_ULPRNLGOAL":
+                var vThisLiId = ($(this).attr('id'));
+                switch (vThisLiId) {
+                    case "ULPRNLGOAL_OPEN":
+                        $('.personalizegoalbutton').text("Open");
+                        $('.personalizegoalbutton').val("Open");
+                        $('.indicator-line,.flag-box-big').addClass("orange").removeClass("red grey green blue");
+                        break;
+                    case "ULPRNLGOAL_MET":
+                        $('.personalizegoalbutton').text("Met");
+                        $('.personalizegoalbutton').val("Met");
+                        $('.indicator-line,.flag-box-big').addClass("green").removeClass("red grey orange blue");
+                        break;
+                    case "ULPRNLGOAL_NOTMET":
+                        $('.personalizegoalbutton').text("Not Met");
+                        $('.personalizegoalbutton').val("Not Met");
+                        $('.indicator-line,.flag-box-big').addClass("red").removeClass("orange grey green blue");
+                        break;
+                    case "ULPRNLGOAL_CLOSED":
+                        $('.personalizegoalbutton').text("Closed, Cancelled");
+                        $('.personalizegoalbutton').val("Closed, Cancelled");
+                        $('.indicator-line,.flag-box-big').addClass('orange').removeClass("red grey green blue");
+                        break;
+                }
+                break;
+            case "_PRSNLUL":
+                vBTNid = vParentUL.replace(vULguid, "_BTN");
+                var vVitalTypeId = vParentUL.replace("_PRSNLUL", "");
 
-            //$("#" + vBTNid).text($(this).text());
-            //$("#" + vBTNid).val($(this).text());
-            break;
-       case "_ULPRSNL":
-           //vBTNid = vParentUL.replace(vULguid, "_BTN");
-           var vVitalTypeId = vParentUL.replace("_ULPRSNL", "");
+                if (parent.Xrm !== undefined) {
+                    var contactId = parent.Xrm.Page.data.entity.getId();
+                }
 
-           if (parent.Xrm !== undefined) {
-               var contactId = parent.Xrm.Page.data.entity.getId();
-           }
-           var vStrippedModId = vModId.replace("_LIPRSNLN", "");
-           //alert(vStrippedModId);
-           GetGoalForCurrentModifier(vStrippedModId, vVitalTypeId, contactId, $(this).text(), "window");
+                GetGoalForCurrentModifier(vModId, vVitalTypeId, contactId, $(this).text(), "personalize");
 
-           //$('.personalizemodifierbutton').text($(this).text());
-           //$('.personalizemodifierbutton').val($(this).text());
-           break;
-        case "_MTRCOPRTRUL":
-            vBTNid = vParentUL.replace(vULguid, "_MTRCOPRTRBTN");
-           
-            $("#" + vBTNid).text($(this).text());
-            $("#" + vBTNid).val($(this).text());
-            break;
-       case "_MTRCOPRTRULTWO":
-           vBTNid = vParentUL.replace(vULguid, "_MTRCOPRTRBTNTWO");
+                //$("#" + vBTNid).text($(this).text());
+                //$("#" + vBTNid).val($(this).text());
+                break;
+            case "_ULPRSNL":
+                //vBTNid = vParentUL.replace(vULguid, "_BTN");
+                var vVitalTypeId = vParentUL.replace("_ULPRSNL", "");
 
-           $("#" + vBTNid).text($(this).text());
-           $("#" + vBTNid).val($(this).text());
-           break;
-        case "_FRQNRMLUL":
-            vBTNid = vParentUL.replace(vULguid, "_FRQNRMLBTN");
+                if (parent.Xrm !== undefined) {
+                    var contactId = parent.Xrm.Page.data.entity.getId();
+                }
+                var vStrippedModId = vModId.replace("_LIPRSNLN", "");
+                //alert(vStrippedModId);
+                GetGoalForCurrentModifier(vStrippedModId, vVitalTypeId, contactId, $(this).text(), "window");
 
-            $("#" + vBTNid).text($(this).text());
-            $("#" + vBTNid).val($(this).text());
-            //$("#" + vBTNid).spinner();
-            break;
-        case "_FRQABNRMLUL":
-            vBTNid = vParentUL.replace(vULguid, "_FRQABNRMLBTN");
+                //$('.personalizemodifierbutton').text($(this).text());
+                //$('.personalizemodifierbutton').val($(this).text());
+                break;
+            case "_MTRCOPRTRUL":
+                vBTNid = vParentUL.replace(vULguid, "_MTRCOPRTRBTN");
 
-            $("#" + vBTNid).text($(this).text());
-            $("#" + vBTNid).val($(this).text());
-            //$("#" + vBTNid).spinner();
-            break; 
-        case "_ASSGNROLEUL":
-            vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+                $("#" + vBTNid).text($(this).text());
+                $("#" + vBTNid).val($(this).text());
+                break;
+            case "_MTRCOPRTRULTWO":
+                vBTNid = vParentUL.replace(vULguid, "_MTRCOPRTRBTNTWO");
 
-            $("#" + vBTNid).text($(this).text());
-            $("#" + vBTNid).val($(this).text());
-            break;
-        case "_PRSNLULNRMLRCR":
-           // vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+                $("#" + vBTNid).text($(this).text());
+                $("#" + vBTNid).val($(this).text());
+                break;
+            case "_FRQNRMLUL":
+                vBTNid = vParentUL.replace(vULguid, "_FRQNRMLBTN");
 
-            $('.personalizerecurrnormal').text($(this).text());
-            $('.personalizerecurrnormal').val($(this).text());
-            break;
-        case "_PRSNLULABNRMLRCR":
-            //vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+                $("#" + vBTNid).text($(this).text());
+                $("#" + vBTNid).val($(this).text());
 
-            $('.personalizerecurrabnormal').text($(this).text());
-            $('.personalizerecurrabnormal').val($(this).text());
-            break;
-        case "_PRSNLULOPRTR":
-            //vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+                if ($(this).text() === "Every Encounter") {
+                    $("#" + vParentUL.replace(vULguid, "") + "_MULTIPLIER_NORMAL").hide();
+                } else {
+                    $("#" + vParentUL.replace(vULguid, "") + "_MULTIPLIER_NORMAL").show();
+                }
+                //$("#" + vBTNid).spinner();
+                break;
+            case "_FRQABNRMLUL":
+                vBTNid = vParentUL.replace(vULguid, "_FRQABNRMLBTN");
 
-            $('.personalizeoperator').text($(this).text());
-            $('.personalizeoperator').val($(this).text());
-            break;
-        case "_PRSNLULOPRTR1":
-            $('.personalizeoperatorOne').text($(this).text());
-            $('.personalizeoperatorOne').val($(this).text());
-            break;
-        case "_PRSNLULOPRTR2":
-            $('.personalizeoperatorTwo').text($(this).text());
-            $('.personalizeoperatorTwo').val($(this).text());
-            break;
+                $("#" + vBTNid).text($(this).text());
+                $("#" + vBTNid).val($(this).text());
+                if ($(this).text() === "Every Encounter") {
+                    $("#" + vParentUL.replace(vULguid, "") + "_MULTIPLIER_ABNORMAL").hide();
+                } else {
+                    $("#" + vParentUL.replace(vULguid, "") + "_MULTIPLIER_ABNORMAL").show();
+                }
+                //$("#" + vBTNid).spinner();
+                break;
+            case "_ASSGNROLEUL":
+                vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+
+                $("#" + vBTNid).text($(this).text());
+                $("#" + vBTNid).val($(this).text());
+                break;
+            case "_PRSNLULNRMLRCR":
+                // vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+
+                $('.personalizerecurrnormal').text($(this).text());
+                $('.personalizerecurrnormal').val($(this).text());
+
+                if ($(this).text() === "Every Encounter") {
+                    $('.personalizenormalmultiplier').hide();
+                } else {
+                    $('.personalizenormalmultiplier').show();
+                }
+                break;
+            case "_PRSNLULABNRMLRCR":
+                //vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+
+                $('.personalizerecurrabnormal').text($(this).text());
+                $('.personalizerecurrabnormal').val($(this).text());
+                if ($(this).text() === "Every Encounter") {
+                    $('.personalizeabnormalmultiplier').hide();
+                } else {
+                    $('.personalizeabnormalmultiplier').show();
+                }
+
+                break;
+            case "_PRSNLULOPRTR":
+                //vBTNid = vParentUL.replace(vULguid, "_ASSGNROLEBTN");
+
+                $('.personalizeoperator').text($(this).text());
+                $('.personalizeoperator').val($(this).text());
+                break;
+            case "_PRSNLULOPRTR1":
+                $('.personalizeoperatorOne').text($(this).text());
+                $('.personalizeoperatorOne').val($(this).text());
+                break;
+            case "_PRSNLULOPRTR2":
+                $('.personalizeoperatorTwo').text($(this).text());
+                $('.personalizeoperatorTwo').val($(this).text());
+                break;
+        }
+
+        // enabling save buttons on dropdown change
+        var inputId = $(this).parent().prev()[0].id;
+        //EnableSaveChangesButton(inputId);
+        AddVitaTypeToSave(inputId);
+        IsDataChanged = true;
+
+        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1)) {
+            IsObservedValueAndFactorModifierChanged = true;
+        }
+        else {
+            IsOtherValuesChanged = true;
+        }
     }
-
-    // enabling save buttons on dropdown change
-   var inputId = $(this).parent().prev()[0].id;
-   //EnableSaveChangesButton(inputId);
-   AddVitaTypeToSave(inputId);
-   IsDataChanged = true;
 });
 
 function GetSetTargetMetricOperator(tri_vitalsvaluetypeid, Vmetricoperator,strWrapper) {
@@ -8616,18 +9034,22 @@ function () {
 }
 
 function AcknowledgementDialog() {
-    $("#alert-wrapper").dialog({
-        //  title: "jQuery Dialog Popup",
-        modal: true,
-        width: 400,
-        position: { my: "center top", at: "center top" },
-        show: { effect: "blind", duration: 800 },
-        hide: { effect: "blind", duration: 400 },
-    });
+    if (IsOtherValuesChanged) {
+        $("#alert-wrapper").dialog({
+            //  title: "jQuery Dialog Popup",
+            modal: true,
+            width: 400,
+            position: { my: "center top", at: "center top" },
+            show: { effect: "blind", duration: 800 },
+            hide: { effect: "blind", duration: 400 },
+        });
+    }
+    else if(IsObservedValueAndFactorModifierChanged){
+        SaveData();
+    }
 }
 
-var saveCliced = false;
-var saveprsnlizeCliced = false;
+
 
 $(document).on('click', '.greybtn-alert', function () {
     $("#alert-wrapper").dialog('close');
@@ -8635,6 +9057,13 @@ $(document).on('click', '.greybtn-alert', function () {
 
 $(document).on('click', '.bluebtn-alert', function () {
     $("#alert-wrapper").dialog('close');
+    SaveData();
+});
+
+function SaveData() {
+    IsObservedValueAndFactorModifierChanged = false;
+    IsOtherValuesChanged = false;
+
     if (saveCliced == true) {
         saveCliced = false;
         OnSaveClicked();
@@ -8642,7 +9071,8 @@ $(document).on('click', '.bluebtn-alert', function () {
         saveprsnlizeCliced = false;
         OnSavePrsnlizeClicked();
     }
-});
+
+}
 
 $(document).on('click', '.savebtn', function () {
     saveCliced = true;
