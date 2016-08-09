@@ -355,8 +355,10 @@ hr.grey {
     background: #CCC;
 }
 
-.window-wrapper, .Personalize-details, .personalize-section, .personalizequalitative, .personalizequantitative, .personalizetargetvalQual
-/*.personalizeoperatorOne,.personalizeoperatorTwo,personalizerangeAnd,.personalizeULoperatorOne,.personalizeULoperatorTwo,.personalizetargetvalMetric,.personalizetargetvalMetricTwo*/ {
+/*.window-wrapper, .Personalize-details, .personalize-section, .personalizequalitative, .personalizequantitative, .personalizetargetvalQual*/
+.window-wrapper, .Personalize-details, .personalize-section
+/*.personalizeoperatorOne,.personalizeoperatorTwo,personalizerangeAnd,.personalizeULoperatorOne,.personalizeULoperatorTwo,.personalizetargetvalMetric,.personalizetargetvalMetricTwo*/ 
+{
     display: none;
 }
 

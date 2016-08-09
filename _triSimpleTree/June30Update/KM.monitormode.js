@@ -605,6 +605,7 @@ var IsRefreshedClicked = false;
 var monitormodeCarePlangoalIds = [];
 var CarePlans;
 
+
 function UpdateVitalFilters(PatientId) {
     if (!IsRefreshedClicked) {
         $('.planFilterbutton').html('All Plans Selected');
@@ -7932,6 +7933,8 @@ $(document).on('click', '.ui-spinner-button', function () {
         AddVitaTypeToSave(vSiblingId);
         //IsDataChanged = true;
     }
+    IsOtherValuesChanged = true;
+
    ////alert("Hello");
   //alert( $(this).siblings('input').attr('id'));
 });
@@ -8203,13 +8206,15 @@ function (results) {
                 }
                 switch (tri_typeofgoalcode) {
                     case 100000000:
-
+                        //$("#" + vQuantSpan).hide();
+                        //$("#" + vQualSpan).show();
                         $("#" + vQUAL_TXTBOXselector).val(tri_qualitativetarget);
                         $("#" + vQUAL_TXTBOXselector).css("display", "inline");
 
                         break;
                     case 100000001:
-
+                        //$("#" + vQuantSpan).show();
+                        //$("#" + vQualSpan).hide();
                         $("#" + vMETRICOPERATORselector).css("display", "inline");
                         $("#" + vMETRICselector).css("display", "inline").val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });
                         GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_MetricOperator, "personalize");
@@ -8609,6 +8614,13 @@ function GetSetTargetMetricOperatorTwo(tri_vitalsvaluetypeid, Vmetricoperator, s
 function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
 
     if (tri_vitalsvaluetypeid !== null && VFreqOSVal !== null) {
+
+        if (strWrapper === "personalize") {
+            $("#" + tri_vitalsvaluetypeid + "_MULTIPLIER_NORMAL").show();
+        }
+        else if (strWrapper === "window") {
+            $('.personalizenormalmultiplier').show();
+        }
         //var vBTNselector = "";
         //if (NormalAbnormalFlag === "Normal") {
         var vBTNselector = tri_vitalsvaluetypeid + "_FRQNRMLBTN";
@@ -8701,10 +8713,12 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Every Encounter");
                     $("#" + vBTNselector).val(167410007);
+                    $("#" + tri_vitalsvaluetypeid + "_MULTIPLIER_NORMAL").hide();
                 };
                 if (strWrapper === "window") {
                     $('.personalizerecurrnormal').text("Every Encounter");
                     $('.personalizerecurrnormal').val(167410007);
+                    $('.personalizenormalmultiplier').hide();
                 };
                 break;
 
@@ -8716,6 +8730,14 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
 
     if (tri_vitalsvaluetypeid !== null && VFreqOSVal !== null) {
        
+        if (strWrapper === "personalize") {
+            $("#" + tri_vitalsvaluetypeid + "_MULTIPLIER_ABNORMAL").show();
+        }
+        else if (strWrapper === "window")
+        {
+            $('.personalizeabnormalmultiplier').show();
+        }
+
         var vBTNselector = tri_vitalsvaluetypeid + "_FRQABNRMLBTN";
         //alert(VFreqOSVal);
         switch (VFreqOSVal) {
@@ -8804,10 +8826,12 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Every Encounter");
                     $("#" + vBTNselector).val(167410007);
+                    $("#" + tri_vitalsvaluetypeid + "_MULTIPLIER_ABNORMAL").hide();
                 };
                 if (strWrapper === "window") {
                     $('.personalizerecurrabnormal').text("Every Encounter");
                     $('.personalizerecurrabnormal').val(167410007);
+                    $('.personalizeabnormalmultiplier').hide();
                 };
                 break;
 
@@ -8937,6 +8961,10 @@ function (results) {
                 switch (tri_typeofgoalcode) {
                     case 100000000:
                         if (strWrapper === "personalize") {
+
+                            $("#" + tri_vitalsvaluetypeid + "_QUANTSPAN").hide();//////////////////////
+                            $("#" + tri_vitalsvaluetypeid + "_QUALSPAN").show();////////////////////
+
                             $("#" + vVitalFactorQUALITATIVEId).val(tri_qualitativetarget);
                             $("#" + vVitalFactorQUALITATIVEId).css("display", "inline");
                             //$("#" + vMETRICselector).val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
@@ -8944,13 +8972,20 @@ function (results) {
                         };
                         if (strWrapper === "window") {
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
+                            $(".personalizequantitative").hide();//////////////////////
+                            $(".personalizequalitative").show();////////////////////
+                            $("#tbl_ObservedValue").show();////////////////////
+
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget); //.addClass('qualitative').removeClass('quantitative');
+                            //$('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
                             // $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                         };
 
                         break;
                     case 100000001:
                         if (strWrapper === "personalize") {
+                            $("#" + tri_vitalsvaluetypeid + "_QUALSPAN").hide();/////////////////////////////
+                            $("#" + tri_vitalsvaluetypeid + "_QUANTSPAN").show();//////////////////////////////
 
                             $("#" + vMETRICOPERATORselector).css("display", "inline");
                             $("#" + vMETRICselector).css("display", "inline").val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });
@@ -8963,6 +8998,10 @@ function (results) {
                             }
                         }
                         if (strWrapper === "window") {
+                            $(".personalizequalitative").hide();//////////////////////
+                            $("#tbl_ObservedValue").hide();////////////////////
+                            $(".personalizequantitative").show();////////////////////
+
                             $('.personalizetargetvalMetric').val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });
                             $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                             GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_MetricOperator, "window");
@@ -8971,12 +9010,20 @@ function (results) {
                         break;
                     case null:
                         if (strWrapper === "personalize") {
+                            $("#" + tri_vitalsvaluetypeid + "_QUANTSPAN").hide();//////////////////////
+                            $("#" + tri_vitalsvaluetypeid + "_QUALSPAN").show();////////////////////
+                            $("#tbl_ObservedValue").show();////////////////////
+
                             $("#" + vMETRICselector).val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
                             $("#" + vMETRICOPERATORselector).hide();
                         };
                         if (strWrapper === "window") {
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
+                            $(".personalizequantitative").hide();//////////////////////
+                            $(".personalizequalitative").show();////////////////////
+
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget);//.addClass('qualitative').removeClass('quantitative');
+                           // $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
                             // $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                         };
                         break;
@@ -9045,6 +9092,9 @@ function AcknowledgementDialog() {
         });
     }
     else if(IsObservedValueAndFactorModifierChanged){
+        SaveData();
+    }
+    else if (!IsObservedValueAndFactorModifierChanged && !IsOtherValuesChanged) {
         SaveData();
     }
 }
