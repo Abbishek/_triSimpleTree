@@ -158,7 +158,7 @@ function GetCarePlanfromPatitentId(PatientId) {
 //"   <attribute name='tri_activitydescription' />" +
 //"   <attribute name='tri_measuredetails' />" +
 //"   <attribute name='tri_activityassignmentrole'  />" +
-//"   <attribute name='tri_schedulecategory'  />" +
+"   <attribute name='tri_schedulecategory'  />" +
 //"   <attribute name='tri_goalsection'  />" +
 //"   <attribute name='tri_metric'/> " +
 //"   <attribute name='tri_nextduedate'/> " +

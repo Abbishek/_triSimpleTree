@@ -506,9 +506,6 @@ $(document).ready(function () {
         }
 
     });
-
-
-
 }); //document ready function closes here
 
 function ClosePersonalizeWindow(PatientId) {
@@ -518,6 +515,7 @@ function ClosePersonalizeWindow(PatientId) {
     $('.monitor-wrapper').show('slow');
     monitormodeCarePlangoalIds.length = 0;
     IsRefreshedClicked = false;
+    IsScheduleCategoryPresent = false;
     DisplayMonitorMode(PatientId);
 }
 
@@ -527,11 +525,16 @@ function CloseWindowWrapper(PatientId) {
     $('.window-wrapper').css('display', 'none');
     monitormodeCarePlangoalIds.length = 0;
     IsRefreshedClicked = false;
+    IsScheduleCategoryPresent = false;
     DisplayMonitorMode(PatientId);
     $('.monitor-wrapper').show('slow');
 }
 
 function DisplayMonitorMode(PatientId) {
+    UpdateVitalFilters(PatientId);
+}
+
+function DisplayIndicators(PatientId) {
     getCPGoalSymptomsAll(PatientId);
     getCPGoaltestcareAll(PatientId);
     getCPGoalvitalsAll(PatientId);
@@ -597,67 +600,143 @@ function DisplayMonitorMode(PatientId) {
     //----wrapup
     $('.indicator-line_wrapup').removeClass("red orange green grey");
     $('.indicator-line_wrapup').addClass("blue");
-
-    UpdateVitalFilters(PatientId);
 }
 
 var IsRefreshedClicked = false;
+var IsScheduleCategoryPresent = false;
 var monitormodeCarePlangoalIds = [];
 var CarePlans;
-
+var ScheduleCategoryCTSArray = [];
 
 function UpdateVitalFilters(PatientId) {
+    debugger;
     if (!IsRefreshedClicked) {
-        $('.planFilterbutton').html('All Plans Selected');
         $('#planFilter ul').html('');
         $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" name="All"><span>Select All</span></li>');
-
+        ScheduleCategoryCTSArray.length = 0;
         var allPlans = GetCarePlanfromPatitentId(PatientId);
         CarePlans = Enumerable.From(allPlans)
         .Where(function (y) { return y.attributes.tri_careplangoalid !== null && y.attributes.tri_careplangoalid !== undefined && y.attributes.tri_careplangoalid.id !== "" })
-        .Select(function (x) { return { 'text': x.attributes.tri_planname.value, 'value': x.attributes.tri_careplanid.id, 'careplangoalid': x.attributes.tri_careplangoalid.id }; })
-        .ToArray();
+        .Select(function (x) {
+            return {
+                'text': x.attributes.tri_planname.value,
+                'value': x.attributes.tri_careplanid.id,
+                'careplangoalid': x.attributes.tri_careplangoalid.id,
+                'schedulecategory': (x.attributes.tri_schedulecategory !== null && x.attributes.tri_schedulecategory !== undefined ? x.attributes.tri_schedulecategory.value : 0)
+            };
+        }).ToArray();
 
         // Get Distinct CarePlans
         var distinctCarePlansTextArray = Enumerable.From(CarePlans)
-                                          .Select(function (x) { return x; })
-                                          .Distinct(function (y) { return y.text; })
-                                          .ToArray();
+                                         .Select(function (x) { return x; })
+                                         .Distinct(function (y) { return y.text; })
+                                         .ToArray();
+        ///
+        ScheduleCategoryCTSArray = Enumerable.From(distinctCarePlansTextArray)
+                                             .Where(function (x) { return x.schedulecategory === 100000001; })
+                                             .Select(function (x) { return x; })
+                                             .ToArray();
+
+        var IsAnyScheduleCategoryCTSPlansPresent = (ScheduleCategoryCTSArray.length > 0 ? true : false);
 
         for (var i = 0; i < distinctCarePlansTextArray.length; i++) {
-            $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" id="' + distinctCarePlansTextArray[i].value + "_VITALFLTRID" + '" name="' + distinctCarePlansTextArray[i].text + '"><span>' + distinctCarePlansTextArray[i].text + '</span></li>');
+            if (!IsAnyScheduleCategoryCTSPlansPresent || (IsAnyScheduleCategoryCTSPlansPresent && distinctCarePlansTextArray[i].schedulecategory === 100000001)) {
+                $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" id="' + distinctCarePlansTextArray[i].value + "_VITALFLTRID" + '" name="' + distinctCarePlansTextArray[i].text + '"><span>' + distinctCarePlansTextArray[i].text + '</span></li>');
+            }
+            else {
+                $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" id="' + distinctCarePlansTextArray[i].value + "_VITALFLTRID" + '" name="' + distinctCarePlansTextArray[i].text + '"><span>' + distinctCarePlansTextArray[i].text + '</span></li>');
+            }
+        }
+
+        var planFilterbuttontext = "";
+        // check if schedule category present then update html and call DisplayFiltered data
+        if (IsAnyScheduleCategoryCTSPlansPresent) {
+            IsScheduleCategoryPresent = true;
+            $('.planFilterbutton').html("Care Transition Schedule Plans Selected");
+            DisplayFilteredData(PatientId);
+        }
+        else {
+            IsScheduleCategoryPresent = false;
+            $('.planFilterbutton').html("All Plans Selected");
+            DisplayIndicators(PatientId);
+        }
+    }
+    else {
+        if (IsScheduleCategoryPresent) {
+            $('.planFilterbutton').html('');
+
+            $('#planFilter ul li input').each(function () {
+
+                if ($(this)[0].id !== undefined && $(this)[0].id !== null && $(this)[0].id !== "") {
+                    if ($(this).is(':checked')) {
+                        var planId = $(this)[0].id.replace("_VITALFLTRID", "");
+
+                           var CTSPlanArray  = Enumerable.From(ScheduleCategoryCTSArray)
+                                              .Where(function (x) { return x.value === planId; })
+                                              .Select(function (x) { return x; })
+                                              .ToArray();
+
+                           if (CTSPlanArray.length > 0) {
+                               $('.planFilterbutton').append('<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>');
+                           }
+                           else {
+                               $(this).prop('checked', false);
+                           }
+                    }
+                }
+            });
         }
     }
 }
 
 $(document).on('click', '#btnFilterRefresh', function () {
-    // Add code to hide indicator
+    var PatientId1 = parent.Xrm.Page.data.entity.getId();
+    var PatientId2 = PatientId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
     $('.maintable_symptoms_all,.maintable_symptoms_red,.maintable_symptoms_orange,.maintable_symptoms_green, .maintable_symptoms_grey,.maintable_testcare_all,.maintable_testcare_red,.maintable_testcare_orange,.maintable_testcare_green, .maintable_testcare_grey,.maintable_vitals_all,.maintable_vitals_red,.maintable_vitals_orange,.maintable_vitals_green, .maintable_vitals_grey,.maintable_medications_all,.maintable_medications_red,.maintable_medications_orange,.maintable_medications_green, .maintable_medications_grey,.maintable_activity_all,.maintable_activity_red,.maintable_activity_orange,.maintable_activity_green, .maintable_activity_grey,.maintable_nutrition_all, .maintable_nutrition_red,.maintable_nutrition_orange,.maintable_nutrition_green, .maintable_nutrition_grey,.maintable_psychosocial_all, .maintable_psychosocial_red,.maintable_psychosocial_orange,.maintable_psychosocial_green, .maintable_psychosocial_grey, .maintable_wrapup_all, .maintable_wrapup_red,.maintable_wrapup_orange,.maintable_wrapup_green, .maintable_wrapup_grey').hide();
-
     IsRefreshedClicked = true;
+    UpdateVitalFilters(PatientId);
+    DisplayFilteredData(PatientId); 
+});
+
+function DisplayFilteredData(PatientId) {
+
     monitormodeCarePlangoalIds.length = 0;
+    // Add code to hide indicator
+    IsRefreshedClicked = true;
+    var btnFilterCTS;
+
     $('#planFilter ul li input').each(function () {
-        if (!$(this).is(':checked') && $(this)[0].id !== undefined && $(this)[0].id !== null && $(this)[0].id !== "") {
+        if ($(this)[0].id !== undefined && $(this)[0].id !== null && $(this)[0].id !== "") {
             var planId = $(this)[0].id.replace("_VITALFLTRID", "");
-            var carePlanGoalIds = Enumerable.From(CarePlans)
-                               .Where(function (x) { return x.value === planId })
-                               .Select(function (y) { return y.careplangoalid; })
-                               .ToArray();
+            var carePlanGoalIds = [];
+
+            if (!$(this).is(':checked')) {
+                carePlanGoalIds = Enumerable.From(CarePlans)
+                                    .Where(function (x) { return x.value === planId })
+                                    .Select(function (y) { return y.careplangoalid; })
+                                    .ToArray();
+            }
+            // Include the checked non CTS plans to remove
+            if (IsScheduleCategoryPresent && $(this).is(':checked')) {
+                carePlanGoalIds = carePlanGoalIds.concat(Enumerable.From(CarePlans)
+                                                         .Where(function (x) { return x.value === planId && x.schedulecategory !== 100000001 })
+                                                         .Select(function (y) { return y.careplangoalid; })
+                                                         .ToArray());
+            }
+
             for (var i = 0; i < carePlanGoalIds.length; i++) {
                 monitormodeCarePlangoalIds.push(carePlanGoalIds[i]);
             }
         }
     });
+    DisplayIndicators(PatientId);
+}
 
-    var PatientId1 = parent.Xrm.Page.data.entity.getId();
-    var PatientId2 = PatientId1.replace("{", "");
-    var PatientId = PatientId2.replace("}", "");
-    DisplayMonitorMode(PatientId);
-});
-
+// Filter check box selection
 $(document).on('click', '#planFilter ul li input', function () {
     var btnPlanFilteHtml = $('.planFilterbutton').html();
-    if ($(this)[0].name === "All") {
+    if ($(this)[0].name === "All") { // All Plans
         var btntext = "";
         var allselectedchecked = false;
         if ($(this).is(':checked')) {
@@ -669,7 +748,7 @@ $(document).on('click', '#planFilter ul li input', function () {
             $($(this)[0].children[0]).prop('checked', allselectedchecked);
         });
     }
-    else if (btnPlanFilteHtml.indexOf($(this)[0].name) > -1) {
+    else if (btnPlanFilteHtml.indexOf($(this)[0].name) > -1) {  // if plan present in multiselect and unchecked
         if (!$(this).is(':checked')) {
             $('.planFilterbutton').children().remove('span:contains(' + $(this)[0].name + ')');
         }
@@ -677,12 +756,26 @@ $(document).on('click', '#planFilter ul li input', function () {
             // this scenario should not occur 
         }
     }
-    else if (!btnPlanFilteHtml.indexOf($(this)[0].name) > -1) {
-        if ($(this).is(':checked')) {
-            btnPlanFilteHtml = btnPlanFilteHtml + '<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>';
+    else if (!btnPlanFilteHtml.indexOf($(this)[0].name) > -1) { // if plan present in multiselect 
+        if ($(this).is(':checked')) { // checked
+
+            if (btnPlanFilteHtml === "Care Transition Schedule Plans Selected") {
+                btnPlanFilteHtml = "";
+
+                $('#planFilter ul li input[name*="All"]').prop('checked', false);
+                $('#planFilter ul li').each(function () {
+                    if ($($(this)[0].children[0]).is(':checked'))
+                    {
+                        btnPlanFilteHtml = btnPlanFilteHtml + '<span class="closespan">' + $($(this)[0].children[0])[0].name + '<a class="closefilter">X</a></span>';
+                    }
+                });
+            }
+            else {
+                btnPlanFilteHtml = btnPlanFilteHtml + '<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>';
+            }
             $('.planFilterbutton').html(btnPlanFilteHtml);
         }
-        else if (!$(this).is(':checked')) {
+        else if (!$(this).is(':checked')) { // unchecked
             var planName = $(this)[0].name;
             $('.planFilterbutton').html('');
             btnPlanFilteHtml = $('.planFilterbutton').html();
