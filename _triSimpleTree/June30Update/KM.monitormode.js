@@ -8054,7 +8054,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
         var vMdfrIdArray = [];
         //var vMdfrTagArray = [];
         var vULselector = tri_vitalsvaluetypeid + "_UL";
-
+        var modifierValue = "";
 
         //get modifier ids and put them in an array
         SDK.JQuery.retrieveMultipleRecords(
@@ -8066,6 +8066,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
 
                         var tri_PatientModifierId = results[i].tri_PatientModifierId.Id;
                         var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
+                        modifierValue = results[i].tri_PatientModifierId.Name;
 
                         var IndexOfMdfrId = vMdfrIdArray.indexOf(tri_PatientModifierId);
 
@@ -8073,6 +8074,8 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
 
                             vMdfrIdArray.push(tri_PatientModifierId);
                         }
+
+                       
                     }
                 }
             },
@@ -8119,6 +8122,10 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                     vitalUlSelector.html('');
                     vitalUlSelector.append(IncrementalModifierTag);
 
+                    if (vMdfrIdArray.length = 1)
+                    {
+                        GetGoalForCurrentModifier(vMdfrIdArray[0], tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
+                    }
                 }
             );
                         };// null check if closes here
