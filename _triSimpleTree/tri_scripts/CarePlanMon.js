@@ -12,6 +12,8 @@ function htmlDecode(value) {
     return value.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 }
 
+// patient 
+
 function opendialog(page) {
     var $dialog = $('#addNewCarePlan')
     .html('<iframe style="border: 0px; " src="' + page + '" width="100%" height="100%"></iframe>')

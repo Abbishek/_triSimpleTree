@@ -120,6 +120,7 @@
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="_imgs\logo-dh-small.png" />
+    <Content Include="June30Update\KM.monitormode_backup_23_8.js" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

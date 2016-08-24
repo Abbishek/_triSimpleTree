@@ -1,4 +1,4 @@
-var joinEntityCollection = null;
+﻿var joinEntityCollection = null;
 var CPGoalSymptomsAll = null;
 var tagCPGoalSymptomsAll = "";
 var CPGoalSymptomsNotMet = null;
@@ -640,24 +640,12 @@ function UpdateVitalFilters(PatientId) {
                 'schedulecategory': (x.attributes.tri_schedulecategory !== null && x.attributes.tri_schedulecategory !== undefined ? x.attributes.tri_schedulecategory.value : 0)
             };
         }).ToArray();
-        debugger;
-        // Get Distinct CarePlans where any CTS is selected and rest other distinct
+
+        // Get Distinct CarePlans
         var distinctCarePlansTextArray = Enumerable.From(CarePlans)
-                                            .Where(function (x) { return x.schedulecategory === 100000001; })
-                                            .Select(function (x) { return x; })
-                                            .Distinct(function (y) { return y.text; })
-                                            .ToArray()
-
-        var ctsArrayText = Enumerable.From(distinctCarePlansTextArray)
-                                     .Select(function (x) { return x.text; })
-                                     .ToArray();
-
-        distinctCarePlansTextArray = distinctCarePlansTextArray.concat(Enumerable.From(CarePlans)
-                                                                        .Where(function (x) { return ctsArrayText.indexOf(x.text) === -1; })
-                                                                        .Select(function (x) { return x; })
-                                                                        .Distinct(function (y) { return y.text; })
-                                                                        .ToArray());
-
+                                         .Select(function (x) { return x; })
+                                         .Distinct(function (y) { return y.text; })
+                                         .ToArray();
         /// distinctCarePlansTextArray == CarePlans  // added
         ScheduleCategoryCTSArray = Enumerable.From(CarePlans)
                                              .Where(function (x) { return x.schedulecategory === 100000001; })
@@ -747,18 +735,10 @@ function DisplayFilteredData(PatientId) {
             }
             // Include the checked non CTS plans to remove
             if (IsScheduleCategoryPresent && $(this).is(':checked')) {
-
-                var schCatPlanArray = Enumerable.From(CarePlans)
-                                                .Where(function (x) { return x.value === planId && x.schedulecategory === 100000001 })
-                                                .Select(function (y) { return y; })
-                                                .ToArray();
-
-                if (schCatPlanArray.length <= 0) {
-                    carePlanGoalIds = carePlanGoalIds.concat(Enumerable.From(CarePlans)
-                                                             .Where(function (x) { return x.value === planId }) //x.schedulecategory !== 100000001 })
-                                                             .Select(function (y) { return y.careplangoalid; })
-                                                             .ToArray());
-                }
+                carePlanGoalIds = carePlanGoalIds.concat(Enumerable.From(CarePlans)
+                                                         .Where(function (x) { return x.value === planId && x.schedulecategory !== 100000001 })
+                                                         .Select(function (y) { return y.careplangoalid; })
+                                                         .ToArray());
             }
 
             for (var i = 0; i < carePlanGoalIds.length; i++) {
@@ -8096,7 +8076,6 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
 
         var FinalModifierTag = "";
         var vMdfrIdArray = [];
-        var vMdfrIdGoalSelectedArray = [];
         //var vMdfrTagArray = [];
         var vULselector = tri_vitalsvaluetypeid + "_UL";
         var modifierValue = "";
@@ -8104,16 +8083,13 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
         //get modifier ids and put them in an array
         SDK.JQuery.retrieveMultipleRecords(
             "tri_cccareplangoal",
-            "?$select=tri_PatientModifierId,tri_cccareplangoalId,tri_GoalSelected,tri_vitalsvaluetype&$filter=tri_vitalsvaluetype/Id eq (guid'" + tri_vitalsvaluetypeid + "') and tri_PatientID/Id eq (guid'" + contactId + "')&$orderby=tri_PatientModifierId asc",
+            "?$select=tri_PatientModifierId,tri_vitalsvaluetype&$filter=tri_vitalsvaluetype/Id eq (guid'" + tri_vitalsvaluetypeid + "') and tri_PatientID/Id eq (guid'" + contactId + "')&$orderby=tri_PatientModifierId asc",
             function (results) {
                 if (results.length > 0) {
                     for (var i = 0; i < results.length; i++) {
 
                         var tri_PatientModifierId = results[i].tri_PatientModifierId.Id;
                         var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
-                        var tri_GoalSelected = results[i].tri_GoalSelected;
-                        var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
-
                         modifierValue = results[i].tri_PatientModifierId.Name;
 
                         var IndexOfMdfrId = vMdfrIdArray.indexOf(tri_PatientModifierId);
@@ -8121,8 +8097,9 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                         if (IndexOfMdfrId === -1 && IndexOfMdfrId !== null && IndexOfMdfrId !== undefined) {
 
                             vMdfrIdArray.push(tri_PatientModifierId);
-                            vMdfrIdGoalSelectedArray.push({ 'ModifierId': tri_PatientModifierId, 'GoalSelecetd': tri_GoalSelected, 'CarePlanGoalId': tri_cccareplangoalId });
                         }
+
+                       
                     }
                 }
             },
@@ -8168,23 +8145,18 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                     var vitalUlSelector = $("#" + vULselector);
                     vitalUlSelector.html('');
                     vitalUlSelector.append(IncrementalModifierTag);
-                    /////
-                    
+
+                    if (vMdfrIdArray.length = 1)
+                    {
+                        GetGoalForCurrentModifier(vMdfrIdArray[0], tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
+                    }
                 }
             );
                         };// null check if closes here
                     };// for clses here
 
-                    // for single modifier default the goal, if goal selected is not true set it true
-                    if (vMdfrIdGoalSelectedArray.length = 1 && !vMdfrIdGoalSelectedArray[0].GoalSelecetd) {
-                        GetGoalForCurrentModifier(vMdfrIdGoalSelectedArray[0].ModifierId, tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
-
-                        var tri_cccareplangoal = {}
-                        tri_cccareplangoal.tri_GoalSelected = true;
-                        SDK.REST.updateRecord(vMdfrIdGoalSelectedArray[0].CarePlanGoalId, tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
-                    }
                 };// array count if closes here
-                
+
             }
         );
 
@@ -9174,17 +9146,21 @@ function (results) {
                             $(".personalizequantitative").hide();//////////////////////
                             $(".personalizequalitative").show();////////////////////
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly', true);//.addClass('qualitative').removeClass('quantitative');
-                            // $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly',true);//.addClass('qualitative').removeClass('quantitative');
+                           // $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
                             // $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                         };
                         break;
                 }
+
+
             },
             function (error) {
                 alert(error.message);
             }
         );
+
+       
 
         // $("#" + vMETRICselector).val(tri_qualitativetarget);//append  metric
         if (strWrapper === "personalize") {
@@ -9246,6 +9222,8 @@ function AcknowledgementDialog() {
         SaveData();
     }
 }
+
+
 
 $(document).on('click', '.greybtn-alert', function () {
     $("#alert-wrapper").dialog('close');
@@ -9833,6 +9811,5 @@ function RetrieveVitalName(vVitalTypeId) {
 //);
    // return tri_name;
 }
-
 
 
