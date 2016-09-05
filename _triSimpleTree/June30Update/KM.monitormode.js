@@ -7033,6 +7033,12 @@ function GetSectionName(OptionSetVal) {
     
 }
 
+function dynamicToolTip(data,idtest){
+	      $("#"+idtest).attr('data-original-title', data)
+          .tooltip('fixTitle')
+          .tooltip('show');
+	}
+	
 function gotoAddCarePlan() {
 
     IsDataChanged = false;
@@ -7321,7 +7327,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7388,7 +7394,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7454,7 +7460,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7521,7 +7527,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7590,7 +7596,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7660,7 +7666,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7727,7 +7733,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7796,7 +7802,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -8410,7 +8416,7 @@ $(document).on('click', '.dropdown-menu li', function () {
         AddVitaTypeToSave(inputId);
         IsDataChanged = true;
 
-        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1)) {
+        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1) || (this.id.indexOf("ULPRNLGOAL") > -1)) {
             IsObservedValueAndFactorModifierChanged = true;
         }
         else {
