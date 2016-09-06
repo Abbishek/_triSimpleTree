@@ -1928,8 +1928,8 @@ function ReviewAndUpdateGoal(currentId) {
       $('#nextresultdate_personalize').val(strNxtGoalDt).datepicker({ disabled: true });
       //$('#lastresultdate_personalize').datepicker();
       $('.personalizedropdownmenu').attr('id', tri_vitalsvaluetype + "_ULPRSNL");
-      $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal); //.spinner();
-      $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal); //.spinner();
+      $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal).spinner();
+      $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal).spinner();
       $('.personalizetriggeraction').val(tri_qualitativeaction).prop('readonly', true);
       $('.savebtn_prsnlize1').attr('id', tri_vitalsvaluetype + "_PRSNLSAVEBTN");
       $('.personalizeULnormalrecurr').attr('id', tri_vitalsvaluetype + "_PRSNLULNRMLRCR");
@@ -1986,11 +1986,11 @@ function ReviewAndUpdateGoal(currentId) {
 
               //$('#tbl_ObservedValue').css('display', 'block');
               $('#tbl_ObservedValue').show();
-              $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative').prop('readonly',true);
+              $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');//.prop('readonly',true);
               $('.personalizequalitative,.personalizetargetvalQual').show();
               $('.personalizequantitative').hide();
               $('.personalizegoalbutton').prop({ disabled: false });
-              $('#qualLastresult_personalize').val(tri_lastresult).prop('readonly', true);
+              $('#qualLastresult_personalize').val(tri_lastresult);//.prop('readonly', true);
               //$('#lastresultdate_personalize').css('display', 'none')
               $('#observedValue').val('');
               var strLstResultDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastResultDate);
@@ -2076,10 +2076,10 @@ function ReviewAndUpdateGoal(currentId) {
                   tri_targetvaluetwo = 0;
               }
               var metric1 = tri_Metric.substr(0, tri_Metric.indexOf("."));
-              $('.personalizetargetvalMetric').val(metric1).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n" });
+              $('.personalizetargetvalMetric').val(metric1).spinner({ step: 1.00, numberFormat: "n" });//.prop('readonly', true); //
 
               var metric2 = tri_targetvaluetwo.substr(0,tri_targetvaluetwo.indexOf("."));
-              $('.personalizetargetvalMetricTwo').val(metric2).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n" });
+              $('.personalizetargetvalMetricTwo').val(metric2).spinner({ step: 1.00, numberFormat: "n" }); // .prop('readonly', true); //
 
               $('.personalizequantitative').show();
               $('.personalizequalitative').hide();
@@ -2095,7 +2095,7 @@ function ReviewAndUpdateGoal(currentId) {
               }
               //// GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_targetmetricoperator);
               if (strLastTrgtVal !== null && strLastTrgtVal !== "") {
-                  $('#lastresult_personalize').val(strLastTrgtVal).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n", disabled: true });
+                  $('#lastresult_personalize').val(strLastTrgtVal).spinner({ step: 1.00, numberFormat: "n", disabled: true });
               }
 
               break;
@@ -3450,9 +3450,9 @@ function getCPGoalvitalsOverDue(PatientId) {
                 var tri_activitydescription = results_vitalsod[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results_vitalsod[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results_vitalsod[i].tri_activitydueon;
-                var tri_activityrecurrence = results_vitalsod[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results_vitalsod[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results_vitalsod[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results_vitalsod[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results_vitalsod[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results_vitalsod[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results_vitalsod[i].tri_GoalSelected;
                 var tri_LastGoalDate = results_vitalsod[i].tri_LastGoalDate;
@@ -7897,8 +7897,9 @@ $(document).on('keyup click', 'input[type=text]', function () {
 
 function NonAcknowledgementPopupCondition(element) {
     return (element.id.indexOf("observedValue") > -1 || element.id.indexOf("_QUALITATIVETXT") > -1 || element.className.indexOf("personalizetargetvalQual") > -1
-            || element.className.indexOf("personalizetriggeraction") > -1 || element.className.indexOf("personalizetargetvalMetric") > -1
-            || element.className.indexOf("personalizetargetvalMetricTwo") > -1);
+            || element.className.indexOf("personalizetriggeraction") > -1
+            //|| element.className.indexOf("personalizetargetvalMetric") > -1 || element.className.indexOf("personalizetargetvalMetricTwo") > -1
+        );
 }
 
 $(document).on('click', '.ui-spinner-button', function () {
@@ -8876,7 +8877,7 @@ function (results) {
                             $(".personalizequalitative").show();////////////////////
                             $("#tbl_ObservedValue").show();////////////////////
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly', true); //.addClass('qualitative').removeClass('quantitative');
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');//.prop('readonly', true); //
                         };
 
                         break;
@@ -8900,8 +8901,8 @@ function (results) {
                             $("#tbl_ObservedValue").hide();////////////////////
                             $(".personalizequantitative").show();////////////////////
 
-                            $('.personalizetargetvalMetric').val(tri_Metric);//.spinner({ step: 1.00, numberFormat: "n" });
-                            $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo);//.spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalMetric').val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                             GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_MetricOperator, "window");
                             GetSetTargetMetricOperatorTwo(tri_vitalsvaluetypeid, tri_metricoperatortwo, "window");
                         };
@@ -8920,7 +8921,7 @@ function (results) {
                             $(".personalizequantitative").hide();//////////////////////
                             $(".personalizequalitative").show();////////////////////
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly', true);//.addClass('qualitative').removeClass('quantitative');
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative'); // .prop('readonly', true);//
                         };
                         break;
                 }
@@ -8940,7 +8941,11 @@ function (results) {
         }
         if (strWrapper === "window") {
             $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal);//append  metric
+            $('.personalizenormalmultiplier').spinner();//append  metric
+
             $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal);//append  metric
+            $('.personalizeabnormalmultiplier').spinner();//append  metric
+
             $('.personalizetriggeraction').val(tri_qualitativeaction).prop('readonly', true);//append  metric, make readonly and change  background color to grey
         }
         if (strWrapper === "personalize") {
