@@ -1011,12 +1011,12 @@ function getCPGoal(PatientId, indicatorBox, indicatorValue, goalSection) {
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
+                        strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
                     else {
                         // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                        strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                     }
 
                     if (tri_LastTargetValue !== null) {
@@ -1141,12 +1141,12 @@ function getCPGoalSymptomsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
                         if (tri_LastTargetValue !== null) {
                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
@@ -1256,8 +1256,8 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
             tagSymptomsAll = '<tr >' +
                             '<td class="typedetails">' + tri_name + '</td>' +
                             //'<td class="target"><input type="text" id = "'+vinputTrgtId+'" class="txtfield"  style="background-color: #FAFAFA;border:none;"></td >' +
-                            '<td class="target" style="color:' + vtxtColor + ';">' + strTargetVal + '<td>' +
-                            '<td class="lastresult">' + strLastTargetVal + '</td>' +
+                            '<td class="target">' + strTargetVal + '<td>' +
+                            '<td class="lastresult" style="color:' + vtxtColor + ';">' + strLastTargetVal + '</td>' +
                             '<td class="lastresultdate">' + strLastGoalDt + '</td>' +
                             '<td class="duedate">' + strNextDueDt + '</td>' +
                             '<td class="more" id="' + strGoalId + '">...</td>' +
@@ -1354,12 +1354,12 @@ function getCPGoalSymptomsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -1491,12 +1491,12 @@ function getCPGoalSymptomsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -1628,12 +1628,12 @@ function getCPGoalSymptomsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -1774,12 +1774,12 @@ function getCPGoalSymptomsOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = ""; 
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -2071,15 +2071,15 @@ function ReviewAndUpdateGoal(currentId) {
                       break;
               }
 
-              if (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined)
-              {
-                  tri_targetvaluetwo = 0;
-              }
-              var metric1 = tri_Metric.substr(0, tri_Metric.indexOf("."));
-              $('.personalizetargetvalMetric').val(metric1).spinner({ step: 1.00, numberFormat: "n" });//.prop('readonly', true); //
+              //if (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined)
+              //{
+              //    tri_targetvaluetwo = 0;
+              //}
+             // var metric1 = tri_Metric.substr(0, tri_Metric.indexOf("."));
+              $('.personalizetargetvalMetric').val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });//.prop('readonly', true); //
 
-              var metric2 = tri_targetvaluetwo.substr(0,tri_targetvaluetwo.indexOf("."));
-              $('.personalizetargetvalMetricTwo').val(metric2).spinner({ step: 1.00, numberFormat: "n" }); // .prop('readonly', true); //
+              // var metric2 = tri_targetvaluetwo.substr(0,tri_targetvaluetwo.indexOf("."));
+              $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" }); // .prop('readonly', true); //
 
               $('.personalizequantitative').show();
               $('.personalizequalitative').hide();
@@ -2278,12 +2278,12 @@ function getCPGoaltestcareAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -2414,12 +2414,12 @@ function getCPGoaltestcareNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -2550,12 +2550,12 @@ function getCPGoaltestcareOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -2685,12 +2685,12 @@ function getCPGoaltestcareMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -2827,12 +2827,12 @@ function getCPGoaltestcareOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -2962,12 +2962,12 @@ function getCPGoalvitalsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -3096,12 +3096,12 @@ function getCPGoalvitalsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -3230,12 +3230,12 @@ function getCPGoalvitalsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -3364,12 +3364,12 @@ function getCPGoalvitalsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -3505,12 +3505,12 @@ function getCPGoalvitalsOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -3640,12 +3640,12 @@ function getCPGoalmedicationsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -3775,12 +3775,12 @@ function getCPGoalmedicationsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -3910,12 +3910,12 @@ function getCPGoalmedicationsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -4045,12 +4045,12 @@ function getCPGoalmedicationsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -4188,12 +4188,12 @@ function getCPGoalmedicationsOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -4321,12 +4321,12 @@ function getCPGoalactivityAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -4457,12 +4457,12 @@ function getCPGoalactivityNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -4592,12 +4592,12 @@ function getCPGoalactivityOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -4725,12 +4725,12 @@ function getCPGoalactivityMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -4866,12 +4866,12 @@ function getCPGoalactivityOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -5001,12 +5001,12 @@ function getCPGoalnutritionAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -5137,12 +5137,12 @@ function getCPGoalnutritionNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -5273,12 +5273,12 @@ function getCPGoalnutritionOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -5409,12 +5409,12 @@ function getCPGoalnutritionMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -5555,12 +5555,12 @@ function getCPGoalnutritionOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -5691,12 +5691,12 @@ function getCPGoalpsychosocialAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -5827,12 +5827,12 @@ function getCPGoalpsychosocialNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -5965,12 +5965,12 @@ function getCPGoalpsychosocialOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -6101,12 +6101,12 @@ function getCPGoalpsychosocialMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -6243,12 +6243,12 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -6379,12 +6379,12 @@ function getCPGoalwrapupAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                           vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
@@ -6517,12 +6517,12 @@ function getCPGoalwrapupNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                            vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
@@ -6653,12 +6653,12 @@ function getCPGoalwrapupOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                             vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
@@ -6788,12 +6788,12 @@ function getCPGoalwrapupMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
@@ -6930,12 +6930,12 @@ function getCPGoalwrapupOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2) + ' and ' +
-                                               vMtrcOprtr2txt + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + Number(tri_Metric).toFixed(2);
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
