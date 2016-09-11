@@ -731,6 +731,7 @@ function UpdateVitalFilters(PatientId, mode) {
 }
 
 function DisplaySnoozeWindow() {
+    $("snoozedays").val(0);
     $("#snooze-wrapper").dialog({
         //  title: "jQuery Dialog Popup",
         modal: true,
@@ -739,25 +740,34 @@ function DisplaySnoozeWindow() {
         show: { effect: "blind", duration: 800 },
         hide: { effect: "blind", duration: 400 },
     });
+
+    if ((DisplayMode === monitorMode)) {
+        $("#snoozeComments").text("Snooze period is over.Please provide snooze days to extend. : ");
+    }
+    else if (DisplayMode === personalizeMode) {
+        $("#snoozeComments").text("Care Transition Plan has been added. Please provide snooze days for all Care Management Schedule Plans : ");
+    }
 }
 
 $(document).on('click', '#snoozewrapperCancel', function () {
-    UpdateSnoozeDays();
+    UpdateSnoozeDays(0);
 });
 
 $(document).on('click', '#snoozewrapperOk', function () {
-    UpdateSnoozeDays();
+    UpdateSnoozeDays(Number($('#snoozedays').val()));
 });
 
-$(document).on('keydown', '#snoozedays', function () {
-    if ($.isNumeric($('#snoozedays').val()) && $('#snoozedays').val() > -1) {
+$(document).on('blur', '#snoozedays', function () {
+    var snoozeDays = $('#snoozedays').val();
+    if (!$.isNumeric(snoozeDays) || snoozeDays < 0) {
         $('#snoozedays').val(0);
     }
 });
 
-function UpdateSnoozeDays() {
+function UpdateSnoozeDays(snoozedays) {
     // check if date is valid else through error
-    var snoozedays = Number($('#snoozedays').val());
+    // var snoozedays = Number($('#snoozedays').val());
+    $("#snooze-wrapper").dialog('close');
     if (snoozedays > 0) {
         var date = new Date();
         date.setDate(date.getDate() + snoozedays);
@@ -781,7 +791,13 @@ function UpdateSnoozeDays() {
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
     var PatientId2 = PatientId1.replace("{", "");
     var PatientId = PatientId2.replace("}", "");
-    DisplayPersonalizeMode(PatientId);
+
+    if (DisplayMode === personalizeMode) {
+        UpdateVitalFilters(PatientId, personalizeMode);
+    }
+    else if ((DisplayMode === monitorMode)) {
+        DisplayIndicators(PatientId);
+    }
 }
 
 $(document).on('click', '#btnFilterRefresh', function () {
@@ -798,7 +814,7 @@ function DisplayFilteredData(PatientId,mode) {
 
     filteredCarePlangoalIds.length = 0;
     // Add code to hide indicator
-    IsRefreshedClicked = true;
+  //  IsRefreshedClicked = true;
     var btnFilterCTS;
 
     $('#planFilter ul li input').each(function () {
@@ -833,24 +849,34 @@ function DisplayFilteredData(PatientId,mode) {
             }
         }
     });
+
     if (mode === monitorMode) {
-        DisplayIndicators(PatientId);  ///////////////
-    }
-    else if (mode === personalizeMode) {
-        debugger;
-
-        var SnoozeArray1 = GetSnoozeDatesfromPatitentId(PatientId);
-        var SnoozeArray = Enumerable.From(SnoozeArray1)
-                        .Where(function (x) { return x.attributes.tri_snoozeuntil !== null && x.attributes.tri_snoozeuntil !== undefined && x.attributes.tri_snoozeuntil.formattedValue !== "" && new Date(x.attributes.tri_snoozeuntil.formattedValue).getTime() > new Date().getTime(); })
-                        .Select(function (x) { return { 'snoozedate': x.attributes.tri_snoozeuntil.formattedValue }; })
-                        .ToArray();
-
-        if (SnoozeArray.length <= 0 && IsScheduleCategoryPresent) {
+        if (SnoozeCMSPlans(PatientId)) {
             DisplaySnoozeWindow();
         }
         else {
-            DisplayPersonalizeMode(PatientId);
+            DisplayIndicators(PatientId);  ///////////////
         }
+    }
+    else if (mode === personalizeMode) {
+        DisplayPersonalizeMode(PatientId);
+    }
+}
+
+function SnoozeCMSPlans(PatientId)
+{
+    debugger;
+    var SnoozeArray1 = GetSnoozeDatesfromPatitentId(PatientId);
+    var SnoozeArray = Enumerable.From(SnoozeArray1)
+                      .Where(function (x) { return x.attributes.tri_snoozeuntil !== null && x.attributes.tri_snoozeuntil !== undefined && x.attributes.tri_snoozeuntil.formattedValue !== "" && new Date(x.attributes.tri_snoozeuntil.formattedValue).getTime() > new Date().getTime(); })
+                      .Select(function (x) { return { 'snoozedate': x.attributes.tri_snoozeuntil.formattedValue }; })
+                      .ToArray();
+
+    if (SnoozeArray.length <= 0 && IsScheduleCategoryPresent) {
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -7146,13 +7172,10 @@ function gotoAddCarePlan() {
                 // Check if added careplanjoin records were created, then update the UI & dropdown 
                 if (addedCarePlan !== undefined && addedCarePlan !== null && addedCarePlan.length > 0) {
                     // Get Distinct CarePlans
-                    var distinctAddedCarePlans = Enumerable.From(addedCarePlan)
-                                                 .Select(function (x) { return { 'text': x.text, 'value': x.value }; })
-                                                 .Distinct(function (y) { return y.text; })
-                                                 .ToArray();
-
-                    // Get data and show 
-                    DisplayPersonalizeMode(contactId);
+                    //var distinctAddedCarePlans = Enumerable.From(addedCarePlan)
+                    //                             .Select(function (x) { return { 'text': x.text, 'value': x.value }; })
+                    //                             .Distinct(function (y) { return y.text; })
+                    //                             .ToArray();
 
                     carePathDropdownArray = Enumerable.From(carePathDropdownArray)
                                             .Where(function (x) { return x.text !== selectedCarePath; })
@@ -7160,13 +7183,22 @@ function gotoAddCarePlan() {
                     // Bind new data to KendAutocomplete
                     kendoAutoCompleteWC.setDataSource(carePathDropdownArray);
                     $('#carePaths').val('');
+
+                    // Get data and show 
+                    //DisplayPersonalizeMode(contactId);
+                    if (SnoozeCMSPlans(contactId)) {
+                        DisplaySnoozeWindow();
+                    }
+                    else {
+                        UpdateVitalFilters(contactId, personalizeMode);
+                    }
                 }
             }
         };
 
         // DisplayPersonalizeMode(contactId);
         $('.Personalize-details,.personalize-section').show();
-        UpdateVitalFilters(contactId,personalizeMode)
+        UpdateVitalFilters(contactId, personalizeMode);
     };//if closes here
 }
 
@@ -7208,6 +7240,7 @@ function DisplayPersonalizeMode(contactId) {
     "<attribute name='tri_careplangoalstate' />" +
     "<attribute name='tri_goalselected' />" +
     "<attribute name='tri_goalsection' />" +
+    "<attribute name='tri_snoozeuntil' />" +
     "<attribute name='tri_careplangoalstate' />" +
     "<order attribute='tri_goalsection' descending='false' />" +
     "<filter type='and'>" +
@@ -7254,13 +7287,16 @@ function DisplayPersonalizeMode(contactId) {
             var tri_GoalState = results[i].attributes["tri_careplangoalstate"];
             var tri_GoalSection = GetSectionName(results[i].attributes["tri_goalsection"].value);
             var tri_VitalValueTypeName = results[i].attributes["a_valtype.tri_name"].value;
+            var tri_SnoozeUntil = (results[i].attributes["tri_snoozeuntil"] !== null && results[i].attributes["tri_snoozeuntil"] !== undefined ? results[i].attributes["tri_snoozeuntil"].formattedValue : "");
 
             //get the selected goal for this vital type
-            if (tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined) {
+            if (tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined && (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1 || !IsRefreshedClicked) ){
 
                 if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1) {
-                    tri_VitalValueTypeName = "Snoozed :" + tri_VitalValueTypeName;
-                }
+                    tri_VitalValueTypeName = tri_VitalValueTypeName + " Snoozed till " + tri_SnoozeUntil;
+                    }
+                // dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
+
                     var IndexOfVitalType = VitalTypeArray.indexOf(tri_VitalValueTypeName);
                     if (IndexOfVitalType === -1 && IndexOfVitalType !== null && IndexOfVitalType !== undefined) {
                         VitalTypeArray.push(tri_VitalValueTypeName)
@@ -7842,7 +7878,7 @@ function DisplayPersonalizeMode(contactId) {
                         //add current row to previous row
                     }
                 }
-          //  }
+           // }
         }
         /// End For
     };//end if
@@ -7988,12 +8024,9 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
 
                         if (tri_patientmodId !== null && tri_patientmodId !== undefined && $('#' + tri_patientmodId).length === 0) {
                             IncrementalModifierTag = IncrementalModifierTag + '<li role="presentation" class="dropdown-header" id=' + tri_patientmodId + '>' + tri_name + '</li>';
-
                             //IncrementalModifierTag.push('<li role="presentation" class="dropdown-header" id=' + tri_patientmodId + '>' + tri_name + '</li>');
                         }
                     }
-
-
                 },
                 function (error) {
                     alert(error.message);

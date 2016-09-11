@@ -149,7 +149,7 @@ var IsObservedValueAndFactorModifierChanged = false;
 var IsOtherValuesChanged = false;
 var saveCliced = false;
 var saveprsnlizeCliced = false;
-//var monitormodeCarePlangoalIds = [];
+//var filteredCarePlangoalIds = [];
 
 $(document).ready(function () {
     //if (parent.Xrm.Page.data.entity.getId() == null) {
@@ -458,16 +458,13 @@ $(document).ready(function () {
         $('.maintable_wrapup_grey').show('slow');
     });
 
-    // Display ToolTip
-    // $('[data-toggle="tooltip"]').tooltip();
-
     $('.maintable_symptoms_all,.maintable_symptoms_red,.maintable_symptoms_orange,.maintable_symptoms_green, .maintable_symptoms_grey,.maintable_testcare_all,.maintable_testcare_red,.maintable_testcare_orange,.maintable_testcare_green, .maintable_testcare_grey,.maintable_vitals_all,.maintable_vitals_red,.maintable_vitals_orange,.maintable_vitals_green, .maintable_vitals_grey,.maintable_medications_all,.maintable_medications_red,.maintable_medications_orange,.maintable_medications_green, .maintable_medications_grey,.maintable_activity_all,.maintable_activity_red,.maintable_activity_orange,.maintable_activity_green, .maintable_activity_grey,.maintable_nutrition_all, .maintable_nutrition_red,.maintable_nutrition_orange,.maintable_nutrition_green, .maintable_nutrition_grey,.maintable_psychosocial_all, .maintable_psychosocial_red,.maintable_psychosocial_orange,.maintable_psychosocial_green, .maintable_psychosocial_grey, .maintable_wrapup_all, .maintable_wrapup_red,.maintable_wrapup_orange,.maintable_wrapup_green, .maintable_wrapup_grey').on("click", "td", function () {
         //alert($(this).text());
         if ($(this).text() === "...") {
             var currentId = $(this).attr('id');
-
+            //hide plan filter
+            $('#planFilter').hide('slow');
             ReviewAndUpdateGoal(currentId);
-
         }
     });
 
@@ -510,6 +507,7 @@ $(document).ready(function () {
     });
 }); //document ready function closes here
 
+// Tooltip functions
 $(document).load(function () {
     debugger;
     $('[data-toggle="tooltip"]').attr('title', $('[data-toggle="tooltip"]').text());
@@ -525,19 +523,23 @@ function ClosePersonalizeWindow(PatientId) {
     $('.Personalize-details,.personalize-section').hide();
     $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
     $('.monitor-wrapper').show('slow');
-    monitormodeCarePlangoalIds.length = 0;
+    // $('#planFilter').css('margin-bottom','-10px');
+    ResetFilter();
+    DisplayMonitorMode(PatientId);
+}
+
+function ResetFilter() {
+    filteredCarePlangoalIds.length = 0;
     IsRefreshedClicked = false;
     IsScheduleCategoryPresent = false;
-    DisplayMonitorMode(PatientId);
 }
 
 function CloseWindowWrapper(PatientId) {
     $("div[class^='tablecontent_']").hide('slow');//divs whose class name start with tablecontent_
     // $('.window-wrapper').hide('slow');
     $('.window-wrapper').css('display', 'none');
-    monitormodeCarePlangoalIds.length = 0;
-    IsRefreshedClicked = false;
-    IsScheduleCategoryPresent = false;
+    $('#planFilter').show('slow');
+    ResetFilter();
     IsObservedValueAndFactorModifierChanged = false;
     IsOtherValuesChanged = false;
     DisplayMonitorMode(PatientId);
@@ -545,7 +547,8 @@ function CloseWindowWrapper(PatientId) {
 }
 
 function DisplayMonitorMode(PatientId) {
-    UpdateVitalFilters(PatientId);
+    DisplayMode = monitorMode;
+    UpdateVitalFilters(PatientId, monitorMode);
 }
 
 function DisplayIndicators(PatientId) {
@@ -618,11 +621,14 @@ function DisplayIndicators(PatientId) {
 
 var IsRefreshedClicked = false;
 var IsScheduleCategoryPresent = false;
-var monitormodeCarePlangoalIds = [];
+var filteredCarePlangoalIds = [];
 var CarePlans;
 var ScheduleCategoryCTSArray = [];
+var monitorMode = "monitor";
+var personalizeMode = "personalize";
+var DisplayMode;
 
-function UpdateVitalFilters(PatientId) {
+function UpdateVitalFilters(PatientId, mode) {
     if (!IsRefreshedClicked) {
         $('#planFilter ul').html('');
         $('#planFilter ul').append('<li role="presentation" class="dropdown-header"><input type="checkbox" checked="checked" name="All"><span>Select All</span></li>');
@@ -637,15 +643,28 @@ function UpdateVitalFilters(PatientId) {
                 'text': x.attributes.tri_planname.value,
                 'value': x.attributes.tri_careplanid.id,
                 'careplangoalid': x.attributes.tri_careplangoalid.id,
-                'schedulecategory': (x.attributes.tri_schedulecategory !== null && x.attributes.tri_schedulecategory !== undefined ? x.attributes.tri_schedulecategory.value : 0)
+                'schedulecategory': (x.attributes.tri_schedulecategory !== null && x.attributes.tri_schedulecategory !== undefined ? x.attributes.tri_schedulecategory.value : 0),
+                //'snoozeuntil':x.attributes.tri_snoozeuntil
             };
         }).ToArray();
 
-        // Get Distinct CarePlans
+        // Get Distinct CarePlans where any CTS is selected and rest other distinct
         var distinctCarePlansTextArray = Enumerable.From(CarePlans)
-                                         .Select(function (x) { return x; })
-                                         .Distinct(function (y) { return y.text; })
-                                         .ToArray();
+                                            .Where(function (x) { return x.schedulecategory === 100000001; })
+                                            .Select(function (x) { return x; })
+                                            .Distinct(function (y) { return y.text; })
+                                            .ToArray();
+
+        var ctsArrayText = Enumerable.From(distinctCarePlansTextArray)
+                                     .Select(function (x) { return x.text; })
+                                     .ToArray();
+
+        distinctCarePlansTextArray = distinctCarePlansTextArray.concat(Enumerable.From(CarePlans)
+                                                                        .Where(function (x) { return ctsArrayText.indexOf(x.text) === -1; })
+                                                                        .Select(function (x) { return x; })
+                                                                        .Distinct(function (y) { return y.text; })
+                                                                        .ToArray());
+
         /// distinctCarePlansTextArray == CarePlans  // added
         ScheduleCategoryCTSArray = Enumerable.From(CarePlans)
                                              .Where(function (x) { return x.schedulecategory === 100000001; })
@@ -668,12 +687,17 @@ function UpdateVitalFilters(PatientId) {
         if (IsAnyScheduleCategoryCTSPlansPresent) {
             IsScheduleCategoryPresent = true;
             $('.planFilterbutton').html("Care Transition Schedule Plans Selected");
-            DisplayFilteredData(PatientId);
+            DisplayFilteredData(PatientId, mode); ///////////////
         }
         else {
             IsScheduleCategoryPresent = false;
             $('.planFilterbutton').html("All Plans Selected");
-            DisplayIndicators(PatientId);
+            if (mode === monitorMode) {
+                DisplayIndicators(PatientId);  ///////////////
+            }
+            else if (mode === personalizeMode) {
+                DisplayPersonalizeMode(PatientId);
+            }
         }
     }
     else {
@@ -686,23 +710,78 @@ function UpdateVitalFilters(PatientId) {
                     if ($(this).is(':checked')) {
                         var planId = $(this)[0].id.replace("_VITALFLTRID", "");
 
-                           var CTSPlanArray  = Enumerable.From(ScheduleCategoryCTSArray)
-                                              .Where(function (x) { return x.value === planId; })
-                                              .Select(function (x) { return x; })
-                                              .Distinct(function (y) { return y.text; })  // added
-                                              .ToArray();
+                        var CTSPlanArray = Enumerable.From(ScheduleCategoryCTSArray)
+                                           .Where(function (x) { return x.value === planId; })
+                                           .Select(function (x) { return x; })
+                                           .Distinct(function (y) { return y.text; })  // added
+                                           .ToArray();
 
-                           if (CTSPlanArray.length > 0) {
-                               $('.planFilterbutton').append('<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>');
-                           }
-                           else {
-                               $(this).prop('checked', false);
-                           }
+                        if (CTSPlanArray.length > 0) {
+                            $('.planFilterbutton').append('<span class="closespan">' + $(this)[0].name + '<a class="closefilter">X</a></span>');
+                        }
+                        else {
+                            $(this).prop('checked', false);
+                        }
                     }
                 }
             });
         }
+        DisplayFilteredData(PatientId, DisplayMode);
     }
+}
+
+function DisplaySnoozeWindow() {
+    $("#snooze-wrapper").dialog({
+        //  title: "jQuery Dialog Popup",
+        modal: true,
+        width: 400,
+        position: { my: "center top", at: "center top" },
+        show: { effect: "blind", duration: 800 },
+        hide: { effect: "blind", duration: 400 },
+    });
+}
+
+$(document).on('click', '#snoozewrapperCancel', function () {
+    UpdateSnoozeDays();
+});
+
+$(document).on('click', '#snoozewrapperOk', function () {
+    UpdateSnoozeDays();
+});
+
+$(document).on('keydown', '#snoozedays', function () {
+    if ($.isNumeric($('#snoozedays').val()) && $('#snoozedays').val() > -1) {
+        $('#snoozedays').val(0);
+    }
+});
+
+function UpdateSnoozeDays() {
+    // check if date is valid else through error
+    var snoozedays = Number($('#snoozedays').val());
+    if (snoozedays > 0) {
+        var date = new Date();
+        date.setDate(date.getDate() + snoozedays);
+        var snoozedate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+        $("#snooze-wrapper").dialog('close');
+        // get all CMS plans Id's
+        var CMSPlanArray = Enumerable.From(CarePlans)
+                                        .Where(function (x) { return x.schedulecategory === 100000000; })
+                                        .Select(function (x) { return x.careplangoalid; })
+                                        .ToArray();
+
+        // update care plan goals
+        for (var i = 0; i < CMSPlanArray.length; i++) {
+            var tri_cccareplangoal = {}
+            tri_cccareplangoal.tri_SnoozeUntil = snoozedate; ////
+            SDK.REST.updateRecord(CMSPlanArray[i], tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
+        }
+    }
+
+    var PatientId1 = parent.Xrm.Page.data.entity.getId();
+    var PatientId2 = PatientId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
+    DisplayPersonalizeMode(PatientId);
 }
 
 $(document).on('click', '#btnFilterRefresh', function () {
@@ -711,13 +790,13 @@ $(document).on('click', '#btnFilterRefresh', function () {
     var PatientId = PatientId2.replace("}", "");
     $('.maintable_symptoms_all,.maintable_symptoms_red,.maintable_symptoms_orange,.maintable_symptoms_green, .maintable_symptoms_grey,.maintable_testcare_all,.maintable_testcare_red,.maintable_testcare_orange,.maintable_testcare_green, .maintable_testcare_grey,.maintable_vitals_all,.maintable_vitals_red,.maintable_vitals_orange,.maintable_vitals_green, .maintable_vitals_grey,.maintable_medications_all,.maintable_medications_red,.maintable_medications_orange,.maintable_medications_green, .maintable_medications_grey,.maintable_activity_all,.maintable_activity_red,.maintable_activity_orange,.maintable_activity_green, .maintable_activity_grey,.maintable_nutrition_all, .maintable_nutrition_red,.maintable_nutrition_orange,.maintable_nutrition_green, .maintable_nutrition_grey,.maintable_psychosocial_all, .maintable_psychosocial_red,.maintable_psychosocial_orange,.maintable_psychosocial_green, .maintable_psychosocial_grey, .maintable_wrapup_all, .maintable_wrapup_red,.maintable_wrapup_orange,.maintable_wrapup_green, .maintable_wrapup_grey').hide();
     IsRefreshedClicked = true;
-    UpdateVitalFilters(PatientId);
-    DisplayFilteredData(PatientId); 
+    UpdateVitalFilters(PatientId, DisplayMode);
+   // DisplayFilteredData(PatientId, DisplayMode);
 });
 
-function DisplayFilteredData(PatientId) {
+function DisplayFilteredData(PatientId,mode) {
 
-    monitormodeCarePlangoalIds.length = 0;
+    filteredCarePlangoalIds.length = 0;
     // Add code to hide indicator
     IsRefreshedClicked = true;
     var btnFilterCTS;
@@ -735,18 +814,44 @@ function DisplayFilteredData(PatientId) {
             }
             // Include the checked non CTS plans to remove
             if (IsScheduleCategoryPresent && $(this).is(':checked')) {
-                carePlanGoalIds = carePlanGoalIds.concat(Enumerable.From(CarePlans)
-                                                         .Where(function (x) { return x.value === planId && x.schedulecategory !== 100000001 })
-                                                         .Select(function (y) { return y.careplangoalid; })
-                                                         .ToArray());
+
+                var schCatPlanArray = Enumerable.From(CarePlans)
+                                                .Where(function (x) { return x.value === planId && x.schedulecategory === 100000001 })
+                                                .Select(function (y) { return y; })
+                                                .ToArray();
+
+                if (schCatPlanArray.length <= 0) {
+                    carePlanGoalIds = carePlanGoalIds.concat(Enumerable.From(CarePlans)
+                                                             .Where(function (x) { return x.value === planId }) //x.schedulecategory !== 100000001 })
+                                                             .Select(function (y) { return y.careplangoalid; })
+                                                             .ToArray());
+                }
             }
 
             for (var i = 0; i < carePlanGoalIds.length; i++) {
-                monitormodeCarePlangoalIds.push(carePlanGoalIds[i]);
+                filteredCarePlangoalIds.push(carePlanGoalIds[i]);
             }
         }
     });
-    DisplayIndicators(PatientId);
+    if (mode === monitorMode) {
+        DisplayIndicators(PatientId);  ///////////////
+    }
+    else if (mode === personalizeMode) {
+        debugger;
+
+        var SnoozeArray1 = GetSnoozeDatesfromPatitentId(PatientId);
+        var SnoozeArray = Enumerable.From(SnoozeArray1)
+                        .Where(function (x) { return x.attributes.tri_snoozeuntil !== null && x.attributes.tri_snoozeuntil !== undefined && x.attributes.tri_snoozeuntil.formattedValue !== "" && new Date(x.attributes.tri_snoozeuntil.formattedValue).getTime() > new Date().getTime(); })
+                        .Select(function (x) { return { 'snoozedate': x.attributes.tri_snoozeuntil.formattedValue }; })
+                        .ToArray();
+
+        if (SnoozeArray.length <= 0 && IsScheduleCategoryPresent) {
+            DisplaySnoozeWindow();
+        }
+        else {
+            DisplayPersonalizeMode(PatientId);
+        }
+    }
 }
 
 // Filter check box selection
@@ -906,16 +1011,16 @@ function getCPGoal(PatientId, indicatorBox, indicatorValue, goalSection) {
                     if (tri_range == true) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
+                        strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
                                        vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' +( (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo )+ '" style="background-color: #FAFAFA;border:none; width:40px">';
                     }
                     else {
                         // alert(vMtrcOprtr1txt);
-                        strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                        strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                     }
 
                     if (tri_LastTargetValue !== null) {
-                        strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                        strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                     }
                     break;
 
@@ -1012,7 +1117,7 @@ function getCPGoalSymptomsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intSymptomsCount = intSymptomsCount + 1;
                 intTotalSymptoms = "ALL " + intSymptomsCount + "";
 
@@ -1036,15 +1141,15 @@ function getCPGoalSymptomsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
                     case null:
@@ -1134,7 +1239,7 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
     $('.' + AppendClassName).html('');
 
     if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "") { // filter change
-        //if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "" && (monitormodeCarePlangoalIds.indexOf(tri_vitalsvaluetype) == -1)) { // filter change
+        //if (tri_vitalsvaluetype !== null && tri_vitalsvaluetype !== undefined && tri_vitalsvaluetype !== "" && (filteredCarePlangoalIds.indexOf(tri_vitalsvaluetype) == -1)) { // filter change
 
         SDK.JQuery.retrieveMultipleRecords(
         "tri_vitalsvaluetype",
@@ -1151,8 +1256,8 @@ function getVitalNameAndAppendTag(AppendClassName, tri_vitalsvaluetype, strTarge
             tagSymptomsAll = '<tr >' +
                             '<td class="typedetails">' + tri_name + '</td>' +
                             //'<td class="target"><input type="text" id = "'+vinputTrgtId+'" class="txtfield"  style="background-color: #FAFAFA;border:none;"></td >' +
-                            '<td class="target" style="color:' + vtxtColor + ';">' + strTargetVal + '<td>' +
-                            '<td class="lastresult">' + strLastTargetVal + '</td>' +
+                            '<td class="target">' + strTargetVal + '<td>' +
+                            '<td class="lastresult" style="color:' + vtxtColor + ';">' + strLastTargetVal + '</td>' +
                             '<td class="lastresultdate">' + strLastGoalDt + '</td>' +
                             '<td class="duedate">' + strNextDueDt + '</td>' +
                             '<td class="more" id="' + strGoalId + '">...</td>' +
@@ -1217,7 +1322,7 @@ function getCPGoalSymptomsNotMet(PatientId) {
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intSymptomsCount = intSymptomsCount + 1;
                  intTotalSymptomsNotMet = " " + intSymptomsCount + "";
 
@@ -1249,16 +1354,16 @@ function getCPGoalSymptomsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -1354,7 +1459,7 @@ function getCPGoalSymptomsMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intSymptomsCount = intSymptomsCount + 1;
                     intTotalSymptomsMet = " " + intSymptomsCount + "";
 
@@ -1386,16 +1491,16 @@ function getCPGoalSymptomsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -1491,7 +1596,7 @@ function getCPGoalSymptomsOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intSymptomsCount = intSymptomsCount + 1;
                   intTotalSymptomsOpen = " " + intSymptomsCount + "";
 
@@ -1523,16 +1628,16 @@ function getCPGoalSymptomsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
 
                           break;
@@ -1637,7 +1742,7 @@ function getCPGoalSymptomsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intSymptomsCount = intSymptomsCount + 1;
                     intTotalSymptomsOverDue = " " + intSymptomsCount + "";
 
@@ -1667,18 +1772,18 @@ function getCPGoalSymptomsOverDue(PatientId) {
                             vMtrcOprtr1txt = GetMetricOperatorTextBasedOnVal(tri_MetricOperator);
 
                             if (tri_range == true) {
-                                var vMtrcOprtr2txt = "";
+                                var vMtrcOprtr2txt = ""; 
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -1823,8 +1928,8 @@ function ReviewAndUpdateGoal(currentId) {
       $('#nextresultdate_personalize').val(strNxtGoalDt).datepicker({ disabled: true });
       //$('#lastresultdate_personalize').datepicker();
       $('.personalizedropdownmenu').attr('id', tri_vitalsvaluetype + "_ULPRSNL");
-      $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal); //.spinner();
-      $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal); //.spinner();
+      $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal).spinner();
+      $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal).spinner();
       $('.personalizetriggeraction').val(tri_qualitativeaction).prop('readonly', true);
       $('.savebtn_prsnlize1').attr('id', tri_vitalsvaluetype + "_PRSNLSAVEBTN");
       $('.personalizeULnormalrecurr').attr('id', tri_vitalsvaluetype + "_PRSNLULNRMLRCR");
@@ -1881,11 +1986,11 @@ function ReviewAndUpdateGoal(currentId) {
 
               //$('#tbl_ObservedValue').css('display', 'block');
               $('#tbl_ObservedValue').show();
-              $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative').prop('readonly',true);
+              $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');//.prop('readonly',true);
               $('.personalizequalitative,.personalizetargetvalQual').show();
               $('.personalizequantitative').hide();
               $('.personalizegoalbutton').prop({ disabled: false });
-              $('#qualLastresult_personalize').val(tri_lastresult).prop('readonly', true);
+              $('#qualLastresult_personalize').val(tri_lastresult);//.prop('readonly', true);
               //$('#lastresultdate_personalize').css('display', 'none')
               $('#observedValue').val('');
               var strLstResultDt = $.datepicker.formatDate('mm/dd/yy', result.tri_LastResultDate);
@@ -1966,15 +2071,15 @@ function ReviewAndUpdateGoal(currentId) {
                       break;
               }
 
-              if (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined)
-              {
-                  tri_targetvaluetwo = 0;
-              }
-              var metric1 = tri_Metric.substr(0, tri_Metric.indexOf("."));
-              $('.personalizetargetvalMetric').val(metric1).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n" });
+              //if (tri_targetvaluetwo === null || tri_targetvaluetwo === undefined)
+              //{
+              //    tri_targetvaluetwo = 0;
+              //}
+             // var metric1 = tri_Metric.substr(0, tri_Metric.indexOf("."));
+              $('.personalizetargetvalMetric').val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });//.prop('readonly', true); //
 
-              var metric2 = tri_targetvaluetwo.substr(0,tri_targetvaluetwo.indexOf("."));
-              $('.personalizetargetvalMetricTwo').val(metric2).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n" });
+              // var metric2 = tri_targetvaluetwo.substr(0,tri_targetvaluetwo.indexOf("."));
+              $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" }); // .prop('readonly', true); //
 
               $('.personalizequantitative').show();
               $('.personalizequalitative').hide();
@@ -1990,7 +2095,7 @@ function ReviewAndUpdateGoal(currentId) {
               }
               //// GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_targetmetricoperator);
               if (strLastTrgtVal !== null && strLastTrgtVal !== "") {
-                  $('#lastresult_personalize').val(strLastTrgtVal).prop('readonly', true); //.spinner({ step: 1.00, numberFormat: "n", disabled: true });
+                  $('#lastresult_personalize').val(strLastTrgtVal).spinner({ step: 1.00, numberFormat: "n", disabled: true });
               }
 
               break;
@@ -2141,7 +2246,7 @@ function getCPGoaltestcareAll(PatientId) {
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
             
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intTestcareCount = intTestcareCount + 1;
                 intTotaltestcare = "ALL " + intTestcareCount + "";
 
@@ -2173,16 +2278,16 @@ function getCPGoaltestcareAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -2277,7 +2382,7 @@ function getCPGoaltestcareNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intTestcareCount = intTestcareCount + 1;
                  intTotaltestcareNotMet = " " + intTestcareCount + "";
 
@@ -2309,16 +2414,16 @@ function getCPGoaltestcareNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -2413,7 +2518,7 @@ function getCPGoaltestcareOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intTestcareCount = intTestcareCount + 1;
                   intTotaltestcareOpen = " " + intTestcareCount + "";
 
@@ -2445,16 +2550,16 @@ function getCPGoaltestcareOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -2548,7 +2653,7 @@ function getCPGoaltestcareMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intTestcareCount = intTestcareCount + 1;
                     intTotaltestcareMet = " " + intTestcareCount + "";
 
@@ -2580,16 +2685,16 @@ function getCPGoaltestcareMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -2691,7 +2796,7 @@ function getCPGoaltestcareOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intTestcareCount = intTestcareCount + 1;
                     intTotaltestcareOverDue = " " + intTestcareCount + "";
                     // intTotaltestcareOverDue = " " + results.length + " ";
@@ -2722,16 +2827,16 @@ function getCPGoaltestcareOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -2825,7 +2930,7 @@ function getCPGoalvitalsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intVitalAllCount = intVitalAllCount + 1;
                 intTotalvitals = "ALL " + intVitalAllCount + "";
 
@@ -2857,16 +2962,16 @@ function getCPGoalvitalsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -2959,7 +3064,7 @@ function getCPGoalvitalsNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intVitalAllCount = intVitalAllCount + 1;
                  intTotalvitalsNotMet = " " + intVitalAllCount + "";
 
@@ -2991,16 +3096,16 @@ function getCPGoalvitalsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -3093,7 +3198,7 @@ function getCPGoalvitalsOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intVitalAllCount = intVitalAllCount + 1;
                   intTotalvitalsOpen = " " + intVitalAllCount + "";
 
@@ -3125,16 +3230,16 @@ function getCPGoalvitalsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -3227,7 +3332,7 @@ function getCPGoalvitalsMet(PatientId) {
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intVitalAllCount = intVitalAllCount + 1;
                     intTotalvitalsMet = " " + intVitalAllCount + "";
 
@@ -3259,16 +3364,16 @@ function getCPGoalvitalsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -3345,9 +3450,9 @@ function getCPGoalvitalsOverDue(PatientId) {
                 var tri_activitydescription = results_vitalsod[i].tri_activitydescription;
                 var tri_activitydescriptionabnormal = results_vitalsod[i].tri_activitydescriptionabnormal;
                 var tri_activitydueon = results_vitalsod[i].tri_activitydueon;
-                var tri_activityrecurrence = results_vitalsod[i].tri_activityrecurrence;
+                var tri_activityrecurrence = results_vitalsod[i].tri_activityrecurrence.Value;
                 var tri_CarePlanGoalState = results_vitalsod[i].tri_CarePlanGoalState.Value;
-                var tri_activityrecurrenceabnormal = results_vitalsod[i].tri_activityrecurrenceabnormal;
+                var tri_activityrecurrenceabnormal = results_vitalsod[i].tri_activityrecurrenceabnormal.Value;
                 var tri_activityrecurrencemultiplierabnormal = results_vitalsod[i].tri_activityrecurrencemultiplierabnormal;
                 var tri_GoalSelected = results_vitalsod[i].tri_GoalSelected;
                 var tri_LastGoalDate = results_vitalsod[i].tri_LastGoalDate;
@@ -3368,7 +3473,7 @@ function getCPGoalvitalsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results_vitalsod[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results_vitalsod[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intVitalAllCount = intVitalAllCount + 1;
                     intTotalvitalsOverDue = " " + intVitalAllCount + "";
 
@@ -3400,16 +3505,16 @@ function getCPGoalvitalsOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -3503,7 +3608,7 @@ function getCPGoalmedicationsAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intMedicationsCount = intMedicationsCount + 1;
                 intTotalmedications = "ALL " + intMedicationsCount + "";
 
@@ -3535,16 +3640,16 @@ function getCPGoalmedicationsAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -3638,7 +3743,7 @@ function getCPGoalmedicationsNotMet(PatientId) {
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intMedicationsCount = intMedicationsCount + 1;
                  intTotalmedicationsNotMet = " " + intMedicationsCount + "";
 
@@ -3670,16 +3775,16 @@ function getCPGoalmedicationsNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -3773,7 +3878,7 @@ function getCPGoalmedicationsOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intMedicationsCount = intMedicationsCount + 1;
                   intTotalmedicationsOpen = " " + intMedicationsCount + "";
 
@@ -3805,16 +3910,16 @@ function getCPGoalmedicationsOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -3908,7 +4013,7 @@ function getCPGoalmedicationsMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intMedicationsCount = intMedicationsCount + 1;
                     intTotalmedicationsMet = " " + intMedicationsCount + "";
 
@@ -3940,16 +4045,16 @@ function getCPGoalmedicationsMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -4051,7 +4156,7 @@ function getCPGoalmedicationsOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intMedicationsCount = intMedicationsCount + 1;
                     intTotalmedicationsOverDue = " " + intMedicationsCount + "";
 
@@ -4083,16 +4188,16 @@ function getCPGoalmedicationsOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -4184,7 +4289,7 @@ function getCPGoalactivityAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intActivityCount = intActivityCount + 1;
                 intTotalactivity = "ALL " + intActivityCount + "";
 
@@ -4216,16 +4321,16 @@ function getCPGoalactivityAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -4320,7 +4425,7 @@ function getCPGoalactivityNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intActivityCount = intActivityCount + 1;
                  intTotalactivityNotMet = " " + intActivityCount + "";
 
@@ -4352,16 +4457,16 @@ function getCPGoalactivityNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
 
                          break;
@@ -4455,7 +4560,7 @@ function getCPGoalactivityOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intActivityCount = intActivityCount + 1;
                   intTotalactivityOpen = " " + intActivityCount + "";
 
@@ -4487,16 +4592,16 @@ function getCPGoalactivityOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -4588,7 +4693,7 @@ function getCPGoalactivityMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intActivityCount = intActivityCount + 1;
                     intTotalactivityMet = " " + intActivityCount + "";
 
@@ -4620,16 +4725,16 @@ function getCPGoalactivityMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -4729,7 +4834,7 @@ function getCPGoalactivityOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intActivityCount = intActivityCount + 1;
                     intTotalactivityOverDue = " " + intActivityCount + "";
 
@@ -4761,16 +4866,16 @@ function getCPGoalactivityOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -4864,7 +4969,7 @@ function getCPGoalnutritionAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intNutritionCount = intNutritionCount + 1;
                 intTotalnutrition = "ALL " + intNutritionCount + "";
 
@@ -4896,16 +5001,16 @@ function getCPGoalnutritionAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -5000,7 +5105,7 @@ function getCPGoalnutritionNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intNutritionCount = intNutritionCount + 1;
                  intTotalnutritionNotMet = " " + intNutritionCount + "";
 
@@ -5032,16 +5137,16 @@ function getCPGoalnutritionNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -5136,7 +5241,7 @@ function getCPGoalnutritionOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intNutritionCount = intNutritionCount + 1;
                   intTotalnutritionOpen = " " + intNutritionCount + "";
 
@@ -5168,16 +5273,16 @@ function getCPGoalnutritionOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -5272,7 +5377,7 @@ function getCPGoalnutritionMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intNutritionCount = intNutritionCount + 1;
                     intTotalnutritionMet = " " + intNutritionCount + "";
 
@@ -5304,16 +5409,16 @@ function getCPGoalnutritionMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -5418,7 +5523,7 @@ function getCPGoalnutritionOverDue(PatientId) {
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intNutritionCount = intNutritionCount + 1;
                     intTotalnutritionOverDue = " " + intNutritionCount + "";
 
@@ -5450,16 +5555,16 @@ function getCPGoalnutritionOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -5554,7 +5659,7 @@ function getCPGoalpsychosocialAll(PatientId) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intPsychosocialCount = intPsychosocialCount + 1;
                 intTotalpsychosocial = "ALL " + intPsychosocialCount + "";
 
@@ -5586,16 +5691,16 @@ function getCPGoalpsychosocialAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -5690,7 +5795,7 @@ function getCPGoalpsychosocialNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intPsychosocialCount = intPsychosocialCount + 1;
                  intTotalpsychosocialNotMet = " " + intPsychosocialCount + "";
 
@@ -5722,16 +5827,16 @@ function getCPGoalpsychosocialNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -5828,7 +5933,7 @@ function getCPGoalpsychosocialOpen(PatientId) {
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intPsychosocialCount = intPsychosocialCount + 1;
                   intTotalpsychosocialOpen = " " + intPsychosocialCount + "";
 
@@ -5860,16 +5965,16 @@ function getCPGoalpsychosocialOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -5964,7 +6069,7 @@ function getCPGoalpsychosocialMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intPsychosocialCount = intPsychosocialCount + 1;
                     intTotalpsychosocialMet = " " + intPsychosocialCount + "";
 
@@ -5996,16 +6101,16 @@ function getCPGoalpsychosocialMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -6106,7 +6211,7 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intPsychosocialCount = intPsychosocialCount + 1;
                     intTotalpsychosocialOverDue = " " + intPsychosocialCount + "";
 
@@ -6138,16 +6243,16 @@ function getCPGoalpsychosocialOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -6242,7 +6347,7 @@ function getCPGoalwrapupAll(PatientId) {
             var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
             
-            if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+            if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                 intWrapCount = intWrapCount + 1;
                 intTotalwrapup = "ALL " + intWrapCount + "";
 
@@ -6274,16 +6379,16 @@ function getCPGoalwrapupAll(PatientId) {
                         if (tri_range == true) {
                             var vMtrcOprtr2txt = "";
                             vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                           vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                           vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                         }
                         else {
                             // alert(vMtrcOprtr1txt);
-                            strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                            strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                         }
 
                         if (tri_LastTargetValue !== null) {
-                            strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                            strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                         }
                         break;
 
@@ -6380,7 +6485,7 @@ function getCPGoalwrapupNotMet(PatientId) {
              var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
              var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-             if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+             if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                  intWrapCount = intWrapCount + 1;
                  intTotalwrapupNotMet = " " + intWrapCount + "";
 
@@ -6412,16 +6517,16 @@ function getCPGoalwrapupNotMet(PatientId) {
                          if (tri_range == true) {
                              var vMtrcOprtr2txt = "";
                              vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                            vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                            vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                          }
                          else {
                              // alert(vMtrcOprtr1txt);
-                             strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                             strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                          }
 
                          if (tri_LastTargetValue !== null) {
-                             strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                             strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                          }
                          break;
 
@@ -6516,7 +6621,7 @@ function getCPGoalwrapupOpen(PatientId) {
               var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
               var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-              if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+              if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                   intWrapCount = intWrapCount + 1;
                   intTotalwrapupOpen = " " + intWrapCount + "";
 
@@ -6548,16 +6653,16 @@ function getCPGoalwrapupOpen(PatientId) {
                           if (tri_range == true) {
                               var vMtrcOprtr2txt = "";
                               vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                             vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                             vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                           }
                           else {
                               // alert(vMtrcOprtr1txt);
-                              strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                              strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                           }
 
                           if (tri_LastTargetValue !== null) {
-                              strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                              strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                           }
                           break;
 
@@ -6651,7 +6756,7 @@ function getCPGoalwrapupMet(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intWrapCount = intWrapCount + 1;
                     intTotalwrapupMet = " " + intWrapCount + "";
 
@@ -6683,16 +6788,16 @@ function getCPGoalwrapupMet(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -6793,7 +6898,7 @@ function getCPGoalwrapupOverDue(PatientId) {
                 var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
                 var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                if (monitormodeCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
+                if (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1) {
                     intWrapCount = intWrapCount + 1;
                     intTotalwrapupOverDue = " " + intWrapCount + "";
 
@@ -6825,16 +6930,16 @@ function getCPGoalwrapupOverDue(PatientId) {
                             if (tri_range == true) {
                                 var vMtrcOprtr2txt = "";
                                 vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px"> and ' +
-                                               vMtrcOprtr2txt + ' <input type="text" class="txtfieldquantitative" value="' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : tri_targetvaluetwo) + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2) + ' and ' +
+                                               vMtrcOprtr2txt + ' ' + ((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2));
                             }
                             else {
                                 // alert(vMtrcOprtr1txt);
-                                strTargetVal = vMtrcOprtr1txt + ' <input type="text" class="txtfieldquantitative" value="' + tri_Metric + '" style="background-color: #FAFAFA;border:none; width:40px">'
+                                strTargetVal = vMtrcOprtr1txt + ' ' + Number(tri_Metric).toFixed(2);
                             }
 
                             if (tri_LastTargetValue !== null) {
-                                strLastTargetVal = '<input type="text" class="txtfieldquantitative" value="' + tri_LastTargetValue + '" style="background-color: #FAFAFA;border:none; width:40px">';
+                                strLastTargetVal = Number(tri_LastTargetValue).toFixed(2);
                             }
                             break;
 
@@ -6928,6 +7033,12 @@ function GetSectionName(OptionSetVal) {
     
 }
 
+function dynamicToolTip(data,idtest){
+	      $("#"+idtest).attr('data-original-title', data)
+          .tooltip('fixTitle')
+          .tooltip('show');
+	}
+	
 function gotoAddCarePlan() {
 
     IsDataChanged = false;
@@ -6942,7 +7053,10 @@ function gotoAddCarePlan() {
     if (personId !== null && personId !== "") {
         $('.monitor-wrapper').hide('slow');
         $('.Personalize-details').html('');
-       
+        // update filter css
+        $('#planFilter').css('margin-bottom','10px');
+        ResetFilter();
+        DisplayMode = personalizeMode;
 
         //var vSelectedGoal = [];
         if (parent.Xrm !== undefined) {
@@ -7050,8 +7164,9 @@ function gotoAddCarePlan() {
             }
         };
 
-        DisplayPersonalizeMode(contactId);
+        // DisplayPersonalizeMode(contactId);
         $('.Personalize-details,.personalize-section').show();
+        UpdateVitalFilters(contactId,personalizeMode)
     };//if closes here
 }
 
@@ -7069,12 +7184,18 @@ function DisplayPersonalizeMode(contactId) {
     var vTblRowsHomeVitals = "";
     var vTblRowsNone = "";
     var VitalTypeArray = [];
-
     IsDataChanged = false;
 
-    //SDK.JQuery.retrieveMultipleRecords(
-    //   "tri_careplanjoin",
-    //   "?$select=tri_GoalSection,tri_typeofgoalcode,new_GoalState,tri_vitalsvaluetypeid,tri_VitalValueTypeName&$filter=tri_PatientID/Id eq (guid'" + contactId + "')&$orderby=tri_GoalSection",
+    // Appened Snooze in front of Snoozed CMS Plans
+    var distinctCTSPlansTextArray = Enumerable.From(CarePlans)
+                               .Where(function (x) { return x.schedulecategory === 100000001; })
+                               .Select(function (x) { return x.text; })
+                               .ToArray();
+
+    var CMSPlanArray = Enumerable.From(CarePlans)
+                       .Where(function (x) { return (x.schedulecategory === 100000000) && (distinctCTSPlansTextArray.indexOf(x.text) === -1); })
+                       .Select(function (x) { return x.careplangoalid; })
+                       .ToArray();
 
     var FetchXmlgoal =
 
@@ -7090,7 +7211,7 @@ function DisplayPersonalizeMode(contactId) {
     "<attribute name='tri_careplangoalstate' />" +
     "<order attribute='tri_goalsection' descending='false' />" +
     "<filter type='and'>" +
-      "<condition attribute='tri_patientid' operator='eq' value='"+contactId+"' />" +
+      "<condition attribute='tri_patientid' operator='eq' value='" + contactId + "' />" +
       "<condition attribute='tri_vitalsvaluetype' operator='not-null' />" +
       "<condition attribute='tri_goalsection' operator='not-null' />" +
     "</filter>" +
@@ -7101,14 +7222,11 @@ function DisplayPersonalizeMode(contactId) {
 "</fetch>"
 
     results = XrmServiceToolkit.Soap.Fetch(FetchXmlgoal);
-  // alert(results.length);
+    // alert(results.length);
     if (results.length > 0) {
         for (var i = 0; i < results.length; i++) {
-             
-           // alert(tri_GoalSection);
-            //var tri_vitalsvaluetypeid = results[i].attributes["tri_vitalsvaluetypeid"];
-             vVitalTypeId = results[i].attributes["tri_vitalsvaluetype"].id;
-           // alert(vVitalTypeId);
+
+            vVitalTypeId = results[i].attributes["tri_vitalsvaluetype"].id;
             var vVitalFactorButtonId = results[i].attributes["tri_vitalsvaluetype"].id + "_BTN";
             var vVitalMetricOperatorButtonId = results[i].attributes["tri_vitalsvaluetype"].id + "_MTRCOPRTRBTN";
             var vVitalMetricOperatorButtonIdTwo = results[i].attributes["tri_vitalsvaluetype"].id + "_MTRCOPRTRBTNTWO";
@@ -7131,877 +7249,619 @@ function DisplayPersonalizeMode(contactId) {
             var vVitalFactorMULTIPLIER_NORMALId = results[i].attributes["tri_vitalsvaluetype"].id + "_MULTIPLIER_NORMAL";// used in normal multipler textbox
             var vVitalFactorMULTIPLIER_ABNORMALId = results[i].attributes["tri_vitalsvaluetype"].id + "_MULTIPLIER_ABNORMAL";// used in abnormal textbox
             var vVitalFactorQUAL_ACTIONId = results[i].attributes["tri_vitalsvaluetype"].id + "_QUAL_ACTION";// used in trigger action textbox
-            //var tri_VitalValueTypeName = results[i].tri_vitalvaluetypename;
+            var tri_cccareplangoalId = results[i].attributes["tri_cccareplangoalid"].value;
             var tri_typeofgoalcode = results[i].attributes["tri_typeofgoalcode"].value;
             var tri_GoalState = results[i].attributes["tri_careplangoalstate"];
             var tri_GoalSection = GetSectionName(results[i].attributes["tri_goalsection"].value);
             var tri_VitalValueTypeName = results[i].attributes["a_valtype.tri_name"].value;
-            //alert(tri_GoalSection +"===" +tri_VitalValueTypeName);
-
 
             //get the selected goal for this vital type
-
             if (tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined) {
 
-                var IndexOfVitalType = VitalTypeArray.indexOf(tri_VitalValueTypeName);
-
-                if (IndexOfVitalType === -1 && IndexOfVitalType !== null && IndexOfVitalType !== undefined) {
-
-                    VitalTypeArray.push(tri_VitalValueTypeName)
-
-                    //tri_PatientModifierName_join = "";
-
-
-                    GetSelectedGoalForCurrentVitalType(results[i].attributes["tri_vitalsvaluetype"].id, contactId);  //need this to default the dropdownlist and all the fields when the page loads the first time.
-                    var goalState;
-
-
-                    if (tri_GoalState !== undefined && tri_GoalState !== null)
-                        goalState = tri_GoalState.value;
-
-                    if (goalState == 167410000) {
-                        goalClass = "orange";
-                    }
-                    else if (goalState == 167410001) {
-                        goalClass = "green";
-                    }
-                    else if (goalState == 167410002) {
-                        goalClass = "red";
-                    }
-                    else {
-                        goalClass = "grey";
-                    }
-                    //alert(vSelectedGoal.length);
-
-                    var modifierList = "";
-
-                    if (vVitalTypeId !== null && vVitalTypeId !== undefined) {
-                        modifierList = GetModifierBasedOnValueType(results[i].attributes["tri_vitalsvaluetype"].id, contactId);
-                    }
-                    if (modifierList === undefined || modifierList === "") {
-                        modifierList = "<li></li>";
-                    }
-
-                    switch (results[i].attributes["tri_goalsection"].value) {
-                        case 100000000:
-                            // vSectnName = "Symptoms";
-                            vTblRowsSymptoms = vTblRowsSymptoms +
-                                '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table  class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>'+//'</table>' +//table 1 end
-         // '<table >' +//table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="tooltip" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '</div>' +
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '</div>' +
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-                            break;
-                        case 100000001:
-                            //vSectnName = "Tests/Care";
-                            vTblRowsTestCare = vTblRowsTestCare +
-                                                       '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-
-                            break;
-                        case 100000002:
-                            //vSectnName = "Medications";
-                            vTblRowsMedications = vTblRowsMedications +
-                                                        '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-
-                            break;
-                        case 100000003:
-                            //vSectnName = "Activity";
-                            vTblRowsActivity = vTblRowsActivity +
-                                                           '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-                            break;
-                        case 100000004:
-                            //vSectnName = "Nutrition";
-                            vTblRowsNutrition = vTblRowsNutrition +
-                                   '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-                            break;
-                        case 100000005:
-                            //vSectnName = "Psycho-Social / Behavioural Health";
-                            vTblRowsPyschoSocial = vTblRowsPyschoSocial +
-                                  '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-                            break;
-                        case 100000006:
-                            //vSectnName = "Wrap Up";
-                            vTblRowsWrapUp = vTblRowsWrapUp +
-                                                      '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                //'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-
-                            break;
-                        case 100000007:
-                            //vSectnName = "Home Vitals";
-                            vTblRowsHomeVitals = vTblRowsHomeVitals +
-                                  '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
-
-          //<!-- FACTORS & VALUES -->     
-         '<table class="maintable" align="left">' + //table 1 start
-         '<tr>' +
-            '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
-            '<td class="labelcenter" width="600px"> Target Value:</td>' +
-            '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
-            '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
-         '</tr>' +//table 1 end
-
-          //table 2 start
-          '<tr class="factors" align="left">' +
-          '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id,contactId) +
-          //<!-- FACTOR DROP-DOWN -->    
-            '<div class="btn-group" style="width: 90px;">' +
-            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
-            '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
-            //GetModifierBasedOnValueType(results[i].tri_vitalsvaluetypeid.Id, contactId) + 
-            '</ul>' +
-              '</div>' +
-              '</td></tr>' +
-                '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
-
-                 // '<table align="left"><tr><td>'+ //nested table3
-
-                //<!-- MODIFIER DROP-DOWN -->    if(
-                '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULId + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
-
-                '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
-                //'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
-                //'<ul class="dropdown-menu" id=' + vVitalMetricOperatorULIdTwo + '>' +
-                //'<li role="presentation" class="dropdown-header"><</li>' +
-                //'<li role="presentation" class="dropdown-header">=</li>' +
-                // '<li role="presentation" class="dropdown-header">></li>' +
-                // '<li role="presentation" class="dropdown-header">>=</li>' +
-                // '<li role="presentation" class="dropdown-header"><=</li>' +
-                // '<li role="presentation" class="dropdown-header">% Increase</li>' +
-                // '<li role="presentation" class="dropdown-header">% Decrease</li>' +
-                //'</ul>' +
-                '</div>' +
-                //'</td>' +
-                //'<td class="labelcenter"  width="525px">' +//table2 column3
-                '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                '</td >' +
-                '<td width="220px">' + //
-                '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
-                //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-              '</td>' +
-                '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
-                 //<!-- MODIFIER DROP-DOWN -->    
-                '<div class="btn-group" style="width:60px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
-                '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
-                  '<li role="presentation" class="dropdown-header">Day</li>' +
-                  '<li role="presentation" class="dropdown-header">Week</li>' +
-                  //'<li role="presentation" class="dropdown-header">Bi-Week</li>' +
-                  '<li role="presentation" class="dropdown-header">Month</li>' +
-                  '<li role="presentation" class="dropdown-header">Quarter</li>' +
-                  //'<li role="presentation" class="dropdown-header">Every 6 Months</li>' +
-                  '<li role="presentation" class="dropdown-header">Year</li>' +
-                  // '<li role="presentation" class="dropdown-header">3 times a day</li>' +
-                  '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
-                '</ul>' +
-              '</div>' +
-         '<br></td>' +
-             '</tr></table>' +//table 2 end
-             '<br>';//tablecontent div closes here
-                            break;
-                        case -1:
-                            break;
-                    }
-                    //add current row to previous row
+                if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1) {
+                    tri_VitalValueTypeName = "Snoozed :" + tri_VitalValueTypeName;
                 }
-            }
+                    var IndexOfVitalType = VitalTypeArray.indexOf(tri_VitalValueTypeName);
+                    if (IndexOfVitalType === -1 && IndexOfVitalType !== null && IndexOfVitalType !== undefined) {
+                        VitalTypeArray.push(tri_VitalValueTypeName)
+
+                        GetSelectedGoalForCurrentVitalType(results[i].attributes["tri_vitalsvaluetype"].id, contactId);  //need this to default the dropdownlist and all the fields when the page loads the first time.
+                        var goalState;
+
+                        if (tri_GoalState !== undefined && tri_GoalState !== null)
+                            goalState = tri_GoalState.value;
+
+                        if (goalState == 167410000) {
+                            goalClass = "orange";
+                        }
+                        else if (goalState == 167410001) {
+                            goalClass = "green";
+                        }
+                        else if (goalState == 167410002) {
+                            goalClass = "red";
+                        }
+                        else {
+                            goalClass = "grey";
+                        }
+
+                        var modifierList = "";
+
+                        if (vVitalTypeId !== null && vVitalTypeId !== undefined) {
+                            modifierList = GetModifierBasedOnValueType(results[i].attributes["tri_vitalsvaluetype"].id, contactId);
+                        }
+                        if (modifierList === undefined || modifierList === "") {
+                            modifierList = "<li></li>";
+                        }
+
+                        switch (results[i].attributes["tri_goalsection"].value) {
+                            case 100000000:
+                                // vSectnName = "Symptoms";
+                                vTblRowsSymptoms = vTblRowsSymptoms +
+                                    '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+
+              //<!-- FACTORS & VALUES -->     
+             '<table  class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//'</table>' +//table 1 end
+             // '<table >' +//table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="tooltip" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+
+                                break;
+                            case 100000001:
+                                //vSectnName = "Tests/Care";
+                                vTblRowsTestCare = vTblRowsTestCare +
+                                                           '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+                                break;
+                            case 100000002:
+                                //vSectnName = "Medications";
+                                vTblRowsMedications = vTblRowsMedications +
+                                                            '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+                                break;
+                            case 100000003:
+                                //vSectnName = "Activity";
+                                vTblRowsActivity = vTblRowsActivity +
+                                                               '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+
+                                break;
+                            case 100000004:
+                                //vSectnName = "Nutrition";
+                                vTblRowsNutrition = vTblRowsNutrition +
+                                       '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+
+                                break;
+                            case 100000005:
+                                //vSectnName = "Psycho-Social / Behavioural Health";
+                                vTblRowsPyschoSocial = vTblRowsPyschoSocial +
+                                      '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+
+                                break;
+                            case 100000006:
+                                //vSectnName = "Wrap Up";
+                                vTblRowsWrapUp = vTblRowsWrapUp +
+                                                          '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+
+                                break;
+                            case 100000007:
+                                //vSectnName = "Home Vitals";
+                                vTblRowsHomeVitals = vTblRowsHomeVitals +
+                                      '<br><div class="sectiontitle_personalize">' + tri_VitalValueTypeName + '</div><div class="indicator-line  ' + goalClass + '"></div>' +  // indicator wrapper div open-closes
+
+              //<!-- FACTORS & VALUES -->     
+             '<table class="maintable" align="left">' + //table 1 start
+             '<tr>' +
+                '<td class="labelcenter" width="270px">Factor / Modifier:</td>' +
+                '<td class="labelcenter" width="600px"> Target Value:</td>' +
+                '<td class="labelcenter" width="220px"> In Range Frequency:</td>' +
+                '<td class="labelcenter" width="220px"> Out of Range Frequency:</td>' +
+             '</tr>' +//table 1 end
+
+              //table 2 start
+              '<tr class="factors" align="left">' +
+              '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
+              //<!-- FACTOR DROP-DOWN -->    
+                '<div class="btn-group" style="width: 90px;">' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
+                '</ul>' +
+                  '</div>' +
+                  '</td></tr>' +
+                    '<tr><td  width="270px"></td><td class="labelcenter" width="600px">' + //table2 column2  width="270px"
+                    //<!-- MODIFIER DROP-DOWN -->    if(
+                    '<span class="quantitativespan"  style="display:inline" id=' + vVitalFactorQuantSPAN + '><div class="btn-group" >' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonId + ' style="display:none"><span class="caret"></span></button>' +
+                    '</div>' +
+                    '<input type="text" class="txtfield"  id=' + vVitalFactorMETRICId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" >' +
+
+                    '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
+                    '</div>' +
+                    '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '</td >' +
+                    '<td width="220px">' + //
+                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+                  '</td>' +
+                    '<td width="220px"> <input type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_ABNORMALId + '>' +    //table2 column6, multiplier for abnormal reading
+                     //<!-- MODIFIER DROP-DOWN -->    
+                    '<div class="btn-group" style="width:60px;">' +
+                    '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqAbNormalButtonId + '><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu" id=' + vVitalFreqAbNormalULId + '>' +
+                      '<li role="presentation" class="dropdown-header">Day</li>' +
+                      '<li role="presentation" class="dropdown-header">Week</li>' +
+                      '<li role="presentation" class="dropdown-header">Month</li>' +
+                      '<li role="presentation" class="dropdown-header">Quarter</li>' +
+                      '<li role="presentation" class="dropdown-header">Year</li>' +
+                      '<li role="presentation" class="dropdown-header">Every Encounter</li>' +
+                    '</ul>' +
+                  '</div>' +
+             '<br></td>' +
+                 '</tr></table>' +//table 2 end
+                 '<br>';//tablecontent div closes here
+                                break;
+                            case -1:
+                                break;
+                        }
+                        //add current row to previous row
+                    }
+                }
+          //  }
         }
         /// End For
     };//end if
-       //function (error) {
-       //    alert(error.message);
-       //},
-       //function () {
-           $('.Personalize-details').html('');
-           vFinalTbl = '<div class="panel-group" id="accordion">' +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Symptoms</th></tr></table>' + vTblRowsSymptoms +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Tests / Care</th></tr></table>' + vTblRowsTestCare +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Medications</th></tr></table>' + vTblRowsMedications +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Activity</th></tr></table>' + vTblRowsActivity +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Nutrition</th></tr></table>' + vTblRowsNutrition +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >PsychoSocial</th></tr></table>' + vTblRowsPyschoSocial +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Wrap Up</th></tr></table>' + vTblRowsWrapUp +
-                       //'<table class="tg"><tr><th class="tg-typedetail" >Home Vitals</th></tr></table>' + vTblRowsHomeVitals +
-                        CreateTooglePanels(vTblRowsSymptoms, 'Symptoms', 'panelSymptoms') +
-                        CreateTooglePanels(vTblRowsTestCare, 'Tests/Care', 'panelTestsCare') +
-                        CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
-                        CreateTooglePanels(vTblRowsMedications, 'Medications', 'panelMedications') +
-                        CreateTooglePanels(vTblRowsActivity, 'Activity', 'panelActivity') +
-                        CreateTooglePanels(vTblRowsNutrition, 'Nutrition', 'panelNutrition') +
-                        CreateTooglePanels(vTblRowsPyschoSocial, 'Psycho-Social/Behavioral Health', 'panelPsychoSocial') +
-                        CreateTooglePanels(vTblRowsWrapUp, 'Wrap-Up', 'panelWrap') +
-                        '<table class="maintable" >' +//table5 start
-                        '<tr></tr>'+
-                        //'<tr><td><br>'+
-                        //'<div class = "center-wrapper" ><div class="center-wrapper">' +//SAVE CHANGES' +
-                        //'<button class="btn btn-primary savebtn" type="button">Save Changes</button>' +
-                        //'</div>' +
-                        //'</td></tr>'+
-                        '</table>'+
-                        '</div>';
+    $('.Personalize-details').html('');
+    vFinalTbl = '<div class="panel-group" id="accordion">' +
+                 CreateTooglePanels(vTblRowsSymptoms, 'Symptoms', 'panelSymptoms') +
+                 CreateTooglePanels(vTblRowsTestCare, 'Tests/Care', 'panelTestsCare') +
+                 CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
+                 CreateTooglePanels(vTblRowsMedications, 'Medications', 'panelMedications') +
+                 CreateTooglePanels(vTblRowsActivity, 'Activity', 'panelActivity') +
+                 CreateTooglePanels(vTblRowsNutrition, 'Nutrition', 'panelNutrition') +
+                 CreateTooglePanels(vTblRowsPyschoSocial, 'Psycho-Social/Behavioral Health', 'panelPsychoSocial') +
+                 CreateTooglePanels(vTblRowsWrapUp, 'Wrap-Up', 'panelWrap') +
+                 '<table class="maintable" >' +//table5 start
+                 '<tr></tr>' +
+                 '</table>' +
+                 '</div>';
 
-           $('.Personalize-details').append(vFinalTbl);
-       //}
-   //);
+    $('.Personalize-details').append(vFinalTbl);
 }
 
 function CreateTooglePanels(body,title,collapsePanelId) {
@@ -8037,8 +7897,9 @@ $(document).on('keyup click', 'input[type=text]', function () {
 
 function NonAcknowledgementPopupCondition(element) {
     return (element.id.indexOf("observedValue") > -1 || element.id.indexOf("_QUALITATIVETXT") > -1 || element.className.indexOf("personalizetargetvalQual") > -1
-            || element.className.indexOf("personalizetriggeraction") > -1 || element.className.indexOf("personalizetargetvalMetric") > -1
-            || element.className.indexOf("personalizetargetvalMetricTwo") > -1);
+            || element.className.indexOf("personalizetriggeraction") > -1
+            //|| element.className.indexOf("personalizetargetvalMetric") > -1 || element.className.indexOf("personalizetargetvalMetricTwo") > -1
+        );
 }
 
 $(document).on('click', '.ui-spinner-button', function () {
@@ -8056,8 +7917,6 @@ $(document).on('click', '.ui-spinner-button', function () {
   //alert( $(this).siblings('input').attr('id'));
 });
 
-
-
 function AddVitaTypeToSave(inputId) {
 
     if (inputId !== null && inputId !== undefined && inputId.length > 0 && inputId !== "observedValue") {
@@ -8071,11 +7930,9 @@ function AddVitaTypeToSave(inputId) {
 }
 
 function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
-    //alert(tri_vitalsvaluetypeid);
-  //  if (tri_vitalsvaluetypeid !== null && tri_vitalsvaluetypeid !== Undefined) {
-
         var FinalModifierTag = "";
         var vMdfrIdArray = [];
+        var vMdfrIdGoalSelectedArray = [];
         //var vMdfrTagArray = [];
         var vULselector = tri_vitalsvaluetypeid + "_UL";
         var modifierValue = "";
@@ -8083,13 +7940,16 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
         //get modifier ids and put them in an array
         SDK.JQuery.retrieveMultipleRecords(
             "tri_cccareplangoal",
-            "?$select=tri_PatientModifierId,tri_vitalsvaluetype&$filter=tri_vitalsvaluetype/Id eq (guid'" + tri_vitalsvaluetypeid + "') and tri_PatientID/Id eq (guid'" + contactId + "')&$orderby=tri_PatientModifierId asc",
+            "?$select=tri_PatientModifierId,tri_cccareplangoalId,tri_GoalSelected,tri_vitalsvaluetype&$filter=tri_vitalsvaluetype/Id eq (guid'" + tri_vitalsvaluetypeid + "') and tri_PatientID/Id eq (guid'" + contactId + "')&$orderby=tri_PatientModifierId asc",
             function (results) {
                 if (results.length > 0) {
                     for (var i = 0; i < results.length; i++) {
 
                         var tri_PatientModifierId = results[i].tri_PatientModifierId.Id;
                         var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
+                        var tri_GoalSelected = results[i].tri_GoalSelected;
+                        var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+
                         modifierValue = results[i].tri_PatientModifierId.Name;
 
                         var IndexOfMdfrId = vMdfrIdArray.indexOf(tri_PatientModifierId);
@@ -8097,9 +7957,8 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                         if (IndexOfMdfrId === -1 && IndexOfMdfrId !== null && IndexOfMdfrId !== undefined) {
 
                             vMdfrIdArray.push(tri_PatientModifierId);
+                            vMdfrIdGoalSelectedArray.push({ 'ModifierId': tri_PatientModifierId, 'GoalSelecetd': tri_GoalSelected, 'CarePlanGoalId': tri_cccareplangoalId });
                         }
-
-                       
                     }
                 }
             },
@@ -8145,18 +8004,23 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                     var vitalUlSelector = $("#" + vULselector);
                     vitalUlSelector.html('');
                     vitalUlSelector.append(IncrementalModifierTag);
-
-                    if (vMdfrIdArray.length = 1)
-                    {
-                        GetGoalForCurrentModifier(vMdfrIdArray[0], tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
-                    }
+                    /////
+                    
                 }
             );
                         };// null check if closes here
                     };// for clses here
 
-                };// array count if closes here
+                    // for single modifier default the goal, if goal selected is not true set it true
+                    if (vMdfrIdGoalSelectedArray.length = 1 && !vMdfrIdGoalSelectedArray[0].GoalSelecetd) {
+                        GetGoalForCurrentModifier(vMdfrIdGoalSelectedArray[0].ModifierId, tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
 
+                        var tri_cccareplangoal = {}
+                        tri_cccareplangoal.tri_GoalSelected = true;
+                        SDK.REST.updateRecord(vMdfrIdGoalSelectedArray[0].CarePlanGoalId, tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
+                    }
+                };// array count if closes here
+                
             }
         );
 
@@ -8164,14 +8028,10 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
 }
 
 function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId) {
-    //alert(tri_vitalsvaluetypeid);
-    //  if (tri_vitalsvaluetypeid !== null && tri_vitalsvaluetypeid !== Undefined) {
-
     var FinalModifierTag = "";
     var vMdfrIdArray = [];
     //var vMdfrTagArray = [];
     var vULselector = tri_vitalsvaluetypeid + "_ULPRSNL";
-
 
     //get modifier ids and put them in an array
     SDK.JQuery.retrieveMultipleRecords(
@@ -8254,10 +8114,7 @@ function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contac
 }
 
 function GetSelectedGoalForCurrentVitalType(tri_vitalsvaluetypeid, contactId) {
-    //alert(tri_vitalsvaluetypeid);
     var vBTNselector = tri_vitalsvaluetypeid + "_BTN";
-    //var vMETRICselector = tri_vitalsvaluetypeid + "_METRIC";
-    //var vMETRICOPERATORselector = tri_vitalsvaluetypeid + "_MTRCOPRTRBTN";
     var vMETRICselector = tri_vitalsvaluetypeid + "_METRIC";
     var vMETRICselectorTwo = tri_vitalsvaluetypeid + "_TARGETVALTWO";
     var vMETRICOPERATORselector = tri_vitalsvaluetypeid + "_MTRCOPRTRBTN";
@@ -8560,7 +8417,7 @@ $(document).on('click', '.dropdown-menu li', function () {
         AddVitaTypeToSave(inputId);
         IsDataChanged = true;
 
-        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1)) {
+        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1) || (this.id.indexOf("ULPRNLGOAL") > -1)) {
             IsObservedValueAndFactorModifierChanged = true;
         }
         else {
@@ -8570,7 +8427,6 @@ $(document).on('click', '.dropdown-menu li', function () {
 });
 
 function GetSetTargetMetricOperator(tri_vitalsvaluetypeid, Vmetricoperator,strWrapper) {
-    //alert(tri_vitalsvaluetypeid + "===" + Vmetricoperator);
     if (tri_vitalsvaluetypeid !== null && Vmetricoperator !== null) {
          
         var vBTNselector = tri_vitalsvaluetypeid + "_MTRCOPRTRBTN";
@@ -8745,13 +8601,7 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
         else if (strWrapper === "window") {
             $('.personalizenormalmultiplier').show();
         }
-        //var vBTNselector = "";
-        //if (NormalAbnormalFlag === "Normal") {
         var vBTNselector = tri_vitalsvaluetypeid + "_FRQNRMLBTN";
-        //};
-        //if (NormalAbnormalFlag === "Abormal") {
-        //    vBTNselector = tri_vitalsvaluetypeid + "_FRQABNRMLBTN";
-        //};
         switch (VFreqOSVal) {
             case 1:
                 if (strWrapper === "personalize") {
@@ -8773,16 +8623,6 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                     $('.personalizerecurrnormal').val(167410000);
                 };
                 break;
-            //case 167410001:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("Bi-Week");
-            //        $("#" + vBTNselector).val(167410001);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrnormal').text("Bi-Week");
-            //        $('.personalizerecurrnormal').val(167410001);
-            //    };
-            //    break;
             case 167410002: if (strWrapper === "personalize") {
                 $("#" + vBTNselector).text("Month");
                 $("#" + vBTNselector).val(167410002);
@@ -8802,16 +8642,6 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                     $('.personalizerecurrnormal').val(167410003);
                 };
                 break;
-            //case 167410004:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("Every 6 Months");
-            //        $("#" + vBTNselector).val(167410004);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrnormal').text("Every 6 Months");
-            //        $('.personalizerecurrnormal').val(167410004);
-            //    };
-            //    break;
             case 167410005:
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Year");
@@ -8823,16 +8653,6 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                 };
 
                 break;
-            //case 167410006:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("3 times a day");
-            //        $("#" + vBTNselector).val(167410006);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrnormal').text("3 times a day");
-            //        $('.personalizerecurrnormal').val(167410006);
-            //    };
-            //    break;
             case 167410007:
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Every Encounter");
@@ -8845,7 +8665,6 @@ function GetSetFreqOsetNormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                     $('.personalizenormalmultiplier').hide();
                 };
                 break;
-
         }
     };
 }
@@ -8863,7 +8682,6 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
         }
 
         var vBTNselector = tri_vitalsvaluetypeid + "_FRQABNRMLBTN";
-        //alert(VFreqOSVal);
         switch (VFreqOSVal) {
             case 1:
                 if (strWrapper === "personalize") {
@@ -8886,16 +8704,6 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                     $('.personalizerecurrabnormal').val(167410000);
                 };
                 break;
-            //case 167410001:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("Bi-Week");
-            //        $("#" + vBTNselector).val(167410001);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrabnormal').text("Bi-Week");
-            //        $('.personalizerecurrabnormal').val(167410001);
-            //    };
-            //    break;
             case 167410002: if (strWrapper === "personalize") {
                 $("#" + vBTNselector).text("Month");
                 $("#" + vBTNselector).val(167410002);
@@ -8915,16 +8723,6 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                     $('.personalizerecurrabnormal').val(167410003);
                 };
                 break;
-            //case 167410004:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("Every 6 Months");
-            //        $("#" + vBTNselector).val(167410004);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrabnormal').text("Every 6 Months");
-            //        $('.personalizerecurrabnormal').val(167410004);
-            //    };
-            //    break;
             case 167410005:
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Year");
@@ -8936,16 +8734,6 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
                 };
 
                 break;
-            //case 167410006:
-            //    if (strWrapper === "personalize") {
-            //        $("#" + vBTNselector).text("3 times a day");
-            //        $("#" + vBTNselector).val(167410006);
-            //    };
-            //    if (strWrapper === "window") {
-            //        $('.personalizerecurrabnormal').text("3 times a day");
-            //        $('.personalizerecurrabnormal').val(167410006);
-            //    };
-            //    break;
             case 167410007:
                 if (strWrapper === "personalize") {
                     $("#" + vBTNselector).text("Every Encounter");
@@ -8964,7 +8752,6 @@ function GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, VFreqOSVal,strWrapper) {
 }
 
 function GetSetAssgnmntRoleOset(tri_vitalsvaluetypeid, VRoleOSVal,strWrapper) {
-    //alert(VRoleOSVal);
     if (tri_vitalsvaluetypeid !== null && VRoleOSVal !== null) {
 
         var vBTNselector = tri_vitalsvaluetypeid + "_ASSGNROLEBTN";
@@ -9023,16 +8810,9 @@ function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId,curr
 
         SDK.JQuery.retrieveMultipleRecords(
 "tri_cccareplangoal",
-//"?$select=new_GoalState,tri_actiontriggervalue,tri_activitydescription,tri_activitydescriptionabnormal,tri_activityrcurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_activityassignmentrole,tri_activityrecurrencemultipliernormal,tri_GoalName,tri_GoalSelected,tri_LastGoalDate,tri_LastTargetValue,tri_measuredetails,tri_metric,tri_PatientModifierId,tri_PatientModifierName,tri_qualitativeaction,tri_qualitativetarget,tri_targetmetricoperator,tri_typeofgoalcode,tri_vitalsvaluetypeid,tri_VitalValueTypeName&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_PatientModifierId/Id  eq (guid'" + vModId + "') and tri_vitalsvaluetypeid/Id eq (guid'" + tri_vitalsvaluetypeid + "')",
  "?$select=tri_actiontriggermetricoperator,tri_actiontriggervalue,tri_activityassignmentrole,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_activityrecurrencemultipliernormal,tri_CarePlanGoalState,tri_cccareplangoalId,tri_GoalSection,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_PatientID,tri_PatientModifierId,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + contactId + "') and tri_vitalsvaluetype/Id eq (guid'" + tri_vitalsvaluetypeid + "') and tri_PatientModifierId/Id eq (guid'" + vModId + "')",
 function (results) {
-    //alert(results.length);
     if (results.length > 0) {
-        //alert(resultsjoin.length);
-        //if (strWrapper === "personalize") {
-        //    $("#" + vBTNselector).text(currText);
-        //    $("#" + vBTNselector).val(currText);
-        //};
         for (var i = 0; i < results.length; i++) {
             var tri_actiontriggermetricoperator = results[i].tri_actiontriggermetricoperator;
             var tri_actiontriggervalue = results[i].tri_actiontriggervalue;
@@ -9067,7 +8847,6 @@ function (results) {
             var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype.Id;
         }
 
-
         SDK.JQuery.retrieveRecord(
            tri_PatientModifierId.Id,
             "tri_patientmodifier",
@@ -9091,8 +8870,6 @@ function (results) {
 
                             $("#" + vVitalFactorQUALITATIVEId).val(tri_qualitativetarget);
                             $("#" + vVitalFactorQUALITATIVEId).css("display", "inline");
-                            //$("#" + vMETRICselector).val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
-                            //$("#" + vMETRICOPERATORselector).hide();
                         };
                         if (strWrapper === "window") {
 
@@ -9100,9 +8877,7 @@ function (results) {
                             $(".personalizequalitative").show();////////////////////
                             $("#tbl_ObservedValue").show();////////////////////
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly', true); //.addClass('qualitative').removeClass('quantitative');
-                            //$('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
-                            // $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');//.prop('readonly', true); //
                         };
 
                         break;
@@ -9126,8 +8901,8 @@ function (results) {
                             $("#tbl_ObservedValue").hide();////////////////////
                             $(".personalizequantitative").show();////////////////////
 
-                            $('.personalizetargetvalMetric').val(tri_Metric);//.spinner({ step: 1.00, numberFormat: "n" });
-                            $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo);//.spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalMetric').val(tri_Metric).spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
                             GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_MetricOperator, "window");
                             GetSetTargetMetricOperatorTwo(tri_vitalsvaluetypeid, tri_metricoperatortwo, "window");
                         };
@@ -9146,21 +8921,15 @@ function (results) {
                             $(".personalizequantitative").hide();//////////////////////
                             $(".personalizequalitative").show();////////////////////
 
-                            $('.personalizetargetvalQual').val(tri_qualitativetarget).prop('readonly',true);//.addClass('qualitative').removeClass('quantitative');
-                           // $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');
-                            // $('.personalizetargetvalMetricTwo').val(tri_targetvaluetwo).spinner({ step: 1.00, numberFormat: "n" });
+                            $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative'); // .prop('readonly', true);//
                         };
                         break;
                 }
-
-
             },
             function (error) {
                 alert(error.message);
             }
         );
-
-       
 
         // $("#" + vMETRICselector).val(tri_qualitativetarget);//append  metric
         if (strWrapper === "personalize") {
@@ -9172,21 +8941,20 @@ function (results) {
         }
         if (strWrapper === "window") {
             $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal);//append  metric
-            // $('.personalizenormalmultiplier').spinner();//append  metric
+            $('.personalizenormalmultiplier').spinner();//append  metric
+
             $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal);//append  metric
-            // $('.personalizeabnormalmultiplier').spinner();//append  metric
+            $('.personalizeabnormalmultiplier').spinner();//append  metric
+
             $('.personalizetriggeraction').val(tri_qualitativeaction).prop('readonly', true);//append  metric, make readonly and change  background color to grey
         }
-        //GetSetTargetMetricOperator(tri_vitalsvaluetypeid, tri_targetmetricoperator);
         if (strWrapper === "personalize") {
             GetSetFreqOsetNormal(tri_vitalsvaluetypeid, tri_activityrecurrence, "personalize");
             GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, tri_activityrecurrenceabnormal, "personalize");
-            //GetSetAssgnmntRoleOset(tri_vitalsvaluetypeid, tri_activityassignmentrole,"personalize");
         }
         if (strWrapper === "window") {
             GetSetFreqOsetNormal(tri_vitalsvaluetypeid, tri_activityrecurrence, "window");
             GetSetFreqOsetAbnormal(tri_vitalsvaluetypeid, tri_activityrecurrenceabnormal, "window");
-            //GetSetAssgnmntRoleOset(tri_vitalsvaluetypeid, tri_activityassignmentrole, "window");
         }
     }
     else {
@@ -9222,8 +8990,6 @@ function AcknowledgementDialog() {
         SaveData();
     }
 }
-
-
 
 $(document).on('click', '.greybtn-alert', function () {
     $("#alert-wrapper").dialog('close');
@@ -9811,5 +9577,6 @@ function RetrieveVitalName(vVitalTypeId) {
 //);
    // return tri_name;
 }
+
 
 

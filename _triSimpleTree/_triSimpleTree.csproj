@@ -75,6 +75,7 @@
     <Content Include="June28Update\personalize-style.css" />
     <Content Include="June30Update\bootstrap.css" />
     <Content Include="June30Update\KM.monitormode.js" />
+    <Content Include="June30Update\KM.monitormode_backup_10_9.js" />
     <Content Include="KM.monitormode%281%29.js" />
     <Content Include="June30Update\monitormode-style.css" />
     <Content Include="June30Update\monitormode.html" />
@@ -120,7 +121,6 @@
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Demo\PersonalizeHTMLCSS\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="_imgs\logo-dh-small.png" />
-    <Content Include="June30Update\KM.monitormode_backup_23_8.js" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
