@@ -745,7 +745,23 @@ function DisplaySnoozeWindow() {
         $("#snoozeComments").text("Snooze period is over.Please provide snooze days to extend. : ");
     }
     else if (DisplayMode === personalizeMode) {
-        $("#snoozeComments").text("Care Transition Plan has been added. Please provide snooze days for all Care Management Schedule Plans : ");
+        var PatientId1 = parent.Xrm.Page.data.entity.getId();
+        var PatientId2 = PatientId1.replace("{", "");
+        var PatientId = PatientId2.replace("}", "");
+        var SnoozeArray1 = GetSnoozeDatesfromPatitentId(PatientId);
+        var SnoozeArray = Enumerable.From(SnoozeArray1)
+                          .Where(function (x) { return x.attributes.tri_snoozeuntil !== null && x.attributes.tri_snoozeuntil !== undefined && x.attributes.tri_snoozeuntil.formattedValue !== "" && new Date(x.attributes.tri_snoozeuntil.formattedValue).getTime() > new Date().getTime(); })
+                          .Select(function (x) { return { 'snoozedate': x.attributes.tri_snoozeuntil.formattedValue }; })
+                          .ToArray();
+
+        var additionalComment = "";
+        if (SnoozeArray.length > 0) {
+            var date = new Date(SnoozeArray[0].snoozedate);
+            var snoozedate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+            additionalComment = "The Care Management Schedule Plans are snoozed till : " + snoozedate;
+        }
+
+        $("#snoozeComments").text(additionalComment + " Please provide snooze days to add/update snooze date for all Care Management Schedule Plans or hit Cancel otherwise : ");
     }
 }
 
@@ -7186,7 +7202,8 @@ function gotoAddCarePlan() {
 
                     // Get data and show 
                     //DisplayPersonalizeMode(contactId);
-                    if (SnoozeCMSPlans(contactId)) {
+                   // if (SnoozeCMSPlans(contactId)) {
+                    if (IsScheduleCategoryPresent) {
                         DisplaySnoozeWindow();
                     }
                     else {
