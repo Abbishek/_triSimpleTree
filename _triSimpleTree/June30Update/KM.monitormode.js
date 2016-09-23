@@ -742,7 +742,7 @@ function DisplaySnoozeWindow() {
     });
 
     if ((DisplayMode === monitorMode)) {
-        $("#snoozeComments").text("Snooze period is over.Please provide snooze days to extend. : ");
+        $("#snoozeComments").text("Snooze period is over.Please provide snooze days to extend or hit cancel to remove Care Transition Schedule Plans. : ");
     }
     else if (DisplayMode === personalizeMode) {
         //Nadeem
@@ -767,11 +767,39 @@ function DisplaySnoozeWindow() {
 }
 
 $(document).on('click', '#snoozewrapperCancel', function () {
+
+    if (DisplayMode === monitorMode) {
+        var PatientId1 = parent.Xrm.Page.data.entity.getId();
+        var PatientId2 = PatientId1.replace("{", "");
+        var PatientId = PatientId2.replace("}", "");
+
+        // Get Distinct CarePlans where any CTS is selected
+        var distinctCarePlans = Enumerable.From(CarePlans)
+                                .Where(function (x) { return x.schedulecategory === 100000001; })
+                                .Select(function (x) { return x; })
+                                .Distinct(function (y) { return y.text; })
+                                .ToArray();
+
+        // Delete selected schedule plans
+        for (var i = 0; i < distinctCarePlans.length; i++) {
+            //var tri_cccareplan = {};
+            //tri_cccareplan.tri_cccareplanId = distinctCarePlans[i].value;
+            alert(distinctCarePlans[i].value);
+            SDK.REST.deleteRecord(distinctCarePlans[i].value, "tri_cccareplan", updateSuccessCallback, errorHandler);
+        }
+    }
+
     UpdateSnoozeDays(0);
 });
 
 $(document).on('click', '#snoozewrapperOk', function () {
-    UpdateSnoozeDays(Number($('#snoozedays').val()));
+    var snoozedays = Number($('#snoozedays').val());
+    if (snoozedays > 0) {
+        UpdateSnoozeDays(snoozedays);
+    }
+    else {
+        alert("Please provide Snooze Days greater than 0 or hit Cancel.");
+    }
 });
 
 $(document).on('blur', '#snoozedays', function () {
@@ -805,6 +833,8 @@ function UpdateSnoozeDays(snoozedays) {
         }
     }
 
+    $('#snoozedays').val(0);
+
     var PatientId1 = parent.Xrm.Page.data.entity.getId();
     var PatientId2 = PatientId1.replace("{", "");
     var PatientId = PatientId2.replace("}", "");
@@ -813,7 +843,8 @@ function UpdateSnoozeDays(snoozedays) {
         UpdateVitalFilters(PatientId, personalizeMode);
     }
     else if ((DisplayMode === monitorMode)) {
-        DisplayIndicators(PatientId);
+        UpdateVitalFilters(PatientId, monitorMode);
+        //DisplayIndicators(PatientId);
     }
 }
 
@@ -7096,7 +7127,7 @@ function dynamicToolTip(element) {
 }
 	
 function gotoAddCarePlan() {
-
+    debugger;
     IsDataChanged = false;
     vitalTypeToSaveArray = [];
     var personId = parent.Xrm.Page.data.entity.getId();
@@ -7201,12 +7232,6 @@ function gotoAddCarePlan() {
 
                 // Check if added careplanjoin records were created, then update the UI & dropdown 
                 if (addedCarePlan !== undefined && addedCarePlan !== null && addedCarePlan.length > 0) {
-                    // Get Distinct CarePlans
-                    //var distinctAddedCarePlans = Enumerable.From(addedCarePlan)
-                    //                             .Select(function (x) { return { 'text': x.text, 'value': x.value }; })
-                    //                             .Distinct(function (y) { return y.text; })
-                    //                             .ToArray();
-
                     carePathDropdownArray = Enumerable.From(carePathDropdownArray)
                                             .Where(function (x) { return x.text !== selectedCarePath; })
                                             .ToArray();
@@ -7217,8 +7242,31 @@ function gotoAddCarePlan() {
                     // Get data and show 
                     //DisplayPersonalizeMode(contactId);
                     //if (SnoozeCMSPlans(contactId)) {
-                    //Nadeem
-                    if (IsScheduleCategoryPresent) {
+                    var allPlan = GetCarePlanfromPatitentId(contactId);
+                    debugger;
+                    // Get all care plans
+                    var ScheduleCategoryCTSPlans = Enumerable.From(allPlan)
+                    .Where(function (y) {
+                        return y.attributes.tri_careplangoalid !== null && y.attributes.tri_careplangoalid !== undefined && y.attributes.tri_careplangoalid.id !== "" &&
+                               y.attributes.tri_schedulecategory !== null && y.attributes.tri_schedulecategory !== undefined && y.attributes.tri_schedulecategory.value === 100000001;
+                    })
+                    .Select(function (x) {
+                                            return {
+                                                'text': x.attributes.tri_planname.value,
+                                                'value': x.attributes.tri_careplanid.id,
+                                                'careplangoalid': x.attributes.tri_careplangoalid.id,
+                                                'schedulecategory': x.attributes.tri_schedulecategory.value,
+                                            };
+                                        }).ToArray();
+
+                    //var ScheduleCategoryCTSPresent = Enumerable.From(CarePlan)
+                    //                                 .Where(function (x) { return x.schedulecategory === 100000001; })
+                    //                                 .Select(function (x) { return x; })
+                    //                                 .ToArray();
+
+                    var IsAnyScheduleCategoryCTSPlansPresent = (ScheduleCategoryCTSPlans.length > 0 ? true : false);
+
+                    if (IsAnyScheduleCategoryCTSPlansPresent) {
                         DisplaySnoozeWindow();
                     }
                     else {
@@ -8159,7 +8207,9 @@ function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contac
 
                 var vitalUlSelector = $("#" + vULselector);
                 vitalUlSelector.html('');
-                IncrementalModifierTag2 = IncrementalModifierTag2 + '<li role="presentation" class="dropdown-header" id =' + tri_cccareplangoalId + '_NA>N/A</li>';
+                if (IncrementalModifierTag2.indexOf("_NA") == -1) {
+                    IncrementalModifierTag2 = IncrementalModifierTag2 + '<li role="presentation" class="dropdown-header" id =' + tri_cccareplangoalId + '_NA>N/A</li>';
+                }
                 vitalUlSelector.append(IncrementalModifierTag2);
             },
             function (error) {
@@ -9725,4 +9775,4 @@ function RetrieveVitalName(vVitalTypeId) {
    // return tri_name;
 }
 
-
+// JavaScript source code

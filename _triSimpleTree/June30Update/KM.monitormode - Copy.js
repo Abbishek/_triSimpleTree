@@ -745,6 +745,7 @@ function DisplaySnoozeWindow() {
         $("#snoozeComments").text("Snooze period is over.Please provide snooze days to extend. : ");
     }
     else if (DisplayMode === personalizeMode) {
+        //Nadeem
         var PatientId1 = parent.Xrm.Page.data.entity.getId();
         var PatientId2 = PatientId1.replace("{", "");
         var PatientId = PatientId2.replace("}", "");
@@ -766,6 +767,23 @@ function DisplaySnoozeWindow() {
 }
 
 $(document).on('click', '#snoozewrapperCancel', function () {
+    var PatientId1 = parent.Xrm.Page.data.entity.getId();
+    var PatientId2 = PatientId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
+
+    // Get Distinct CarePlans where any CTS is selected and rest other distinct
+    var distinctCarePlans = Enumerable.From(CarePlans)
+                            .Where(function (x) { return x.schedulecategory === 100000001; })
+                            .Select(function (x) { return x; })
+                            .Distinct(function (y) { return y.text; })
+                            .ToArray();
+
+    // Delete selected schedule plans
+    for (var i = 0; i < distinctCarePlans.length; i++) {
+        var tri_cccareplan = {};
+        tri_cccareplan.tri_cccareplanId = distinctCarePlans[i].value;
+        SDK.REST.deleteRecord(distinctCarePlans[i].value, tri_cccareplan, "tri_cccareplan", updateSuccessCallback, errorHandler);
+    }
     UpdateSnoozeDays(0);
 });
 
@@ -812,7 +830,8 @@ function UpdateSnoozeDays(snoozedays) {
         UpdateVitalFilters(PatientId, personalizeMode);
     }
     else if ((DisplayMode === monitorMode)) {
-        DisplayIndicators(PatientId);
+        UpdateVitalFilters(PatientId, monitorMode);
+        // DisplayIndicators(PatientId);
     }
 }
 
@@ -1918,9 +1937,11 @@ function ReviewAndUpdateGoal(currentId) {
   currentId,
   "tri_cccareplangoal",
   "tri_actiontriggervalue,tri_range,tri_PatientID,tri_metricoperatortwo,tri_vitalsvaluetype,tri_MetricOperator,tri_qualitativetarget,tri_Metric,tri_targetvaluetwo,tri_typeofgoalcode,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_qualitativeaction,tri_activityrecurrencemultiplierabnormal,tri_activityrecurrencemultipliernormal,tri_PatientModifierId,tri_activitydescription,tri_LastTargetValue,tri_activitydescriptionabnormal,tri_CarePlanGoalState,tri_LastGoalDate,tri_LastResultDate,tri_name,tri_NextDueDate,tri_typeofgoalcode,tri_patientmodifier_tri_cccareplangoal/tri_name,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype/tri_name",
-  'tri_patientmodifier_tri_cccareplangoal,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype,tri_lastresult',
+  'tri_patientmodifier_tri_cccareplangoal,tri_tri_vitalsvaluetype_tri_cccareplangoal_vitalsvaluetype,tri_lastresult,tri_cccareplangoalId',
   function (result) {
       //alert(result.tri_name);
+      var tri_cccareplangoalId = result.tri_cccareplangoalId;
+
       var tri_actiontriggervalue = result.tri_actiontriggervalue;
       var tri_activitydescription = result.tri_activitydescription;
       var tri_activitydescriptionabnormal = result.tri_activitydescriptionabnormal;
@@ -1961,7 +1982,7 @@ function ReviewAndUpdateGoal(currentId) {
 
      // alert(contactId);
 
-      GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetype, tri_PatientID);
+      GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetype, tri_PatientID,tri_cccareplangoalId);
 
       $('.monitor-wrapper').hide();
       $('.sectiontitle_personalize').text(tri_name);
@@ -1973,6 +1994,10 @@ function ReviewAndUpdateGoal(currentId) {
       $('.personalizenormalmultiplier').val(tri_activityrecurrencemultipliernormal).spinner();
       $('.personalizeabnormalmultiplier').val(tri_activityrecurrencemultiplierabnormal).spinner();
       $('.personalizetriggeraction').val(tri_qualitativeaction).prop('readonly', true);
+
+      $('.personalizetriggeraction').mouseover(function () {
+          dynamicToolTip(this);
+      });
       $('.savebtn_prsnlize1').attr('id', tri_vitalsvaluetype + "_PRSNLSAVEBTN");
       $('.personalizeULnormalrecurr').attr('id', tri_vitalsvaluetype + "_PRSNLULNRMLRCR");
       $('.personalizeULabnormalrecurr').attr('id', tri_vitalsvaluetype + "_PRSNLULABNRMLRCR");
@@ -2029,6 +2054,12 @@ function ReviewAndUpdateGoal(currentId) {
               //$('#tbl_ObservedValue').css('display', 'block');
               $('#tbl_ObservedValue').show();
               $('.personalizetargetvalQual').val(tri_qualitativetarget).addClass('qualitative').removeClass('quantitative');//.prop('readonly',true);
+              console.log("Inside Qual Value")
+
+              $('.personalizetargetvalQual').mouseover(function () {                  
+                  dynamicToolTip(this);
+              });
+
               $('.personalizequalitative,.personalizetargetvalQual').show();
               $('.personalizequantitative').hide();
               $('.personalizegoalbutton').prop({ disabled: false });
@@ -7075,11 +7106,12 @@ function GetSectionName(OptionSetVal) {
     
 }
 
-function dynamicToolTip(data,idtest){
-	      $("#"+idtest).attr('data-original-title', data)
+function dynamicToolTip(element) {
+    var toolTipData = element.value;
+    $(element).attr('data-original-title', toolTipData)
           .tooltip('fixTitle')
           .tooltip('show');
-	}
+}
 	
 function gotoAddCarePlan() {
 
@@ -7202,7 +7234,8 @@ function gotoAddCarePlan() {
 
                     // Get data and show 
                     //DisplayPersonalizeMode(contactId);
-                   // if (SnoozeCMSPlans(contactId)) {
+                    //if (SnoozeCMSPlans(contactId)) {
+                    //Nadeem
                     if (IsScheduleCategoryPresent) {
                         DisplaySnoozeWindow();
                     }
@@ -7309,7 +7342,8 @@ function DisplayPersonalizeMode(contactId) {
             //get the selected goal for this vital type
             if (tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined && (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1 || !IsRefreshedClicked) ){
 
-                if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1) {
+                if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1
+                    && new Date(tri_SnoozeUntil).getTime() > new Date().getTime()) {
                     tri_VitalValueTypeName = tri_VitalValueTypeName + " Snoozed till " + tri_SnoozeUntil;
                     }
                 // dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
@@ -7340,7 +7374,7 @@ function DisplayPersonalizeMode(contactId) {
                         var modifierList = "";
 
                         if (vVitalTypeId !== null && vVitalTypeId !== undefined) {
-                            modifierList = GetModifierBasedOnValueType(results[i].attributes["tri_vitalsvaluetype"].id, contactId);
+                            modifierList = GetModifierBasedOnValueType(results[i].attributes["tri_vitalsvaluetype"].id, contactId,tri_cccareplangoalId);
                         }
                         if (modifierList === undefined || modifierList === "") {
                             modifierList = "<li></li>";
@@ -7365,7 +7399,7 @@ function DisplayPersonalizeMode(contactId) {
               '<td class="labelcenter" style="width:90px; padding-right:20px;" colspan="4">' + //table2 column1 
               //<!-- FACTOR DROP-DOWN -->    
                 '<div class="btn-group" style="width: 90px;">' +
-                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="tooltip" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
+                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFactorButtonId + '><span class="caret"></span></button>' +
                 '<ul class="dropdown-menu" id=' + vVitalFactorULId + '>' + modifierList +
                 '</ul>' +
                   '</div>' +
@@ -7380,7 +7414,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7447,7 +7481,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7513,7 +7547,7 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
                     '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
@@ -7580,10 +7614,10 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
-                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    '<input  type="text" class="txtfieldquantitative" onmouseover ="dynamicToolTip(this)" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
                     //<!-- MODIFIER DROP-DOWN -->    
                     '<div class="btn-group" style="width:60px;">' +
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
@@ -7649,10 +7683,10 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
-                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    '<input  type="text" class="txtfieldquantitative" onmouseover ="dynamicToolTip(this)" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
                     //<!-- MODIFIER DROP-DOWN -->    
                     '<div class="btn-group" style="width:60px;">' +
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
@@ -7719,10 +7753,10 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
-                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    '<input  type="text" class="txtfieldquantitative" onmouseover ="dynamicToolTip(this)" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
                     //<!-- MODIFIER DROP-DOWN -->    
                     '<div class="btn-group" style="width:60px;">' +
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
@@ -7786,10 +7820,10 @@ function DisplayPersonalizeMode(contactId) {
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalMetricOperatorButtonIdTwo + ' style="display:none"><span class="caret"></span></button>' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
-                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    '<input  type="text" class="txtfieldquantitative" onmouseover ="dynamicToolTip(this)" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
                     //<!-- MODIFIER DROP-DOWN -->    
                     '<div class="btn-group" style="width:60px;">' +
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
@@ -7855,10 +7889,10 @@ function DisplayPersonalizeMode(contactId) {
                     '<p id =' + vVitalFactorANDId + ' style="display:none"> And </p><div class="btn-group">' +
                     '</div>' +
                     '<input type="text" class="txtfield" onChange="validateQuantitative(this);" id=' + vVitalFactortargetvaluetwoId + ' style="width:50px;text-align: left; padding-left: 10px; display:none" ></span>' +
-                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this.value,' + "'"+vVitalFactorQUALITATIVEId+"')"+'"' +' class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
+                    '<span class="qualititativespan" id=' + vVitalFactorQualSPAN + ' style="display:inline"><input type="text" data-toggle="tooltip" onmouseover ="dynamicToolTip(this)" class="txtfield" id="' + vVitalFactorQUALITATIVEId + '"  style="width:480px;text-align: left; padding-left: 10px; display:none" ></span>' +
                     '</td >' +
                     '<td width="220px">' + //
-                    '<input  type="text" class="txtfieldquantitative" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
+                    '<input  type="text" class="txtfieldquantitative" onmouseover ="dynamicToolTip(this)" style="width:45px;" id=' + vVitalFactorMULTIPLIER_NORMALId + '>' + //multiplier for normal reading
                     //<!-- MODIFIER DROP-DOWN -->    
                     '<div class="btn-group" style="width:60px;">' +
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id=' + vVitalFreqNormalButtonId + '><span class="caret"></span></button>' +
@@ -7982,7 +8016,7 @@ function AddVitaTypeToSave(inputId) {
     }
 }
 
-function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
+function GetModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccareplangoalId) {
         var FinalModifierTag = "";
         var vMdfrIdArray = [];
         var vMdfrIdGoalSelectedArray = [];
@@ -8053,6 +8087,11 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                      //alert(IncrementalModifierTag);
                     var vitalUlSelector = $("#" + vULselector);
                     vitalUlSelector.html('');
+
+                    if (IncrementalModifierTag.indexOf("_NAP") == -1) {                        
+                        IncrementalModifierTag = IncrementalModifierTag + '<li role="presentation" class="dropdown-header" id= ' + tri_cccareplangoalId + '_NAP' + '>N/A</li>';
+                    }
+
                     vitalUlSelector.append(IncrementalModifierTag);
                     /////
                     
@@ -8061,14 +8100,14 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
                         };// null check if closes here
                     };// for clses here
 
-                    // for single modifier default the goal, if goal selected is not true set it true
-                    if (vMdfrIdGoalSelectedArray.length = 1 && !vMdfrIdGoalSelectedArray[0].GoalSelecetd) {
-                        GetGoalForCurrentModifier(vMdfrIdGoalSelectedArray[0].ModifierId, tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
+                    //// for single modifier default the goal, if goal selected is not true set it true
+                    //if (vMdfrIdGoalSelectedArray.length = 1 && !vMdfrIdGoalSelectedArray[0].GoalSelecetd) {
+                    //    GetGoalForCurrentModifier(vMdfrIdGoalSelectedArray[0].ModifierId, tri_vitalsvaluetypeid, contactId, modifierValue, "personalize");
 
-                        var tri_cccareplangoal = {}
-                        tri_cccareplangoal.tri_GoalSelected = true;
-                        SDK.REST.updateRecord(vMdfrIdGoalSelectedArray[0].CarePlanGoalId, tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
-                    }
+                    //    var tri_cccareplangoal = {}
+                    //    tri_cccareplangoal.tri_GoalSelected = true;
+                    //    SDK.REST.updateRecord(vMdfrIdGoalSelectedArray[0].CarePlanGoalId, tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
+                    //}
                 };// array count if closes here
                 
             }
@@ -8077,7 +8116,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid,contactId) {
     //}; //top if ends here
 }
 
-function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId) {
+function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccareplangoalId) {
     var FinalModifierTag = "";
     var vMdfrIdArray = [];
     //var vMdfrTagArray = [];
@@ -8138,6 +8177,9 @@ function GetPersonLizationModifierBasedOnValueType(tri_vitalsvaluetypeid, contac
 
                 var vitalUlSelector = $("#" + vULselector);
                 vitalUlSelector.html('');
+                if (IncrementalModifierTag2.indexOf("_NA") == -1) {
+                    IncrementalModifierTag2 = IncrementalModifierTag2 + '<li role="presentation" class="dropdown-header" id =' + tri_cccareplangoalId + '_NA>N/A</li>';
+                }
                 vitalUlSelector.append(IncrementalModifierTag2);
             },
             function (error) {
@@ -8308,6 +8350,14 @@ $(document).on('click', '.dropdown-menu li', function () {
     var vParentUL = $(this).parent('ul').attr('id');
     var vModId = $(this).attr('id');
 
+    if (vModId.indexOf('_NA') !== -1) {
+        $(this).parent().siblings("button").text("N/A");    
+    } else {
+        var vModText = $(this).text();
+        $(this).parent().siblings("button").text(vModText);
+    }
+
+
     if (vParentUL !== null && vParentUL !== undefined) {
         var vULguid = vParentUL.substr(vParentUL.indexOf("_"), vParentUL.length);
         var vBTNid = "";
@@ -8467,7 +8517,7 @@ $(document).on('click', '.dropdown-menu li', function () {
         AddVitaTypeToSave(inputId);
         IsDataChanged = true;
 
-        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1) || (this.id.indexOf("ULPRNLGOAL") > -1)) {
+        if ((this.id.indexOf("_LIPRSNLN") > -1) || (inputId.indexOf("_BTN") > -1) || (this.id.indexOf("ULPRNLGOAL") > -1) || (this.id.indexOf("_NA") > -1)) {
             IsObservedValueAndFactorModifierChanged = true;
         }
         else {
@@ -8856,6 +8906,24 @@ function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId,curr
     var vMetricANDSelector = tri_vitalsvaluetypeid + "_AND";
     var ModIdStr = "";
     var ButtonText = "";
+
+    if (currText == "N/A") {
+        $("#" + vMETRICselector).val(0).spinner({ step: 1.00, numberFormat: "n" });
+        $("#" + vMULTIPLIER_NORMALselector).val("");//append  metric
+        $("#" + vMULTIPLIER_ABNORMALselector).val("");//append  metric
+        $("#" + vVitalFactorQUALITATIVEId).val("");
+        $("#" + vMETRICselector).val(0).spinner({ step: 1.00, numberFormat: "n" });
+        $("#" + vMETRICselectorTwo).val(0).spinner({ step: 1.00, numberFormat: "n" });
+        $('.personalizetargetvalQual').val("");
+        $('.personalizetriggeraction').val("");
+        $("#" + "observedValue").val("");
+        $('.personalizetargetvalMetric').val(0).spinner({ step: 1.00, numberFormat: "n" });
+        $('.personalizetargetvalMetricTwo').val(0).spinner({ step: 1.00, numberFormat: "n" });
+        //$('.personalizerecurrnormal').text("");
+        return;
+
+
+    }
     if (tri_vitalsvaluetypeid !== undefined && tri_vitalsvaluetypeid !== null && tri_vitalsvaluetypeid.length > 0 && vModId !== undefined && vModId !== null && vModId.length > 0) {
 
         SDK.JQuery.retrieveMultipleRecords(
@@ -9082,8 +9150,20 @@ function OnSaveClicked() {
         ClosePersonalizeWindow(PatientId);
     }
 
+    
+
     for (i = 0; i < vitalTypeToSaveArray.length; i++) {
         var vModfrName = $("#" + vitalTypeToSaveArray[i] + "_BTN").text();
+
+        var vNaId = $("#" + vitalTypeToSaveArray[i] + "_BTN").siblings().children("li:contains('N/A')").attr("id");
+
+        if (vNaId.indexOf("_NA") !== -1) {
+            if (vNaId.indexOf("_NAP") !== -1) {
+                vNaId = vNaId.replace("_NAP", "");
+            } else {
+                vNaId = vNaId.replace("_NA", "");
+            }
+        }
         var vMetricOprtrTxt = $("#" + vitalTypeToSaveArray[i] + "_MTRCOPRTRBTN").text();
         var vTargetValueTxt = $("#" + vitalTypeToSaveArray[i] + "_METRIC").val();
 
@@ -9123,9 +9203,22 @@ function OnSaveClicked() {
         if (i === vitalTypeToSaveArray.length - 1) {
             lastVitalId = vitalTypeToSaveArray[i];
         }
+
+        if (vModfrName == "N/A") {
+            //Update GoalSelected = False for this careplanId
+            var obj = {};
+            obj.tri_GoalSelected = false;
+            console.log("GoalId-" + vNaId);
+            SDK.REST.updateRecord(vNaId, obj, "tri_cccareplangoal", updateSuccessCallbackUpdate, errorHandler);
+            ClosePersonalizeWindow(PatientId);
+        }
     }
     vitalTypeToSaveArray.length = 0;
     IsPersonalizeClosed = true;
+}
+
+function updateSuccessCallbackUpdate() {
+    console.log("Successfully update GoalSelected");
 }
 
 function OnSavePrsnlizeClicked() {
@@ -9133,6 +9226,15 @@ function OnSavePrsnlizeClicked() {
     var vVitalTypIdStr1 = $('.savebtn_prsnlize1').attr('id');
     var vVitalTypId1 = vVitalTypIdStr1.replace("_PRSNLSAVEBTN", "");
     var vModfrName1 = $('.personalizemodifierbutton').text();
+    var vNaId = $('.personalizemodifierbutton').siblings().children("li:contains('N/A')").attr("id");
+
+    if (vNaId.indexOf("_NA") !== -1) {
+        if (vNaId.indexOf("_NAP") !== -1) {
+            vNaId = vNaId.replace("_NAP", "");
+        } else {
+            vNaId = vNaId.replace("_NA", "");
+        }
+    }
     var vMetricOprtrTxt1 = $('.personalizeoperatorOne').text();
     var vTargetValueTxt1 = $('.personalizetargetvalMetric').val();
     var vFreqNormalTxt1 = $('.personalizerecurrnormal').text();
@@ -9148,9 +9250,13 @@ function OnSavePrsnlizeClicked() {
     var vLastResultDate = new Date();
 
     //alert(vGoalStateTxt1);
+    var contactId1;
     if (parent.Xrm !== undefined) {
-        var contactId1 = parent.Xrm.Page.data.entity.getId();
+        contactId1 = parent.Xrm.Page.data.entity.getId();
     };
+
+    var PatientId2 = contactId1.replace("{", "");
+    var PatientId = PatientId2.replace("}", "");
 
     var vOsetValMetricOperator1 = "";
     if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
@@ -9177,6 +9283,17 @@ function OnSavePrsnlizeClicked() {
     };
 
     GetModfrIdFromName(vVitalTypId1, contactId1, vModfrName1, vOsetValMetricOperator1, vTargetValueTxt1, vOsetValFreqNormal1, vOsetValFreqAbNormal1, "", vMultiplierNormalTxt1, vMultiplierAbormalTxt1, vTargetValue2Txt1, vQualTxt1, vOsetValMetricOperator21, vOsetValGoalState1, vobservedValue, vLastResultDate);
+
+    if (vModfrName1 == "N/A") {
+        //Update GoalSelected = False for this careplanId
+        var obj = {};
+        obj.tri_GoalSelected = false;
+        console.log("GoalId-" + vNaId);
+        SDK.REST.updateRecord(vNaId, obj, "tri_cccareplangoal", updateSuccessCallbackUpdate, errorHandler);
+        CloseWindowWrapper(PatientId);
+    }
+
+
     lastVitalId = vVitalTypId1;
     IsDataChanged = false;
     IsWindowsWrapperClosed = true;
@@ -9628,5 +9745,4 @@ function RetrieveVitalName(vVitalTypeId) {
    // return tri_name;
 }
 
-
-
+// JavaScript source code
