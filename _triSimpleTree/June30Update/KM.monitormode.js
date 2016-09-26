@@ -920,7 +920,7 @@ function SnoozeCMSPlans(PatientId)
                       .Select(function (x) { return { 'snoozedate': x.attributes.tri_snoozeuntil.formattedValue }; })
                       .ToArray();
 
-    if (SnoozeArray.length <= 0 && IsScheduleCategoryPresent) {
+    if (SnoozeArray.length <= 0 && IsScheduleCategoryCTS(PatientId)) {
         return true;
     }
     else {
@@ -7239,34 +7239,7 @@ function gotoAddCarePlan() {
                     kendoAutoCompleteWC.setDataSource(carePathDropdownArray);
                     $('#carePaths').val('');
 
-                    // Get data and show 
-                    //DisplayPersonalizeMode(contactId);
-                    //if (SnoozeCMSPlans(contactId)) {
-                    var allPlan = GetCarePlanfromPatitentId(contactId);
-                    debugger;
-                    // Get all care plans
-                    var ScheduleCategoryCTSPlans = Enumerable.From(allPlan)
-                    .Where(function (y) {
-                        return y.attributes.tri_careplangoalid !== null && y.attributes.tri_careplangoalid !== undefined && y.attributes.tri_careplangoalid.id !== "" &&
-                               y.attributes.tri_schedulecategory !== null && y.attributes.tri_schedulecategory !== undefined && y.attributes.tri_schedulecategory.value === 100000001;
-                    })
-                    .Select(function (x) {
-                                            return {
-                                                'text': x.attributes.tri_planname.value,
-                                                'value': x.attributes.tri_careplanid.id,
-                                                'careplangoalid': x.attributes.tri_careplangoalid.id,
-                                                'schedulecategory': x.attributes.tri_schedulecategory.value,
-                                            };
-                                        }).ToArray();
-
-                    //var ScheduleCategoryCTSPresent = Enumerable.From(CarePlan)
-                    //                                 .Where(function (x) { return x.schedulecategory === 100000001; })
-                    //                                 .Select(function (x) { return x; })
-                    //                                 .ToArray();
-
-                    var IsAnyScheduleCategoryCTSPlansPresent = (ScheduleCategoryCTSPlans.length > 0 ? true : false);
-
-                    if (IsAnyScheduleCategoryCTSPlansPresent) {
+                    if (IsScheduleCategoryCTS(contactId)) {
                         DisplaySnoozeWindow();
                     }
                     else {
@@ -7282,6 +7255,27 @@ function gotoAddCarePlan() {
     };//if closes here
 }
 
+
+function IsScheduleCategoryCTS(contactId) {
+    // Get data and show 
+    var allPlan = GetCarePlanfromPatitentId(contactId);
+    // Get all care plans
+    var ScheduleCategoryCTSPlans = Enumerable.From(allPlan)
+    .Where(function (y) {
+        return y.attributes.tri_careplangoalid !== null && y.attributes.tri_careplangoalid !== undefined && y.attributes.tri_careplangoalid.id !== "" &&
+               y.attributes.tri_schedulecategory !== null && y.attributes.tri_schedulecategory !== undefined && y.attributes.tri_schedulecategory.value === 100000001;
+    })
+    .Select(function (x) {
+        return {
+            'text': x.attributes.tri_planname.value,
+            'value': x.attributes.tri_careplanid.id,
+            'careplangoalid': x.attributes.tri_careplangoalid.id,
+            'schedulecategory': x.attributes.tri_schedulecategory.value,
+        };
+    }).ToArray();
+
+    return (ScheduleCategoryCTSPlans.length > 0 ? true : false);
+}
 
 function DisplayPersonalizeMode(contactId) {
 
