@@ -74,9 +74,7 @@
     <Content Include="June28Update\monitormode.html" />
     <Content Include="June28Update\personalize-style.css" />
     <Content Include="June30Update\bootstrap.css" />
-    <Content Include="June30Update\KM.monitormode - Copy.js" />
     <Content Include="June30Update\KM.monitormode.js" />
-    <Content Include="June30Update\KM.monitormode_backup_10_9.js" />
     <Content Include="KM.monitormode%281%29.js" />
     <Content Include="June30Update\monitormode-style.css" />
     <Content Include="June30Update\monitormode.html" />
@@ -95,6 +93,12 @@
     <Content Include="NewUI\monitormode-style.css" />
     <Content Include="NewUI\monitormode.html" />
     <Content Include="NewUI\personalize-style.css" />
+    <Content Include="SAAS Webresource files\bootstrap.css" />
+    <Content Include="SAAS Webresource files\KM.monitormode.js" />
+    <Content Include="SAAS Webresource files\monitormode-style.css" />
+    <Content Include="SAAS Webresource files\monitormode.html" />
+    <Content Include="SAAS Webresource files\PatientMonitorMode.js" />
+    <Content Include="SAAS Webresource files\personalize-style.css" />
     <Content Include="temp.html" />
     <Content Include="tri_css\bootstrap.css" />
     <Content Include="tri_css\Default\sprite.png" />

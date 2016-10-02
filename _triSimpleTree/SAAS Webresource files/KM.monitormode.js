@@ -162,8 +162,21 @@ $(document).ready(function () {
     var joinEntityCollection = null;
     
     if (PatientId1 === null || PatientId1 === "") {
+
+       
+        var items = parent.Xrm.Page.ui.formSelector.items.get();
+        for (var i in items) {
+            var item = items[i];
+            var itemId = item.getId();
+            var itemLabel = item.getLabel()
+
+            if (itemLabel != "Health360 Core") {
+                //navigate to the form
+                gotohealth360Form();
+            } //endif
+        } //end for
         
-        gotohealth360Form();
+       
 
     };
     if (PatientId !== null && PatientId !== "") {
@@ -952,12 +965,12 @@ function DisplayFilteredData(PatientId,mode) {
     });
 
     if (mode === monitorMode) {
-        if (SnoozeCMSPlans(PatientId)) {
-            DisplaySnoozeWindow();
-        }
-        else {
+        //if (SnoozeCMSPlans(PatientId)) {
+        //    DisplaySnoozeWindow();
+        //}
+        //else {
             DisplayIndicators(PatientId);  ///////////////
-        }
+        //}
     }
     else if (mode === personalizeMode) {
         DisplayPersonalizeMode(PatientId);
@@ -7291,12 +7304,12 @@ function gotoAddCarePlan() {
                     kendoAutoCompleteWC.setDataSource(carePathDropdownArray);
                     $('#carePaths').val('');
 
-                    if (IsScheduleCategoryCTS(contactId)) {
-                        DisplaySnoozeWindow();
-                    }
-                    else {
+                    //if (IsScheduleCategoryCTS(contactId)) {
+                    //    DisplaySnoozeWindow();
+                    //}
+                    //else {
                         UpdateVitalFilters(contactId, personalizeMode);
-                    }
+                    //}
                 }
             }
         };
@@ -7419,10 +7432,10 @@ function DisplayPersonalizeMode(contactId) {
             //get the selected goal for this vital type
             if (tri_VitalValueTypeName !== null && tri_VitalValueTypeName !== undefined && (filteredCarePlangoalIds.indexOf(tri_cccareplangoalId) == -1 || !IsRefreshedClicked) ){
 
-                if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1
-                    && new Date(tri_SnoozeUntil).getTime() > new Date().getTime()) {
-                    tri_VitalValueTypeName = tri_VitalValueTypeName + " Snoozed till " + tri_SnoozeUntil;
-                    }
+                //if (IsScheduleCategoryPresent && tri_cccareplangoalId !== undefined && tri_cccareplangoalId !== null && CMSPlanArray.indexOf(tri_cccareplangoalId) > -1
+                //    && new Date(tri_SnoozeUntil).getTime() > new Date().getTime()) {
+                //    tri_VitalValueTypeName = tri_VitalValueTypeName + " Snoozed till " + tri_SnoozeUntil;
+                //    }
                 // dateNowPlus7.getFullYear() + '-' + ("0" + (dateNowPlus7.getMonth() + 1)).slice(-2) + '-' + ("0" + dateNowPlus7.getDate()).slice(-2) + "T05:00:00.000Z";
 
                     var IndexOfVitalType = VitalTypeArray.indexOf(tri_VitalValueTypeName);
@@ -8012,13 +8025,14 @@ function DisplayPersonalizeMode(contactId) {
     };//end if
     $('.Personalize-details').html('');
     vFinalTbl = '<div class="panel-group" id="accordion">' +
-                 CreateTooglePanels(vTblRowsSymptoms, 'Symptoms', 'panelSymptoms') +
-                 CreateTooglePanels(vTblRowsTestCare, 'Tests/Care', 'panelTestsCare') +
-                 CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
+                 CreateTooglePanels(vTblRowsSymptoms, 'Personal Goals', 'panelSymptoms') +
+                 CreateTooglePanels(vTblRowsTestCare, 'Tests / Vitals', 'panelTestsCare') +
+                 //CreateTooglePanels(vTblRowsHomeVitals, 'Home Vitals', 'panelHomeVitals') +
                  CreateTooglePanels(vTblRowsMedications, 'Medications', 'panelMedications') +
-                 CreateTooglePanels(vTblRowsActivity, 'Activity', 'panelActivity') +
-                 CreateTooglePanels(vTblRowsNutrition, 'Nutrition', 'panelNutrition') +
-                 CreateTooglePanels(vTblRowsPyschoSocial, 'Psycho-Social/Behavioral Health', 'panelPsychoSocial') +
+                 CreateTooglePanels(vTblRowsNutrition, 'Activity / Nutrition', 'panelNutrition') +
+                 CreateTooglePanels(vTblRowsActivity, 'Support Services', 'panelActivity') +
+                 CreateTooglePanels(vTblRowsPyschoSocial, 'Behavioral Health', 'panelPsychoSocial') +
+                // CreateTooglePanels(vTblRowsNutrition, 'Support Services', 'panelNutrition') +
                  CreateTooglePanels(vTblRowsWrapUp, 'Wrap-Up', 'panelWrap') +
                  '<table class="maintable" >' +//table5 start
                  '<tr></tr>' +
@@ -9168,22 +9182,22 @@ function () {
 }
 
 function AcknowledgementDialog() {
-    if (IsOtherValuesChanged) {
-        $("#alert-wrapper").dialog({
-            //  title: "jQuery Dialog Popup",
-            modal: true,
-            width: 400,
-            position: { my: "center top", at: "center top" },
-            show: { effect: "blind", duration: 800 },
-            hide: { effect: "blind", duration: 400 },
-        });
-    }
-    else if(IsObservedValueAndFactorModifierChanged){
+    //if (IsOtherValuesChanged) {
+    //    $("#alert-wrapper").dialog({
+    //        //  title: "jQuery Dialog Popup",
+    //        modal: true,
+    //        width: 400,
+    //        position: { my: "center top", at: "center top" },
+    //        show: { effect: "blind", duration: 800 },
+    //        hide: { effect: "blind", duration: 400 },
+    //    });
+    //}
+    //else if(IsObservedValueAndFactorModifierChanged){
         SaveData();
-    }
-    else if (!IsObservedValueAndFactorModifierChanged && !IsOtherValuesChanged) {
-        SaveData();
-    }
+    //}
+    //else if (!IsObservedValueAndFactorModifierChanged && !IsOtherValuesChanged) {
+    //    SaveData();
+    //}
 }
 
 $(document).on('click', '.greybtn-alert', function () {
@@ -9227,12 +9241,15 @@ function OnSaveClicked() {
         ClosePersonalizeWindow(PatientId);
     }
 
+    
+
     for (i = 0; i < vitalTypeToSaveArray.length; i++) {
         var vModfrName = $("#" + vitalTypeToSaveArray[i] + "_BTN").text();
 
         var vNaId = $("#" + vitalTypeToSaveArray[i] + "_BTN").siblings().children("li:contains('N/A')").attr("id");
 
-        if (vNaId === undefined || vNaId === null) {
+        if (vNaId === undefined || vNaId === null)
+        {
             vNaId = "";
         }
 
@@ -9765,7 +9782,7 @@ function validateQuantitative(thistxtBox) {
     //alert($(thistxtBox).attr('class'));
 }
 function gotohealth360Form() {
-    alert("Cannot create new Patient here. Switching Form.");
+   
     var items = parent.Xrm.Page.ui.formSelector.items.get();
     for (var i in items) {
         var item = items[i];
@@ -9774,6 +9791,7 @@ function gotohealth360Form() {
 
         if (itemLabel == "Health360 Core") {
             //navigate to the form
+            alert("Cannot create new Patient here. Switching Form.");
             item.navigate();
         } //endif
     } //end for
