@@ -133,29 +133,30 @@ function GetQuestionCategories(_tri_assessmenttypeid_value) {
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
-                
+                var fieldsets = "";
                 for (var i = 0; i < results.value.length; i++) {
                     var tri_name = results.value[i]["tri_name"];
                     var tri_assessmentquestioncategoryid = results.value[i]["tri_assessmentquestioncategoryid"];
 
                     if (i === 0) {
                         $("#progressbar").append('<li class="active">' + tri_name + '</li>');
-                       
+
                     }
                     else {
                         $("#progressbar").append('<li>' + tri_name + '</li>');
                     }
 
-                    $('#fieldsets').append('<fieldset>' +
-		                '<h2 class="fs-title">' + tri_name + '</h2>' +
-		                '<h3 class="fs-subtitle">' + tri_name + '</h3>' +
-		                    //alert(GetAssesmentQuestions(_tri_assessmenttypeid_value,tri_assessmentquestioncategoryid))+
-                            //alert(GetAssesmentAnswers(_tri_assessmenttypeid_value)) +
-                        '<input type="button" name="previous" class="previous action-button" value="Previous" />' +
-                        '<input type="button" name="next" class="next action-button" value="Next" />' +
-                    '</fieldset>');
+                    GetAssesmentQuestions(tri_name, _tri_assessmenttypeid_value, tri_assessmentquestioncategoryid);
+                    //GetAssesmentAnswers(_tri_assessmenttypeid_value);
 
+                    //fieldsets =  '<fieldset>' +
+                    //                '<h2 class="fs-title">' + tri_name + '</h2>' +
+                    //                '<h3 class="fs-subtitle">' + tri_name + '</h3>' + getquestions + getanswers +
+                    //                '<input type="button" name="previous" class="previous action-button" value="Previous" />' +
+                    //                '<input type="button" name="next" class="next action-button" value="Next" />' +
+                    //            '</fieldset>';
                 }
+                // $('#fieldsets').append(fieldsets);
             }
             else {
                 alert(this.statusText);
@@ -166,7 +167,7 @@ function GetQuestionCategories(_tri_assessmenttypeid_value) {
 
 }
 
-function GetAssesmentQuestions(assessmenttypeid,questionCategoryId) {
+function GetAssesmentQuestions(sectionname,assessmenttypeid,questionCategoryId) {
     var req = new XMLHttpRequest();
     req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentquestions?$select=tri_answertype,tri_answertypetext,_tri_assessmentquestioncategoryid_value,tri_assessmentquestionid,_tri_assessmenttypeid_value,tri_includecomments,tri_isrequired,tri_name,tri_questionnumber&$filter=_tri_assessmenttypeid_value eq " + assessmenttypeid + " and  _tri_assessmentquestioncategoryid_value eq "+questionCategoryId, true);
     req.setRequestHeader("OData-MaxVersion", "4.0");
@@ -179,6 +180,7 @@ function GetAssesmentQuestions(assessmenttypeid,questionCategoryId) {
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
+                var questionsset = "";
                 for (var i = 0; i < results.value.length; i++) {
                     var tri_answertype = results.value[i]["tri_answertype"];
                     var tri_answertype_formatted = results.value[i]["tri_answertype@OData.Community.Display.V1.FormattedValue"];
@@ -196,10 +198,11 @@ function GetAssesmentQuestions(assessmenttypeid,questionCategoryId) {
                     var tri_questionnumber = results.value[i]["tri_questionnumber"];
                     var tri_questionnumber_formatted = results.value[i]["tri_questionnumber@OData.Community.Display.V1.FormattedValue"];
 
-                    alert(_tri_assessmentquestioncategoryid_value);
                     // display questions
-                    return '<span>' + tri_questionnumber + '.</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
+                    questionsset = '<span>' + tri_questionnumber + '.</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
+                    GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid);
                 }
+                //return questionsset;
             }
             else {
                 alert(this.statusText);
@@ -209,9 +212,9 @@ function GetAssesmentQuestions(assessmenttypeid,questionCategoryId) {
     req.send();
 }
 
-function GetAssesmentAnswers(assessmenttypeid) {
+function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questionid) {
     var req = new XMLHttpRequest();
-    req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentanswers?$select=tri_answervalue,tri_assessmentanswerid,_tri_assessmentquestionid_value,_tri_assessmenttypeid_value,tri_name&$filter=_tri_assessmenttypeid_value eq " + assessmenttypeid, true);
+    req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentanswers?$select=tri_answervalue,tri_assessmentanswerid,_tri_assessmentquestionid_value,_tri_assessmenttypeid_value,tri_name&$filter=_tri_assessmenttypeid_value eq " + assessmenttypeid + " and _tri_assessmentquestionid_value eq "+ questionid, true);
     req.setRequestHeader("OData-MaxVersion", "4.0");
     req.setRequestHeader("OData-Version", "4.0");
     req.setRequestHeader("Accept", "application/json");
@@ -222,6 +225,7 @@ function GetAssesmentAnswers(assessmenttypeid) {
             req.onreadystatechange = null;
             if (this.status === 200) {
                 var results = JSON.parse(this.response);
+                var getanswers = "";
                 for (var i = 0; i < results.value.length; i++) {
                     var tri_answervalue = results.value[i]["tri_answervalue"];
                     var tri_answervalue_formatted = results.value[i]["tri_answervalue@OData.Community.Display.V1.FormattedValue"];
@@ -231,9 +235,18 @@ function GetAssesmentAnswers(assessmenttypeid) {
                     var _tri_assessmenttypeid_value = results.value[i]["_tri_assessmenttypeid_value"];
                     var _tri_assessmenttypeid_value_formatted = results.value[i]["_tri_assessmenttypeid_value@OData.Community.Display.V1.FormattedValue"];
                     var tri_name = results.value[i]["tri_name"];
-
-                    return '<span></span>';
+                    getanswers = getanswers + '<span>' + tri_answervalue + '</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
                 }
+                var fieldsets =  '<fieldset>' +
+                                    '<h2 class="fs-title">' + sectionname + '</h2>' +
+                                    '<h3 class="fs-subtitle">' + sectionname + '</h3>' +
+                                        questionsset +
+                                        getanswers +
+                                    '<input type="button" name="previous" class="previous action-button" value="Previous" />' +
+                                    '<input type="button" name="next" class="next action-button" value="Next" />' +
+                                '</fieldset>';
+
+                $('#fieldsets').append(fieldsets);
             }
             else {
                 alert(this.statusText);
