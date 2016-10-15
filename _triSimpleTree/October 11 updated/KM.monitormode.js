@@ -774,91 +774,47 @@ function DisplaySnoozeWindow() {
 
 $(document).on('click', '#snoozewrapperCancel', function () {
 
-    $('#snoozewrapperCancel').prop("disabled", true);
-    $('#snoozewrapperOk').prop("disabled", true);
-
+    // $('#snoozewrapperCancel').prop('disabled', true);
+    $('#snoozewrapperOk').prop('disabled', true);
+    $($('#snoozewrapperCancel')[0]).prop('disabled', true);
     if (DisplayMode === monitorMode) {
         var PatientId1 = parent.Xrm.Page.data.entity.getId();
         var PatientId2 = PatientId1.replace("{", "");
         var PatientId = PatientId2.replace("}", "");
 
         // Get Distinct CarePlans where any CTS is selected
-        var distinctCarePlans = Enumerable.From(CarePlans)
-                                .Where(function (x) { return x.schedulecategory === 100000001; })
+        var careplanarray = GetCarePlanfromPatitentId(PatientId);
+        var distinctCarePlans = Enumerable.From(careplanarray)
+                                .Where(function (x) { return x.attributes.tri_schedulecategory.value === 100000001; })
                                 .Select(function (x) { return x; })
-                                .Distinct(function (y) { return y.text; })
+                                .Distinct(function (y) { return y.attributes.tri_planname.value; })
                                 .ToArray();
 
         debugger;
 
-        // Delete selected schedule plans
-        for (var i = 0; i < distinctCarePlans.length; i++) {
-            var careplanId = distinctCarePlans[i].value;
+        if (distinctCarePlans.length > 0) {
+            // Delete selected schedule plans
+            for (var i = 0; i < distinctCarePlans.length; i++) {
+                var careplanId = distinctCarePlans[i].attributes.tri_careplanid.id;
+                SDK.REST.deleteRecord(careplanId,
+                                        "tri_cccareplan",
+                                        function () {
+                                            alert("Care Plan :" + careplanId + " is deleted.");
+                                            //if (i == distinctCarePlans.length - 1) {
+                                            //    alert("Going to UpdateSnoozeDays :",i);
+                                            //    UpdateSnoozeDays(0);
+                                            //}
+                                        },
+                                        errorHandler);
 
-            // var carePlanJoins = GetCarePlanfromCarePlanId(careplanId);
-            //for (var j = 0; j < carePlanJoins.length; j++) {
-            //    var carePlanJoinId = carePlanJoins[j].id;
-            //    // delete care plan join records
-            //    SDK.REST.deleteRecord(carePlanJoinId,
-            //                          "tri_careplanjoin",
-            //                          function () {
-            //                              if (j == carePlanJoins.length - 1) {
-            //                                  alert("Care Plan Join :" + carePlanJoinId + " is deleted.");
-            //                                  // delete care plan records 
-            //                                  SDK.REST.deleteRecord(careplanId,
-            //                                                        "tri_cccareplan",
-            //                                                        function () {
-            //                                                            alert("Care Plan :" + careplanId + " is deleted.");
-            //                                                            if (i == distinctCarePlans.length - 1) {
-            //                                                                UpdateSnoozeDays(0);
-            //                                                            }
-            //                                                        },
-            //                                                        errorHandler);
-            //                              }
-            //                          },
-            //                          errorHandler);
-            //}
-
-            //for (var i = 0; i < CMSPlanArray.length; i++) {
-            //    var tri_cccareplangoal = {}
-            //    tri_cccareplangoal.statecode = { value: 2 }; ////
-            //    SDK.REST.updateRecord(CMSPlanArray[i], tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
-            //}
-
-            var tri_cccareplan = {};
-            tri_cccareplan.statecode = { Value: 1 };
-            tri_cccareplan.statuscode = { Value: 2 };
-            //delete care plan records 
-            SDK.REST.updateRecord(careplanId,
-                                tri_cccareplan,
-                                "tri_cccareplan",
-                                function () {
-                                    //alert("Care Plan :" + careplanId + " is deleted.");
-                                    if (i == distinctCarePlans.length - 1) {
-                                        debugger;
-                                        UpdateSnoozeDays(0);
-                                        debugger;
-                                    }
-                                },
-                                errorHandler);
+            }
+            UpdateSnoozeDays(0);
         }
-
-
-        //// Delete selected schedule plans
-        //for (var i = 0; i < distinctCarePlans.length; i++) {
-        //    var careplanId = distinctCarePlans[i].value;
-
-        //    var carePlanJoins = GetCarePlanfromCarePlanId(careplanId);
-        //    for (var j = 0; j < carePlanJoins.length; j++) {
-        //        var carePlanJoinId = carePlanJoins[j].id;
-        //        // delete care plan join records
-        //        SDK.REST.deleteRecord(carePlanJoinId, "tri_careplanjoin", function () { alert("Care Plan Join :" + carePlanJoinId + " is deleted.") }, errorHandler);
-        //    }
-        //    // delete care plan records 
-        //    SDK.REST.deleteRecord(careplanId, "tri_cccareplan", function () { alert("Care Plan :" + careplanId + " is deleted.") }, errorHandler);
-        //}
-        //UpdateSnoozeDays(0);
     }
+    else {
+        UpdateSnoozeDays(0);
+    }
+
 });
 
 $(document).on('click', '#snoozewrapperOk', function () {
@@ -916,8 +872,8 @@ function UpdateSnoozeDays(snoozedays) {
         UpdateVitalFilters(PatientId, monitorMode);
         //DisplayIndicators(PatientId);
     }
-    $('#snoozewrapperCancel').prop("disabled", false);
-    $('#snoozewrapperOk').prop("disabled", false);
+    $('#snoozewrapperCancel').prop('disabled', false);
+    $('#snoozewrapperOk').prop('disabled', false);
 }
 
 $(document).on('click', '#btnFilterRefresh', function () {
@@ -2616,6 +2572,11 @@ function () {
 $(document).on('click', '.dropdown-menu li', function () {
     var vParentUL = $(this).parent('ul').attr('id');
     var vModId = $(this).attr('id');
+
+    if (vModId === undefined || vModId === null)
+    {
+        vModId = "";
+    }
 
     if (vModId.indexOf('_NA') !== -1) {
         $(this).parent().siblings("button").text("N/A");
