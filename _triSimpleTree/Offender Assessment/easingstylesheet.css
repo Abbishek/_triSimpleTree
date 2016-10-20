@@ -48,7 +48,7 @@ body {
 	border: 1px solid #ccc;
 	border-radius: 3px;
 	margin-bottom: 10px;
-	width: 100%;
+	/*width: 100%;*/
 	box-sizing: border-box;
 	font-family: montserrat;
 	color: #2C3E50;
@@ -73,7 +73,7 @@ body {
 .fs-title {
 	font-size: 15px;
 	text-transform: uppercase;
-	color: #2C3E50;
+	color: #fff;
 	margin-bottom: 10px;
 }
 .fs-subtitle {
