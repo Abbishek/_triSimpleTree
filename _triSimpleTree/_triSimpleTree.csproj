@@ -57,8 +57,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assessment2.html" />
-    <Content Include="AssessmentWizard.js" />
     <Content Include="Demo\MonitorModeHTMLCSS\images\calendar.png" />
     <Content Include="Demo\MonitorModeHTMLCSS\monitomode.html" />
     <Content Include="Demo\MonitorModeHTMLCSS\monitormode-style.css" />
