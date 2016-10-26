@@ -106,7 +106,12 @@ $(document).ready(function () {
 
     $(".submit").click(function () {
         return false;
-})
+    })
+
+    $(function () {
+        $(".datepicker").datepicker();
+        $(".numeric").spinner({ step: 1.00, numberFormat: "n" });
+    });
 
 });
 
@@ -476,12 +481,17 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
 
                 req.onreadystatechange = null;
                 if (this.status === 200) {
-                    var questionToMatch = lstAssesmentDetails.find(function (x) { return x.QuestionId == questionid; });
-                    var answerValueToMatch = ""
-                    if(questionToMatch !== null && questionToMatch !== undefined)
-                    {
-                        answerValueToMatch = questionToMatch.AnswerValue;
-                    }
+                    //var questionToMatch = lstAssesmentDetails.find(function (x) { return x.QuestionId == questionid; });
+
+                    var answerValueToMatch = $.map(lstAssesmentDetails, function (val) {
+                        return val.QuestionId == questionid ? val.AnswerValue : null;
+                    });
+
+                    //var answerValueToMatch = ""
+                    //if(questionToMatch !== null && questionToMatch !== undefined)
+                    //{
+                    //    answerValueToMatch = questionToMatch.AnswerValue;
+                    //}
 
                     var results = JSON.parse(this.response);	
                     if (results.value.length > 0) {
@@ -497,7 +507,7 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
 
                             // check if answe matches to existing then introduce checked
                             var checked = "";
-                            if (tri_answervalue === answerValueToMatch) {
+                            if (tri_answervalue === answerValueToMatch && answerValueToMatch !== null) {
                                 checked = 'checked="checked"';
                             }
 
@@ -516,13 +526,14 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                                 answercontrols = '<textarea rows="4" id="' + questionid + '_textarea" maxlength="4000" cols="100">' + tri_name + '</textarea><br>'
                             }
                             else if (answerType === 100000002) {
-                                answercontrols = '<input type="date" name="' + questionid + '_date" value="' + tri_answervalue + '" max="1979-12-31"><br>'; // we can show this with jquery date picker even
+                                // answercontrols = '<input type="date" name="' + questionid + '_date" value="' + tri_answervalue + '" max="1979-12-31"><br>'; // we can show this with jquery date picker even
+                                answercontrols = '<input type="text" name="' + questionid + '_date" value="' + tri_answervalue + '" class="datepicker"><br>'; // we can show this with jquery date picker even
                             }
                             else if (answerType === 100000004) {
-                                answercontrols = '';  // , you can use the spinner control.
+                                answercontrols = '<input style="border-color: transparent;" type="text" name="' + questionid + '_numeric" value="' + tri_answervalue + '" class="numeric"><br>';  // , you can use the spinner control.
                             }
                             else if (answerType === 100000005) {
-                                answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_answervalue + '">' + tri_name + '<br>';
+                                answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_answervalue + '">' + tri_name;// + '<br>';
                             }
 
                             window.getanswers = window.getanswers + answercontrols; //CreateAnswers(tri_answervalue, tri_name, answertype, questionid); //'<span>' + tri_answervalue + '</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
@@ -540,10 +551,10 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                             answercontrols = '<textarea rows="4" id="' + questionid + '_textarea" maxlength="4000" cols="100"></textarea><br>'
                         }
                         else if (answerType === 100000002) {
-                            answercontrols = '<input type="date" name="' + questionid + '_date" max="1979-12-31"><br>'; // we can show this with jquery date picker even
+                            answercontrols = '<input type="text" name="' + questionid + '_date" class="datepicker"><br>'; // we can show this with jquery date picker even
                         }
                         else if (answerType === 100000004) {
-                            answercontrols = '';  // , you can use the spinner control. Numeric
+                            answercontrols = '<input style="border-color: transparent;" type="text" name="' + questionid + '_numeric" class="numeric"><br>';;  // , you can use the spinner control. Numeric
                         }
                         //else if (answerType === 100000005) {
                         //    answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" value="' + tri_answervalue + '">' + tri_name + '<br>';
