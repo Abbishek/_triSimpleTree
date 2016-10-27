@@ -113,6 +113,7 @@
     <Content Include="Offender Assessment\Backups\Oct 13 2016\AssessmentPrintIframe.html" />
     <Content Include="Offender Assessment\easingstylesheet.css" />
     <Content Include="Offender Assessment\jquery.easing.js" />
+    <Content Include="Offender Assessment\SDK.WEBAPI.js" />
     <Content Include="SAAS Webresource files\bootstrap.css" />
     <Content Include="SAAS Webresource files\KM.monitormode.js" />
     <Content Include="SAAS Webresource files\monitormode-style.css" />
