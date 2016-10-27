@@ -339,11 +339,13 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
             var tri_name = results.value[i]["tri_name"];
             var tri_questionnumber = results.value[i]["tri_questionnumber"];
             var tri_questionnumber_formatted = results.value[i]["tri_questionnumber@OData.Community.Display.V1.FormattedValue"];
+            var tri_memofieldsize = results.value[i]["tri_memofieldsize"];
+            var tri_memofieldsize_formatted = results.value[i]["tri_memofieldsize@OData.Community.Display.V1.FormattedValue"];
 
             // display questions
 
             questionsset = '<span>' + tri_questionnumber + '.</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
-            var getanswers = GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype);
+            var getanswers = GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype, tri_isrequired, tri_memofieldsize);
             console.log("AnswersType in GetAssesmentQuestions-", tri_answertype);
             console.log("Answers-");
             console.log(getanswers);
@@ -419,12 +421,20 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
                         var tri_name = results.value[i]["tri_name"];
                         var tri_questionnumber = results.value[i]["tri_questionnumber"];
                         var tri_questionnumber_formatted = results.value[i]["tri_questionnumber@OData.Community.Display.V1.FormattedValue"];
+                        var tri_memofieldsize = results.value[i]["tri_memofieldsize"];
+                        var tri_memofieldsize_formatted = results.value[i]["tri_memofieldsize@OData.Community.Display.V1.FormattedValue"];
+                
+                        var isRequiredError = "";
+
+                        if (tri_isrequired) {
+                            isRequiredError = '<span sectionname="' + sectionname + '" id="' + tri_assessmentquestionid + '_errorSpan" class="error">This Question needs to be answered.</span><br/>';
+                        }
 
                         // display questions
-                        questionsset = '<span>' + tri_questionnumber + '.</span><div style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
+                        questionsset = isRequiredError + '<span>' + tri_questionnumber + '.</span><div style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
                         //var getanswers = "";
                         window.getanswers = "";
-                        GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype);
+                        GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype, tri_isrequired, tri_memofieldsize);
                         console.log("AnswersType in GetAssesmentQuestions-", tri_answertype);
                         console.log("Answers-");
                         console.log(window.getanswers);
@@ -483,7 +493,7 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
     }
 }
 
-function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questionid, answertype) {
+function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questionid, answertype, isrequired, memoFieldSize) {
 
     if (debugMode == true) {
 
@@ -540,11 +550,15 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                         return val.QuestionId == questionid ? val.AnswerValue : null;
                     });
 
-                    //var answerValueToMatch = ""
-                    //if(questionToMatch !== null && questionToMatch !== undefined)
-                    //{
-                    //    answerValueToMatch = questionToMatch.AnswerValue;
-                    //}
+                    var requiredClass = "";
+                    if (isrequired) {
+                        requiredClass = "required ";
+                    }
+
+                    var textRows = 4;
+                    if (memoFieldSize !== null && memoFieldSize !== undefined && $.isNumeric(memoFieldSize) && (answerType === 100000001 || answerType === 100000003)) {
+                        textRows = Number(memoFieldSize);
+                    }
 
                     var results = JSON.parse(this.response);
                     if (results.value.length > 0) {
@@ -560,7 +574,7 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
 
                             // check if answe matches to existing then introduce checked
                             var checked = "";
-                            if (tri_answervalue === answerValueToMatch && answerValueToMatch !== null) {
+                            if (tri_answervalue === answerValueToMatch[0] && answerValueToMatch !== null) {
                                 checked = 'checked="checked"';
                             }
 
@@ -568,24 +582,26 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                             if (tri_name.indexOf('=')) {
                                 tri_name = tri_name.substr(tri_name.indexOf('=') + 1);
                             }
-
+                           
                             var answercontrols = "";
                             console.log("answerType :", answerType);
                             if (answerType === 100000000) {
-                                answercontrols = '<input type="radio" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' value="' + tri_answervalue + '"> ' + tri_name; // checked="checked" 
+                                answercontrols = '<input type="radio" class="'+ requiredClass +'" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' value="' + tri_answervalue + '"> ' + tri_name; // checked="checked" 
                             }
                             else if (answerType === 100000001 || answerType === 100000003) {
-                                answercontrols = '<textarea rows="4" id="' + questionid + '_textarea" maxlength="4000" cols="100">' + tri_name + '</textarea><br>'
+                                answercontrols = '<textarea rows="' + textRows + '" class="' + requiredClass + '" id="' + questionid + '_textarea" maxlength="4000" cols="100">' + tri_name + '</textarea><br>'
                             }
                             else if (answerType === 100000002) {
+                                requiredClass = requiredClass + "datepicker";
                                 // answercontrols = '<input type="date" name="' + questionid + '_date" value="' + tri_answervalue + '" max="1979-12-31"><br>'; // we can show this with jquery date picker even
-                                answercontrols = '<input type="text" name="' + questionid + '_date" value="' + tri_answervalue + '" class="datepicker"><br>'; // we can show this with jquery date picker even
+                                answercontrols = '<input type="text" name="' + questionid + '_date" value="' + tri_answervalue + '" class="' + requiredClass + '"><br>'; // we can show this with jquery date picker even
                             }
                             else if (answerType === 100000004) {
-                                answercontrols = '<input style="border-color: transparent;" type="text" name="' + questionid + '_numeric" value="' + tri_answervalue + '" class="numeric"><br>';  // , you can use the spinner control.
+                                requiredClass = requiredClass + "numeric";
+                                answercontrols = '<input style="border-color: transparent;" type="text" name="' + questionid + '_numeric" value="' + tri_answervalue + '" class="' + requiredClass + '"><br>';  // , you can use the spinner control.
                             }
                             else if (answerType === 100000005) {
-                                answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_answervalue + '">' + tri_name;// + '<br>';
+                                answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_answervalue + '" class="' + requiredClass + '">' + tri_name;// + '<br>';
                             }
 
                             window.getanswers = window.getanswers + answercontrols; //CreateAnswers(tri_answervalue, tri_name, answertype, questionid); //'<span>' + tri_answervalue + '</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
@@ -600,13 +616,15 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                         //}
                         //else
                         if (answerType === 100000001 || answerType === 100000003) {
-                            answercontrols = '<textarea rows="4" id="' + questionid + '_textarea" maxlength="4000" cols="100"></textarea><br>'
+                            answercontrols = '<textarea  class="' + requiredClass + '" rows="' + textRows + '" id="' + questionid + '_textarea" maxlength="4000" cols="100"></textarea><br>'
                         }
                         else if (answerType === 100000002) {
-                            answercontrols = '<input type="text" name="' + questionid + '_date" class="datepicker"><br>'; // we can show this with jquery date picker even
+                            requiredClass = requiredClass + "datepicker";
+                            answercontrols = '<input type="text" name="' + questionid + '_date"  class="' + requiredClass + '"><br>'; // we can show this with jquery date picker even
                         }
                         else if (answerType === 100000004) {
-                            answercontrols = '<input style="border-color: transparent;" value="0" type="text" name="' + questionid + '_numeric" class="numeric"><br>';;  // , you can use the spinner control. Numeric
+                            requiredClass = requiredClass + "numeric";
+                            answercontrols = '<input style="border-color: transparent;" value="0" type="text" name="' + questionid + '_numeric"  class="' + requiredClass + '"><br>';;  // , you can use the spinner control. Numeric
                         }
                         //else if (answerType === 100000005) {
                         //    answercontrols = '<input type="checkbox" name="' + questionid + '_chkbox_answerValue" value="' + tri_answervalue + '">' + tri_name + '<br>';

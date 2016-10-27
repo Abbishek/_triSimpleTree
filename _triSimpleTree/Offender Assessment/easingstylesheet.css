@@ -134,6 +134,16 @@ body {
 	color: white;
 }
 
+.required {
+    border: 1px solid red; 
+}
 
+.error{
+	display: none;
+	margin-left: 10px;
+}		
 
-
+.error_show{
+	color: red;
+	margin-left: 10px;
+}

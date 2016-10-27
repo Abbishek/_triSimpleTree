@@ -114,6 +114,7 @@
     <Content Include="Offender Assessment\easingstylesheet.css" />
     <Content Include="Offender Assessment\jquery.easing.js" />
     <Content Include="Offender Assessment\SDK.WEBAPI.js" />
+    <Content Include="Offender Assessment\ui-icons_777777_256x240.png" />
     <Content Include="SAAS Webresource files\bootstrap.css" />
     <Content Include="SAAS Webresource files\KM.monitormode.js" />
     <Content Include="SAAS Webresource files\monitormode-style.css" />
