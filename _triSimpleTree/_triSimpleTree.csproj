@@ -112,6 +112,7 @@
     <Content Include="Offender Assessment\Backups\Oct 13 2016\Assessment.js" />
     <Content Include="Offender Assessment\Backups\Oct 13 2016\AssessmentPrintIframe.html" />
     <Content Include="Offender Assessment\easingstylesheet.css" />
+    <Content Include="Offender Assessment\jquery-ui.1_11_4.assessment.css" />
     <Content Include="Offender Assessment\jquery.easing.js" />
     <Content Include="Offender Assessment\SDK.WEBAPI.js" />
     <Content Include="Offender Assessment\ui-icons_777777_256x240.png" />

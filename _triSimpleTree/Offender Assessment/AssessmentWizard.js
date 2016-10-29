@@ -11,11 +11,11 @@ function questionWithAnswerSelected(questionid, answerid, answervalue, assessmen
 
     this.questionid = questionid;
     this.answervalue = answervalue;
-    //this.answerid = answerid;    
-    //this.assessmentid = assessmentid;
-    //this.assessmenttypeid = assessmenttypeid;
-    //this.assessmentdetailid = assessmentdetailid;
-    //this.questionnumber = questionnumber;
+    this.answerid = answerid;
+    this.assessmentid = assessmentid;
+    this.assessmenttypeid = assessmenttypeid;
+    this.assessmentdetailid = assessmentdetailid;
+    this.questionnumber = questionnumber;
 };
 
 function checkIfQuestionAlreayAnswered(questionid) {
@@ -47,16 +47,81 @@ function bindRadioClickEvent() {
 
         if (index !== -1) {
             //QuestionAlreadyAnswered
-            lstAnswerSelected[index].answerid = answerid;
+            //lstAnswerSelected[index].answerid = answerid;
             lstAnswerSelected[index].answervalue = answervalue;
         } else {
-            var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber);
+            //var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber);
+            var questionObj = new questionWithAnswerSelected(questionid, null, answervalue, null, null, null, null);
             lstAnswerSelected.push(questionObj);
         }
     });
-
 };
 
+function bindTextAreaClickEvent() {
+    $("textarea").bind('blur', function () {
+        debugger;
+        var answervalue = $(this).val();
+        var questionid = $(this).context.attributes.id.value;
+
+        var index = checkIfQuestionAlreayAnswered(questionid);
+
+        if (index !== -1) {
+            //QuestionAlreadyAnswered            
+            lstAnswerSelected[index].answervalue = answervalue;
+        } else {
+            var questionObj = new questionWithAnswerSelected(questionid, null, answervalue, null, null, null, null);
+            lstAnswerSelected.push(questionObj);
+        }
+    });
+}
+
+function bindTextBoxClickEvent() {
+    $("input[type=text]").bind('blur', function () {
+        debugger;
+        var answervalue = $(this).val();
+        var questionid = $(this).context.attributes.name.value;
+
+        var index = checkIfQuestionAlreayAnswered(questionid);
+
+        if (index !== -1) {
+            //QuestionAlreadyAnswered            
+            lstAnswerSelected[index].answervalue = answervalue;
+        } else {
+            var questionObj = new questionWithAnswerSelected(questionid, null, answervalue, null, null, null, null);
+            lstAnswerSelected.push(questionObj);
+        }
+    });
+}
+
+function bindCheckBoxClickEvent() {
+    $("input[type=checkbox]").bind('click', function () {
+        debugger;
+        var answervalue = $(this).val();
+        var questionid = $(this).context.attributes.name.value;
+
+        var index = checkIfQuestionAlreayAnswered(questionid);
+
+        if ($(this).prop('checked') == true) {
+            if (index == -1) {
+                var obj = {
+                    "questionid": questionid,
+                    answers: []
+                };
+                obj.answers.push(answervalue);
+                lstAnswerSelected.push(obj);
+            } else {
+                lstAnswerSelected[index].answers.push(answervalue);
+            }
+        } else {
+            lstAnswerSelected[index].answers.splice(lstAnswerSelected[index].answers.indexOf(answervalue), 1);
+            if (lstAnswerSelected[index].answers.length == 0) {
+                //remove object from list
+                lstAnswerSelected.splice(index, 1);
+            }
+
+        }
+    });
+}
 
 $(document).ready(function () {
     //("hello");
@@ -95,6 +160,12 @@ $(document).ready(function () {
             //$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
             $("#progressbar li").eq(progressIndex).addClass("active");
         }
+
+        //clean gloabl array of selected answers
+
+        console.log("Logging Object to be Stored");
+        console.log(lstAnswerSelected);
+        lstAnswerSelected = [];
 
         //show the next fieldset
         next_fs.show();
@@ -166,6 +237,9 @@ $(document).ready(function () {
     });
 
     bindRadioClickEvent();
+    bindTextAreaClickEvent();
+    bindTextBoxClickEvent();
+    bindCheckBoxClickEvent();
 
 });
 
@@ -423,7 +497,7 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
                         var tri_questionnumber_formatted = results.value[i]["tri_questionnumber@OData.Community.Display.V1.FormattedValue"];
                         var tri_memofieldsize = results.value[i]["tri_memofieldsize"];
                         var tri_memofieldsize_formatted = results.value[i]["tri_memofieldsize@OData.Community.Display.V1.FormattedValue"];
-                
+
                         var isRequiredError = "";
 
                         if (tri_isrequired) {
@@ -582,11 +656,11 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                             if (tri_name.indexOf('=')) {
                                 tri_name = tri_name.substr(tri_name.indexOf('=') + 1);
                             }
-                           
+
                             var answercontrols = "";
                             console.log("answerType :", answerType);
                             if (answerType === 100000000) {
-                                answercontrols = '<input type="radio" class="'+ requiredClass +'" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' value="' + tri_answervalue + '"> ' + tri_name; // checked="checked" 
+                                answercontrols = '<input type="radio" class="' + requiredClass + '" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' value="' + tri_answervalue + '"> ' + tri_name; // checked="checked" 
                             }
                             else if (answerType === 100000001 || answerType === 100000003) {
                                 answercontrols = '<textarea rows="' + textRows + '" class="' + requiredClass + '" id="' + questionid + '_textarea" maxlength="4000" cols="100">' + tri_name + '</textarea><br>'
