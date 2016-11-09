@@ -105,7 +105,7 @@ function bindTextAreaClickEvent() {
             lstAnswerSelected[index].tri_comments = comments;
         } else {
             var answervalue = ""; //$(this).val();
-          //  var questionid = $(this).context.attributes.id.value;
+            //  var questionid = $(this).context.attributes.id.value;
 
             //var questionid = $(this).context.attributes.questionid.value;
             //var answervalue = $(this).context.attributes.value.value;
@@ -128,58 +128,100 @@ function bindTextAreaClickEvent() {
 }
 
 function bindTextBoxClickEvent() {
-    $("input[type=text]").bind('blur', function () {
+    $("input[type=text]:not([class~=datepicker])").bind('blur', function () {
         debugger;
         var controlName = $(this)[0].name;
-       // if (controlName.indexOf("_date") !== -1) {
-            var answerText = $(this).val();
-            if (controlName.indexOf("_date") > -1) {
-                if (answerText !== null && answerText !== undefined && answerText !== "") {
+        // if (controlName.indexOf("_date") !== -1) {
+        var answerText = $(this).val();
+        if (controlName.indexOf("_date") > -1) {
+            if (answerText !== null && answerText !== undefined && answerText !== "") {
 
-                    var date = new Date(answerText);
-                    //date.setDate(date.getDate() + snoozedays);
-                    answerText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-                }
+                var date = new Date(answerText);
+                //date.setDate(date.getDate() + snoozedays);
+                answerText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
             }
-                //else if (controlName.indexOf("_numeric") > -1) {
-                //    answerText = 
-                //}
+        }
+        //else if (controlName.indexOf("_numeric") > -1) {
+        //    answerText = 
+        //}
 
-                var questionid = $(this).context.attributes.questionid.value;
-                var question = $("#" + questionid + "_question");
-                var questionnumber = $(question).attr('questionnumber');
+        var questionid = $(this).context.attributes.questionid.value;
+        var question = $("#" + questionid + "_question");
+        var questionnumber = $(question).attr('questionnumber');
 
-                var index = checkIfQuestionAlreayAnswered(questionnumber);
+        var index = checkIfQuestionAlreayAnswered(questionnumber);
 
-                if (index !== -1) {
-                    lstAnswerSelected[index].tri_answertext = answerText;
-                } else {
+        if (index !== -1) {
+            lstAnswerSelected[index].tri_answertext = answerText;
+        } else {
 
-                    var answervalue = ""; //$(this).val();
-                    // var questionid = $(this).context.attributes.questionid.value;
-                    var answerid = $(this).context.attributes.answerid.value;
-                    var assessmentid = vAssessmentIdFormatted;
-                    var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
-                    var assessmentdetailid = "";
-                    //var question = $("#" + questionid + "_question");
+            var answervalue = ""; //$(this).val();
+            // var questionid = $(this).context.attributes.questionid.value;
+            var answerid = $(this).context.attributes.answerid.value;
+            var assessmentid = vAssessmentIdFormatted;
+            var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
+            var assessmentdetailid = "";
+            //var question = $("#" + questionid + "_question");
 
-                    var sectionName = $(question).attr('sectionName');
-                    var quesCatId = $(question).attr('questionCat');
-                    var weightedScore = $(question).attr('weightedScore');
-                    var comments = "";
+            var sectionName = $(question).attr('sectionName');
+            var quesCatId = $(question).attr('questionCat');
+            var weightedScore = $(question).attr('weightedScore');
+            var comments = "";
 
-                    var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Multi-Select",
-                                                                        answerText, weightedScore, sectionName, quesCatId, comments);
-                    lstAnswerSelected.push(questionObj);
-                }
-            //}
-       // }
+            var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Multi-Select",
+                                                                answerText, weightedScore, sectionName, quesCatId, comments);
+            lstAnswerSelected.push(questionObj);
+        }
+        //}
+        // }
     });
 }
 
-function bindDateChangeClickEvent() {
+function bindDateChangeClickEvent(dateText, ctrl) {
 
+    debugger;
+    //var controlName = $(this)[0].name;
+    //// if (controlName.indexOf("_date") !== -1) {
+    //var answerText = $(this).val();
+    //if (controlName.indexOf("_date") > -1) {
+    //    if (answerText !== null && answerText !== undefined && answerText !== "") {
 
+    //        var date = new Date(answerText);
+    //        //date.setDate(date.getDate() + snoozedays);
+    //        answerText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    //    }
+    //}
+    ////else if (controlName.indexOf("_numeric") > -1) {
+    ////    answerText = 
+    ////}
+
+    //var questionid = $(this).context.attributes.questionid.value;
+    //var question = $("#" + questionid + "_question");
+    //var questionnumber = $(question).attr('questionnumber');
+
+    //var index = checkIfQuestionAlreayAnswered(questionnumber);
+
+    //if (index !== -1) {
+    //    lstAnswerSelected[index].tri_answertext = answerText;
+    //} else {
+
+    //    var answervalue = ""; //$(this).val();
+    //    // var questionid = $(this).context.attributes.questionid.value;
+    //    var answerid = $(this).context.attributes.answerid.value;
+    //    var assessmentid = vAssessmentIdFormatted;
+    //    var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
+    //    var assessmentdetailid = "";
+    //    //var question = $("#" + questionid + "_question");
+
+    //    var sectionName = $(question).attr('sectionName');
+    //    var quesCatId = $(question).attr('questionCat');
+    //    var weightedScore = $(question).attr('weightedScore');
+    //    var comments = "";
+
+    //    var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Multi-Select",
+    //                                                        answerText, weightedScore, sectionName, quesCatId, comments);
+    //    lstAnswerSelected.push(questionObj);
+    //}
 }
 
 function bindCheckBoxClickEvent() {
@@ -233,6 +275,63 @@ function bindCheckBoxClickEvent() {
     });
 }
 
+function isMandatoryQuestionAnswered(questionObj, questType) {
+
+    var result = true;
+    var answerSelected;
+
+    if (questionObj == undefined || questionObj == null || questType == undefined || questType == null) {
+        result = false;
+    }
+    if (questType == "100000000") {
+        var optionSet = $(questionObj).children("input[type=radio]")[0];
+        var radioGroupName = $(optionSet).attr('name');
+        var questionDiv = $(questionObj).children('div');
+        var questionid = $(questionDiv).attr('questionid');
+        answerSelected = $('input[name=' + radioGroupName + ']:checked').val();
+    }
+
+    if (questType == "100000001" || questType == "100000003") {
+        var content = $(questionObj).children("input[type=textarea]").val();
+        if (content.length < 1) {
+            answerSelected = undefined;
+        }
+    }
+
+    var errorSpanId = questionid + "_errorSpan";
+    var errorSpan = '<span style = "color:red;" class = "errorSpan" id="' + errorSpanId + '"><span>This question requires an answer!</span></br></span>';
+    if (answerSelected == undefined) {
+        $(questionObj).prepend(errorSpan);
+        result = false;
+    }
+
+    return result;
+}
+
+function validateSection(sectionObject) {
+    var result = true;
+    if (sectionObject == undefined || sectionObject == null) {
+        return false;
+    }
+
+    var questions = $(sectionObject).children('div');
+
+    $.each(questions, function (index, valueObj) {
+        if (index > 0) {
+            var questionDiv = $(valueObj).children('div');
+            var questType = $(questionDiv).attr('questiontype');
+            var isQuestionMandatory = $(questionDiv).attr('isrequired');
+            if (isQuestionMandatory == "true") {
+                if (!isMandatoryQuestionAnswered(valueObj, questType)) {
+                    result = false;
+                }
+            }
+        }
+    });
+
+    return result;
+}
+
 $(document).ready(function () {
     //("hello");
     //jQuery time
@@ -260,6 +359,18 @@ $(document).ready(function () {
         current_fs = $(this).parent();
         next_fs = $(this).parent().next();
 
+        if (next_fs == undefined) {
+            alert("No Section Found");
+            animating = false;
+            return;
+        }
+
+        if (!validateSection(current_fs)) {
+            alert("Some Mandatory Questions are not Answered.")
+            animating = false;
+            return;
+        }
+
         var current_fs_section = current_fs[0].childNodes[0].firstChild.data;
         var next_fs_section = next_fs[0].childNodes[0].firstChild.data;
 
@@ -275,7 +386,7 @@ $(document).ready(function () {
 
         console.log("Logging Object to be Stored");
         console.log(lstAnswerSelected);
-       // lstAnswerSelected = [];
+        // lstAnswerSelected = [];
 
         //show the next fieldset
         next_fs.show();
@@ -391,8 +502,8 @@ $(document).ready(function () {
         $(".datepicker").datepicker();
         $(".numeric").spinner({ step: 1.00, numberFormat: "n" });
         $('.datepicker').datepicker({
-            onClose: function () {
-                $(this).trigger('blur');
+            onSelect: function () {
+                bindDateChangeClickEvent(dateText,this);
             }
         });
     });
@@ -401,7 +512,7 @@ $(document).ready(function () {
     bindTextAreaClickEvent();
     bindTextBoxClickEvent();
     bindCheckBoxClickEvent();
-    bindDateChangeClickEvent();
+    
 });
 
 function GetAssessmentType(vAssessmentId) {
@@ -909,7 +1020,7 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
         }
     }
 }
-    
+
 
 function GetAssesmentAnswers_Update(sectionname, assessmenttypeid, questionsset, questionid) {
 
