@@ -3,10 +3,12 @@ var progressIndex = 0;
 var assessmentWizardVars = {};
 assessmentWizardVars.noOfQuestionsToDisplayOnView = 5;
 var firstView = false;
+var isLastCategory = false;
 var getanswers = "";
 var lstAssesmentDetails = [];
 //var assesmentDetailId = "";
 var lstAnswerSelected = [];
+var assesmentDetailsToSave = [];
 var vAssessmentIdFormatted = "";
 
 function questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, answerType, answerText, weightedScore, sectionName, quesCatId, comments) {
@@ -52,11 +54,29 @@ function checkIfQuestionAlreayAnswered(questionNum) {
     return questionFoundAtIndex;
 };
 
+function checkIfSaveObjectAlreayAnswered(Object, questionNum) {
+    var questionFoundAtIndex = -1;
+
+    if (Object.length > 0) {
+        $.each(Object, function (index, valueObj) {
+            if (valueObj !== null && typeof(valueObj) !== 'undefined' && valueObj.tri_questionnumber == questionNum) {
+                questionFoundAtIndex = index;
+                return false;
+            }
+        });
+    }
+    return questionFoundAtIndex;
+};
+
 function bindRadioClickEvent() {
 
     $("input[type=radio]").bind('click', function (evt) {
 
-        debugger;
+        var errorSpan = $(this).siblings('.errorSpan');
+        if (errorSpan !== undefined) {
+            $(errorSpan).remove();
+        }
+
         var questionid = $(this).context.attributes.questionid.value;
         var question = $("#" + questionid + "_question");
         var questionnumber = $(question).attr('questionnumber')
@@ -71,6 +91,12 @@ function bindRadioClickEvent() {
             lstAnswerSelected[index].tri_answertext = answerText;
             lstAnswerSelected[index]["tri_AnswerId@odata.bind"] = "/tri_assessmentanswers(" + answerid + ")";
 
+            var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
+            if (objectIndex > -1) {
+                assesmentDetailsToSave.splice(objectIndex, 1);
+            }
+            assesmentDetailsToSave.push(lstAnswerSelected[objectIndex]);
+
         } else {
             //var questionid = $(this).context.attributes.questionid.value;
             var assessmentid = vAssessmentIdFormatted;
@@ -83,17 +109,22 @@ function bindRadioClickEvent() {
             var quesCatId = $(question).attr('questionCat');
             var weightedScore = $(question).attr('weightedScore');
 
-            var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber,"Optionset",
+            var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Optionset",
                                                                 answerText, weightedScore, sectionName, quesCatId, comments);
             //var questionObj = new questionWithAnswerSelected(questionid, null, answervalue, null, null, null, null);
             lstAnswerSelected.push(questionObj);
+            assesmentDetailsToSave.push(questionObj);
         }
     });
 };
 
 function bindTextAreaClickEvent() {
     $("textarea").bind('blur', function () {
-        debugger;
+        var errorSpan = $(this).siblings('.errorSpan');
+        if (errorSpan !== undefined) {
+            $(errorSpan).remove();
+        }
+
         var questionid = $(this).context.attributes.questionid.value;
         var question = $("#" + questionid + "_question");
         var questionnumber = $(question).attr('questionnumber');
@@ -103,6 +134,12 @@ function bindTextAreaClickEvent() {
         if (index !== -1) {
             //QuestionAlreadyAnswered            
             lstAnswerSelected[index].tri_comments = comments;
+
+            var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
+            if (objectIndex > -1) {
+                assesmentDetailsToSave.splice(objectIndex, 1);
+            }
+            assesmentDetailsToSave.push(lstAnswerSelected[index]);
         } else {
             var answervalue = ""; //$(this).val();
             //  var questionid = $(this).context.attributes.id.value;
@@ -123,13 +160,18 @@ function bindTextAreaClickEvent() {
             var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Memo",
                                                                 answerText, weightedScore, sectionName, quesCatId, comments);
             lstAnswerSelected.push(questionObj);
+            assesmentDetailsToSave.push(questionObj);
+
         }
     });
 }
 
 function bindTextBoxClickEvent() {
     $("input[type=text]:not([class~=datepicker])").bind('blur', function () {
-        debugger;
+        var errorSpan = $(this).parent().siblings('.errorSpan');
+        if (errorSpan !== undefined) {
+            $(errorSpan).remove();
+        }
         var controlName = $(this)[0].name;
         // if (controlName.indexOf("_date") !== -1) {
         var answerText = $(this).val();
@@ -153,6 +195,13 @@ function bindTextBoxClickEvent() {
 
         if (index !== -1) {
             lstAnswerSelected[index].tri_answertext = answerText;
+
+            var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
+            if (objectIndex > -1) {
+                assesmentDetailsToSave.splice(objectIndex, 1);
+            }
+            assesmentDetailsToSave.push(lstAnswerSelected[index]);
+
         } else {
 
             var answervalue = ""; //$(this).val();
@@ -171,13 +220,15 @@ function bindTextBoxClickEvent() {
             var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Multi-Select",
                                                                 answerText, weightedScore, sectionName, quesCatId, comments);
             lstAnswerSelected.push(questionObj);
+            assesmentDetailsToSave.push(questionObj);
+
         }
         //}
         // }
     });
 }
 
-function bindDateChangeClickEvent(dateText, ctrl) {
+function bindDateChangeClickEvent(dateText) {
 
     debugger;
     //var controlName = $(this)[0].name;
@@ -226,7 +277,6 @@ function bindDateChangeClickEvent(dateText, ctrl) {
 
 function bindCheckBoxClickEvent() {
     $("input[type=checkbox]").bind('click', function () {
-        debugger;
         var questionid = $(this).context.attributes.questionid.value;
         var question = $("#" + questionid + "_question");
 
@@ -250,11 +300,19 @@ function bindCheckBoxClickEvent() {
                                                                     answerText, weightedScore, sectionName, quesCatId, comments);
 
                 lstAnswerSelected.push(questionObj);
+                assesmentDetailsToSave.push(questionObj);
+
             } else {
                 lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext + "," + answerText;
                 //delete lstAnswerSelected[index]["tri_AnswerId@odata.bind"];
                 lstAnswerSelected[index]["tri_AnswerId@odata.bind"] = "/tri_assessmentanswers(" + lstAnswerSelected[index]["tri_AnswerId@odata.bind"]
                     .substr(lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf('(') + 1, lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf(')') - lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf('(')) + ',' + answerid + ")";
+
+                var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
+                if (objectIndex > -1) {
+                    assesmentDetailsToSave.splice(objectIndex, 1);
+                }
+                assesmentDetailsToSave.push(lstAnswerSelected[index]);
 
             }
         } else if ($(this).prop('checked') == false) {
@@ -271,41 +329,69 @@ function bindCheckBoxClickEvent() {
             //    //remove object from list
             //    lstAnswerSelected.splice(index, 1);
             //}
+            var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
+            if (objectIndex > -1) {
+                assesmentDetailsToSave.splice(objectIndex, 1);
+            }
         }
     });
 }
 
 function isMandatoryQuestionAnswered(questionObj, questType) {
 
-    var result = true;
-    var answerSelected;
+    var isAnswerSelected = true;
 
     if (questionObj == undefined || questionObj == null || questType == undefined || questType == null) {
         result = false;
     }
+
+    //Option set radion button
     if (questType == "100000000") {
         var optionSet = $(questionObj).children("input[type=radio]")[0];
         var radioGroupName = $(optionSet).attr('name');
         var questionDiv = $(questionObj).children('div');
         var questionid = $(questionDiv).attr('questionid');
-        answerSelected = $('input[name=' + radioGroupName + ']:checked').val();
+        var answerSelected = $('input[name=' + radioGroupName + ']:checked').val();
+        if (answerSelected == undefined) {
+            isAnswerSelected = false;
+        }
     }
 
+    //commemts
     if (questType == "100000001" || questType == "100000003") {
-        var content = $(questionObj).children("input[type=textarea]").val();
-        if (content.length < 1) {
-            answerSelected = undefined;
+        //alert("Text area is mandatory question");
+        var content = $(questionObj).children("textarea").val();
+        if (content == undefined) {
+            isAnswerSelected = false;
+        } else {
+            if (content.trim() == "") {
+                isAnswerSelected = false;
+            }
+        }
+    }
+
+    //input numeric
+    if (questType == "100000004") {
+        var input = $(questionObj).children("span").children("input[type=text]").val();
+        if (input == undefined) {
+            isAnswerSelected = false;
+        } else {
+            if (input.trim() == "") {
+                isAnswerSelected = false;
+            }
         }
     }
 
     var errorSpanId = questionid + "_errorSpan";
     var errorSpan = '<span style = "color:red;" class = "errorSpan" id="' + errorSpanId + '"><span>This question requires an answer!</span></br></span>';
-    if (answerSelected == undefined) {
-        $(questionObj).prepend(errorSpan);
-        result = false;
+    if (isAnswerSelected == false) {
+        var span = $(questionObj).children().siblings('.errorSpan');
+        if (span.length == 0) {
+            $(questionObj).prepend(errorSpan);
+        }
     }
 
-    return result;
+    return isAnswerSelected;
 }
 
 function validateSection(sectionObject) {
@@ -346,7 +432,7 @@ $(document).ready(function () {
     vAssessmentIdFormatted = vAssessmentId2.replace("}", "");
 
     GetAssesmentDetails(vAssessmentIdFormatted);
-    console.log("Assesment details b4 save:",lstAnswerSelected);
+    console.log("Assesment details b4 save:", lstAnswerSelected);
     var vAssementType = GetAssessmentType(vAssessmentIdFormatted);
     //var vAssementType = GetAssessmentType("");
     //alert(vAssementType);
@@ -359,71 +445,73 @@ $(document).ready(function () {
         current_fs = $(this).parent();
         next_fs = $(this).parent().next();
 
-        if (next_fs == undefined) {
+        if (!validateSection(current_fs)) {
+            //alert("Some Mandatory Questions are not Answered.")
+            animating = false;
+            return;
+        }
+
+        if (next_fs[0] == undefined) {
             alert("No Section Found");
             animating = false;
             return;
         }
+        else {
+            var current_fs_section = current_fs[0].childNodes[0].firstChild.data;
+            var next_fs_section = next_fs[0].childNodes[0].firstChild.data;
 
-        if (!validateSection(current_fs)) {
-            alert("Some Mandatory Questions are not Answered.")
-            animating = false;
-            return;
+            if (current_fs_section !== next_fs_section) {
+                document.getElementById('questionCategory').innerHTML = next_fs_section;
+                //activate next step on progressbar using the index of next_fs
+                progressIndex = progressIndex + 1;
+                //$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                $("#progressbar li").eq(progressIndex).addClass("active");
+            }
+
+            //clean gloabl array of selected answers
+
+            console.log("Logging Object to be Stored");
+            console.log(lstAnswerSelected);
+            // lstAnswerSelected = [];
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50) + "%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({ 'transform': 'scale(' + scale + ')' });
+                    next_fs.css({ 'left': left, 'opacity': opacity });
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
         }
 
-        var current_fs_section = current_fs[0].childNodes[0].firstChild.data;
-        var next_fs_section = next_fs[0].childNodes[0].firstChild.data;
-
-        if (current_fs_section !== next_fs_section) {
-            document.getElementById('questionCategory').innerHTML = next_fs_section;
-            //activate next step on progressbar using the index of next_fs
-            progressIndex = progressIndex + 1;
-            //$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-            $("#progressbar li").eq(progressIndex).addClass("active");
-        }
-
-        //clean gloabl array of selected answers
-
-        console.log("Logging Object to be Stored");
-        console.log(lstAnswerSelected);
-        // lstAnswerSelected = [];
-
-        //show the next fieldset
-        next_fs.show();
-        //hide the current fieldset with style
-        current_fs.animate({ opacity: 0 }, {
-            step: function (now, mx) {
-                //as the opacity of current_fs reduces to 0 - stored in "now"
-                //1. scale current_fs down to 80%
-                scale = 1 - (1 - now) * 0.2;
-                //2. bring next_fs from the right(50%)
-                left = (now * 50) + "%";
-                //3. increase opacity of next_fs to 1 as it moves in
-                opacity = 1 - now;
-                current_fs.css({ 'transform': 'scale(' + scale + ')' });
-                next_fs.css({ 'left': left, 'opacity': opacity });
-            },
-            duration: 800,
-            complete: function () {
-                current_fs.hide();
-                animating = false;
-            },
-            //this comes from the custom easing plugin
-            easing: 'easeInOutBack'
-        });
-
-        debugger;
-        if (lstAnswerSelected.length > 0) {
+        debugger; //assesmentDetailsToSave
+        //if (lstAnswerSelected.length > 0) {
+        if (assesmentDetailsToSave.length > 0) {
             // Save on next click
-            for (var i = 0; i < lstAnswerSelected.length; i++) {
+            for (var i = 0; i < assesmentDetailsToSave.length; i++) {
                 var url = "";
                 var method = "";
-                if (lstAnswerSelected[i]["tri_assessmentdetailId@odata.bind"] !== null
-                    && typeof (lstAnswerSelected[i]["tri_assessmentdetailId@odata.bind"]) !== "undefined"
-                    && lstAnswerSelected[i]["tri_assessmentdetailId@odata.bind"] !== "") {
-                    url = "/api/data/v8.0" + lstAnswerSelected[i]["tri_assessmentdetailId@odata.bind"];
+                if (assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"] !== null
+                    && typeof (assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"]) !== "undefined"
+                    && assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"] !== "") {
+                    url = "/api/data/v8.0" + assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"];
                     method = "PATCH";
-                    delete lstAnswerSelected[i]["tri_assessmentdetailId@odata.bind"];
+                    delete assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"];
                 }
                 else {
                     url = "/api/data/v8.0/tri_assessmentdetails";
@@ -452,9 +540,9 @@ $(document).ready(function () {
                         }
                     }
                 };
-                req.send(JSON.stringify(lstAnswerSelected[i]));
+                req.send(JSON.stringify(assesmentDetailsToSave[i]));
             }
-            lstAnswerSelected.length = 0;
+            assesmentDetailsToSave.length = 0;
             GetAssesmentDetails(vAssessmentIdFormatted);
         }
     });
@@ -498,21 +586,20 @@ $(document).ready(function () {
         return false;
     })
 
-    $(function () {
-        $(".datepicker").datepicker();
-        $(".numeric").spinner({ step: 1.00, numberFormat: "n" });
-        $('.datepicker').datepicker({
-            onSelect: function () {
-                bindDateChangeClickEvent(dateText,this);
-            }
-        });
+    // $(function () {
+    $(".datepicker").datepicker();
+    $(".numeric").spinner({ step: 1.00, numberFormat: "n" });
+    $('.datepicker').datepicker({
+        onSelect: function () {
+            bindDateChangeClickEvent(dateText);
+        }
     });
+    // });
 
     bindRadioClickEvent();
     bindTextAreaClickEvent();
     bindTextBoxClickEvent();
     bindCheckBoxClickEvent();
-    
 });
 
 function GetAssessmentType(vAssessmentId) {
@@ -626,6 +713,9 @@ function GetQuestionCategories(_tri_assessmenttypeid_value) {
                             $("#progressbar").append('<li>' + tri_name + '</li>');
                         }
 
+                        if (i == results.value.length - 1) {
+                            isLastCategory = true;
+                        }
                         GetAssesmentQuestions(tri_name, _tri_assessmenttypeid_value, tri_assessmentquestioncategoryid);
                     }
                 }
@@ -773,11 +863,15 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
                         var isRequiredError = "";
 
                         if (tri_isrequired) {
+                            console.log("This is mandatory questions");
                             isRequiredError = '<span sectionName="' + sectionname + '" id="' + tri_assessmentquestionid + '_errorSpan" class="error">This Question needs to be answered.</span><br/>';
+                            console.log(isRequiredError);
                         }
 
                         // display questions
-                        questionsset = isRequiredError + '<span>' + tri_questionnumber + '.</span><div questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
+                        //questionsset = isRequiredError + '<span>' + tri_questionnumber + '.</span><div questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
+                        questionsset = '<span>' + tri_questionnumber + '.</span><div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
+
                         //var getanswers = "";
                         window.getanswers = "";
                         GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype, tri_isrequired, tri_memofieldsize);
@@ -814,9 +908,18 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
                                             divClose;
                                     firstView = true;
                                 } else {
+                                    var nextButton = '';
+
+                                    if (isLastCategory == true) {
+                                        console.log("In last Section");
+                                        nextButton = '<input type="button" name="next" class="next action-button" value="Submit" />';
+                                    } else {
+                                        nextButton = '<input type="button" name="next" class="next action-button" value="Next" />';
+                                    }
+
                                     quesAnsHtm = quesAnsHtm +
                                             '<input type="button" name="previous" class="previous action-button" value="Previous" />' +
-                                            '<input type="button" name="next" class="next action-button" value="Next" />' +
+                                            nextButton +
                                             divClose;
 
                                 }
@@ -884,7 +987,7 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
             textRows = Number(memoFieldSize);
         }
 
-        debugger;
+        // debugger;
         var answerValueToMatch = $.map(lstAnswerSelected, function (val) {
             if (val["tri_QuestionId@odata.bind"].indexOf(questionid) > -1) {
                 if (answerType === 100000000) {
@@ -999,8 +1102,7 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
         else {
             var answercontrols = "";
             var text = "";
-            if (answerValueToMatch.length > 0)
-            {
+            if (answerValueToMatch.length > 0) {
                 text = answerValueToMatch[0];
             }
 
