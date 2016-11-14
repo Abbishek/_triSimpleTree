@@ -121,7 +121,7 @@ function GetAssessmentType(vAssessmentId) {
 }
 
 function GetQuestionCategories(_tri_assessmenttypeid_value) {
-   // alert(_tri_assessmenttypeid_value);
+    // alert(_tri_assessmenttypeid_value);
     
     var req = new XMLHttpRequest();
     req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentquestioncategories?$select=tri_name,tri_assessmentquestioncategoryid&$filter=_tri_assessmenttypeid_value eq " + _tri_assessmenttypeid_value + "", false);
@@ -379,3 +379,106 @@ function GetAssesmentDetails(){
     };
     req.send();
 }
+
+// text Area
+"assesment id  : 09F16A49-E896-E611-80D1-005056810C7C"
+"assesment type id : e4b495f0-e396-e611-80d1-005056810c7c"
+"question id : f19d5bf3-e596-e611-80d1-005056810c7c"
+"question number : 6"
+"tri_comments : 6th Answer"
+
+
+
+{
+    "@odata.etag":"W/\"1913709\"",
+    "_tri_assessmentid_value":"cdeea141-d7d4-e511-80cf-005056810c7c",
+    "versionnumber":1913709,
+    "statecode":0,
+    "_tri_assessmentquestioncategoryid_value":"c15a39f9-d3d4-e511-80cf-005056810c7c",
+    "statuscode":1,
+    "createdon":"2016-02-16T18:01:49Z",
+    "_tri_assessmenttypeid_value":"85872edf-d2d4-e511-80cf-005056810c7c",
+    "tri_answertype":"Optionset",
+    "_ownerid_value":"2baf4a0a-b048-e311-b75b-0050568b4c09",
+    "modifiedon":"2016-02-16T18:03:05Z",
+    "tri_questionnumber":1,
+    "tri_answervalue":5,
+    "tri_name":"CPAT:1",
+    "_modifiedby_value":"2baf4a0a-b048-e311-b75b-0050568b4c09",
+    "tri_assessmentdetailid":"b4153959-d7d4-e511-80cf-005056810c7c",
+    "_tri_questionid_value":"c2e4f8d0-d3d4-e511-80cf-005056810c7c",
+    "_createdby_value":"2baf4a0a-b048-e311-b75b-0050568b4c09",
+    "_owningbusinessunit_value":"79117684-9848-e311-b75b-0050568b4c09",
+    "_tri_answerid_value":"842c02da-d4d4-e511-80cf-005056810c7c",
+    "_owninguser_value":"2baf4a0a-b048-e311-b75b-0050568b4c09",
+    "tri_answertext":null,
+    "tri_weightedscore":null,
+    "_modifiedonbehalfby_value":null,
+    "timezoneruleversionnumber":null,
+    "importsequencenumber":null,
+    "utcconversiontimezonecode":null,
+    "tri_comments":null,
+    "_owningteam_value":null,
+    "_createdonbehalfby_value":null,
+    "overriddencreatedon":null
+}
+
+
+if (answerType == "Optionset") {
+    answerid = $(this).context.attributes.answerid.value;
+    answervalue = $(this).context.attributes.value.value;
+}
+else if (answerType == "Multi-Select") {
+    answerText = $(this).text();
+}
+else {
+    comments = $(this).text();
+}
+entity.tri_questionnumber = 5;
+entity.tri_answervalue = 2;
+entity.tri_comments = "Sanjy test For populating lookups";
+entity["tri_AssessmentId@odata.bind"] = "/tri_assessments(09F16A49-E896-E611-80D1-005056810C7C)";
+entity["tri_AssessmentTypeId@odata.bind"] = "/tri_assessmenttypes(e4b495f0-e396-e611-80d1-005056810c7c)";
+entity["tri_QuestionId@odata.bind"] = "/tri_assessmentquestions(025a9fbf-e596-e611-80d1-005056810c7c)";
+//entity["tri_assessmentdetailId@odata.bind"] = "/tri_assessmentdetails(806e20ee-8fa3-e611-80d1-005056810c7c)"
+ 
+var req = new XMLHttpRequest();
+req.open("POST", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentdetails", true);
+req.setRequestHeader("OData-MaxVersion", "4.0");
+req.setRequestHeader("OData-Version", "4.0");
+req.setRequestHeader("Accept", "application/json");
+req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+req.onreadystatechange = function () {
+    if (this.readyState === 4) {
+        req.onreadystatechange = null;
+        if (this.status === 204) {
+            var uri = this.getResponseHeader("OData-EntityId");
+            var regExp = /\(([^)]+)\)/;
+            var matches = regExp.exec(uri);
+            var newEntityId = matches[1];
+        }
+        else {
+            alert(this.statusText);
+        }
+    }
+};
+req.send(JSON.stringify(entity));
+
+var req = new XMLHttpRequest();
+req.open("PATCH", Xrm.Page.context.getClientUrl() + "/api/data/v8.0/tri_assessmentdetails(806e20ee-8fa3-e611-80d1-005056810c7c)", true);
+req.setRequestHeader("OData-MaxVersion", "4.0");
+req.setRequestHeader("OData-Version", "4.0");
+req.setRequestHeader("Accept", "application/json");
+req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+req.onreadystatechange = function () {
+    if (this.readyState === 4) {
+        req.onreadystatechange = null;
+        if (this.status === 204) {
+            //Success - No Return Data - Do Something
+        }
+        else {
+            alert(this.statusText);
+        }
+    }
+};
+req.send(JSON.stringify(entity));
