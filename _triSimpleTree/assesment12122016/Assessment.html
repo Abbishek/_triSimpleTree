@@ -1,0 +1,58 @@
+﻿<html><head>
+    <title>Update Assesment</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery.min.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=qWoBkQaDHW0tpZnubPF4RmgdXZH7TYuSTwNSJez8OLo%3D" type="text/javascript"> </script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery_ui.custom.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=9ilWoPpcHOZonsxhnMavzh7Zz0GAFd%2Bn30H2By4V83w%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/SDK.REST.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=HTMdDkLivKv6QRkBKfbZJW0c2BM9w4fuOqIhjZeJm9U%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/XrmServiceToolkit.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=mF1De1YXkiTPuz%2BIddU3UtR%2FO3KEbKG4d5rMI7x%2BLHk%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/SDK.JQuery.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=chRsxtX6ZgV4ZqHBQN8rpSILikyzrNLxGUe76Y%2BPby4%3D" type="text/javascript"> </script>
+    <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery.easing.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=AyNZ2HHArAoTncNsHlhP8y%2B1IAb3t6gcPxZ5DpTLDIc%3D" type="text/javascript"></script>
+    -->
+    <script src="../../tri_scripts/TBHealth360.Common/jquery.min.js" type="text/javascript"> </script>
+    <script src="../../tri_scripts/TBHealth360.Common/jquery_ui.custom.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/SDK.REST.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/xrmservicetoolkit.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/SDK.JQuery.js" type="text/javascript"> </script>
+    <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/jquery.easing.js" type="text/javascript"></script>
+
+    <script src="../../tri_scripts/TBHealth360.Common/HTMLSharedUtilities.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Assessment/AssessmentCommon.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Assessment/AssessmentWizard.js" type="text/javascript"></script>
+
+    <link href="../../tri_css/TBHealth360.Common/easingstylesheet.css" rel="stylesheet">
+    <link href="../../tri_css/TBHealth360.Assessment/jquery.assessment.css" rel="stylesheet">
+    <style>
+        .questionRequired {
+            color:red; 
+            display: inline-block; 
+            font-size:larger; 
+            font-weight:bold;
+        }
+    </style>
+    <!--<link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/css/jquery.assessment.css?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=zIK9YiAW4xz26iRkinu%2BKJHELaNKCDbkqp4oRxF8an0%3D" rel="stylesheet"> -->
+
+</head>
+
+<body>
+    <form id="msform">
+        <div>
+            <div style="width: 80%; float: left;">
+                <ul id="progressbar"></ul>
+            </div>
+            <!-- White: 255, 255, 2155 for Old version and Yellow 255,255,0 for new) -->
+            <div id="divScore" style="width: 17%; color: rgb(255, 255, 0); float: right; border:2px solid red; cursor:pointer;">
+                <span id="scoreTitle">Score:</span>
+                <h1 id="h1Score"><span id="spanScore"></span></h1>
+            </div>
+        </div>
+        <br/><br/>
+        <div id="fieldsets" style="clear: both;">
+            <h2 class="fs-title" id="questionCategory"></h2>
+        </div>
+    </form>
+</body>
+
+</html>

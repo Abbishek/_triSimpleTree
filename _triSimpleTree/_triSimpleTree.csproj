@@ -57,6 +57,13 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assesment12122016\Assessment.css" />
+    <Content Include="assesment12122016\Assessment.html" />
+    <Content Include="assesment12122016\AssessmentWizard.js" />
+    <Content Include="BulkUpdateGoals\BulkUpdateHtml.html" />
+    <Content Include="BulkUpdateGoals\BulkUpdateScript.js" />
+    <Content Include="BulkUpdateGoals\Common.js" />
+    <Content Include="BulkUpdateGoals\easingstylesheet.css" />
     <Content Include="Demo\MonitorModeHTMLCSS\images\calendar.png" />
     <Content Include="Demo\MonitorModeHTMLCSS\monitomode.html" />
     <Content Include="Demo\MonitorModeHTMLCSS\monitormode-style.css" />

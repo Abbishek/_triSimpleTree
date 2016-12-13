@@ -4,9 +4,3 @@ C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\SimpleTree\Simple
 C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.csprojResolveAssemblyReference.cache
 C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.dll
 C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.pdb
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\bin\_triSimpleTree.dll.config
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\bin\_triSimpleTree.dll
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\bin\_triSimpleTree.pdb
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.dll
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.pdb
-C:\Users\Abhishek\Desktop\Appsolforce\StierSolutions\Tribridge\session20160513\SimpleTree\SimpleTree\_triSimpleTree\_triSimpleTree\obj\Debug\_triSimpleTree.csprojResolveAssemblyReference.cache
