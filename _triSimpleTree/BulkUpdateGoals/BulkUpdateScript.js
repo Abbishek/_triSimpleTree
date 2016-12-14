@@ -10,13 +10,13 @@ $(document).ready(function () {
     var animating; //flag to prevent quick multi-click glitches
 
     $(".next").click(function () {
-        
+
         if (animating) return false;
         animating = true;
 
         current_fs = $(this).parent();
         next_fs = $(this).parent().next();
-        
+
         //activate next step on progressbar using the index of next_fs
         $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
@@ -121,53 +121,53 @@ $(document).ready(function () {
 
         current_fs;
         next_fs;
-        
+
 
         //get the current visible fieldset and set it to current_fs variable
         $("fieldset").each(function () {
             if ($(this).is(":visible")) {
-                current_fs = $(this);                          
+                current_fs = $(this);
             };
-        });     
+        });
 
         var vCurrLIid = $(this).attr('id');
 
-       
+
         switch (vCurrLIid) {
             case "lipersonalgoals":
                 next_fs = $('.fspersonalgoals');
                 $('.personalgoalrowclass').show();
-                $('.testsvitalsrowclass,.medicationsrowclass, .supportservicesrowclass, .activitynutritionrowclass, .behavioralhealthrowclass, .wrapuprowclass').hide();               
+                $('.testsvitalsrowclass,.medicationsrowclass, .supportservicesrowclass, .activitynutritionrowclass, .behavioralhealthrowclass, .wrapuprowclass').hide();
                 break;
             case "litestvitals":
                 next_fs = $('.fstestvitals');
                 $('.testsvitalsrowclass').show();
                 $('.personalgoalrowclass,.medicationsrowclass, .supportservicesrowclass, .activitynutritionrowclass, .behavioralhealthrowclass, .wrapuprowclass').hide();
-             break;
+                break;
             case "limedications":
                 next_fs = $('.fsmedications');
                 $('.medicationsrowclass').show();
-                $('.personalgoalrowclass,.testsvitalsrowclass, .supportservicesrowclass, .activitynutritionrowclass, .behavioralhealthrowclass, .wrapuprowclass').hide();                
-               break;
+                $('.personalgoalrowclass,.testsvitalsrowclass, .supportservicesrowclass, .activitynutritionrowclass, .behavioralhealthrowclass, .wrapuprowclass').hide();
+                break;
             case "liactivitynutrition":
                 next_fs = $('.fsactivitynutrition');
                 $('.activitynutritionrowclass').show();
-                $('.personalgoalrowclass,.testsvitalsrowclass, .supportservicesrowclass,.medicationsrowclass , .behavioralhealthrowclass, .wrapuprowclass').hide();                       
+                $('.personalgoalrowclass,.testsvitalsrowclass, .supportservicesrowclass,.medicationsrowclass , .behavioralhealthrowclass, .wrapuprowclass').hide();
                 break;
             case "lisupportservices":
                 next_fs = $('.fssupportservices');
                 $('.supportservicesrowclass').show();
-                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass , .behavioralhealthrowclass, .wrapuprowclass').hide();                   
+                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass , .behavioralhealthrowclass, .wrapuprowclass').hide();
                 break;
             case "libehavioralhealth":
                 next_fs = $('.fsbehavioralhealth');
                 $('.behavioralhealthrowclass').show()
-                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass ,.supportservicesrowclass , .wrapuprowclass').hide();                             
+                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass ,.supportservicesrowclass , .wrapuprowclass').hide();
                 break;
             case "liwrapup":
                 next_fs = $('.fswrapup');
                 $('.wrapuprowclass').show();
-                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass ,.supportservicesrowclass ,.behavioralhealthrowclass ').hide();              
+                $('.personalgoalrowclass,.testsvitalsrowclass,.activitynutritionrowclass ,.medicationsrowclass ,.supportservicesrowclass ,.behavioralhealthrowclass ').hide();
                 break;
         }
 
@@ -178,9 +178,8 @@ $(document).ready(function () {
         $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active").prevAll().addClass("active");
         $("#progressbar li").eq($("fieldset").index(next_fs)).nextAll().removeClass("active");
 
-        if (current_fs.attr('class') !== next_fs.attr('class'))
-        {           
-        next_fs.show();        
+        if (current_fs.attr('class') !== next_fs.attr('class')) {
+            next_fs.show();
             current_fs.animate({ opacity: 0 }, {
 
                 step: function (now, mx) {
@@ -207,8 +206,8 @@ $(document).ready(function () {
 
     });
 
-    getDataParam();    
-   
+    getDataParam();
+
 });
 
 function getDataParam() {
@@ -252,9 +251,9 @@ function parseDataValue(datavalue) {
         //alert(vals[0]);
         //DisplayPersonalizeMode(vals[0]);
         contactObjectId = vals[0];
-       
+
         ConstructSectionDetails(vals[0]);
-        
+
     }
     else {
         noParams();
@@ -279,8 +278,7 @@ function setText(element, text) {
 
 }
 
-function ConstructSectionDetails(contactid)
-{
+function ConstructSectionDetails(contactid) {
     //$("#progressbar").before('<div style="display:inline;text-align:center;font-size:15px;margin-bottom:5px;opacity: 0.6;">Patient Information Goes here</div>');
 
     vTblStr = '  <table class="tg-blkupdt">' +
@@ -294,7 +292,7 @@ function ConstructSectionDetails(contactid)
                          '<th class="tg-blkupdt-duedate">Next Due Date</th>' +
                                  '<th class="tg-blkupdt-goalstate">Goal State</th>' +
                          //'<th class="tg-more">More</th>' +
-                     '</tr>'+
+                     '</tr>' +
                 ' </table>';
 
     $('.blkupdt-symptoms-details, .blkupdt-testcare-details,.blkupdt-medications-details,.blkupdt-nutrition-details,.blkupdt-activity-details,.blkupdt-psychosocial-details,.blkupdt-wrap-details').append(vTblStr);
@@ -302,11 +300,11 @@ function ConstructSectionDetails(contactid)
     BuildTableRows(contactid);
 };
 
-function createMetricOperatorDropDown(operator,goalid,idAttribute) {
+function createMetricOperatorDropDown(operator, goalid, idAttribute) {
 
-    var id = goalid +  idAttribute;
+    var id = goalid + idAttribute;
     var ddOperator = '<div class="btn-group">' +
-                        '<button type="button" id="'+ id +'" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                        '<button type="button" id="' + id + '" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                             operator + //'<span class="caret"></span>' +
                         '</button>' +
                     '</div>';
@@ -314,10 +312,9 @@ function createMetricOperatorDropDown(operator,goalid,idAttribute) {
     return ddOperator;
 }
 
-function createMerticValueTextbox(metricValue,goalid,idAttribute)
-{
-    var id = goalid +  idAttribute;
-    return '<input type="text" id="'+ id +'" value="' + metricValue + '" class="txtfieldquantitative" style="width:40px; padding: 6px; border-color:transparent;">';//text-align: left;display:inline;
+function createMerticValueTextbox(metricValue, goalid, idAttribute) {
+    var id = goalid + idAttribute;
+    return '<input type="text" id="' + id + '" value="' + metricValue + '" class="txtfieldquantitative" style="width:40px; padding: 6px; border-color:transparent;">';//text-align: left;display:inline;
 }
 
 function BuildTableRows(vContactId) {
@@ -383,7 +380,7 @@ function BuildTableRows(vContactId) {
               strGoalId = tri_cccareplangoalId;
               strSliderDiv = "";
               strMdfrBtnId = tri_cccareplangoalId + "_BLKUPDTMDFRBTN";
-              vULselector = vVitalId + "_ULBLKUPDT"; //vital id
+              vULselector = vVitalId + "_ULBLKUPDT_" + tri_cccareplangoalId; //vital id
               strUniqueRowClass = tri_cccareplangoalId + "_uniquerow";
               strUniqueGoalStateButtonClass = tri_cccareplangoalId + "_uniquegoalstatebutton";
               vGoalColorclass = "";
@@ -393,12 +390,12 @@ function BuildTableRows(vContactId) {
                   case 100000000: // Qualitative
 
                       strTargetVal = results[i].tri_qualitativetarget;
-                      strLastTargetVal = tri_lastresult; // tri_LastTargetValue
+                      strLastTargetVal = tri_lastresult;
                       //build slider control if slider lookup has data
                       if (tri_SliderControlId !== null && tri_SliderControlId !== "undefined") {
 
                           var vSldrClass = tri_cccareplangoalId + "_sldr";
-                          var vSldrtxtboxClass = tri_cccareplangoalId + "_sldrtxtbox txtfield";
+                          var vSldrtxtboxClass = tri_cccareplangoalId + "_sldrtxtbox txtfield tg-blkupdt-sldrtxtbox";
                           strSliderDiv = '<div class="' + vSldrClass + '"></div>' +
                               '<span><input type="text"  class=' + vSldrtxtboxClass + ' readonly style="text-align: left; padding-left: 10px;font-size:14px;border:none;background-color: #FAFAFA;"></span>';
                           SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId);
@@ -413,7 +410,7 @@ function BuildTableRows(vContactId) {
                           var vMtrcOprtr2txt = "";
                           vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                           strTargetVal = createMetricOperatorDropDown(vMtrcOprtr1txt, tri_cccareplangoalId, "_MetricOpr1") + ' ' + createMerticValueTextbox(Number(tri_Metric).toFixed(2), tri_cccareplangoalId, "_MetricOprVal1") + ' and ' +
-                                         createMetricOperatorDropDown(vMtrcOprtr2txt, tri_cccareplangoalId, "_MetricOpr2") + ' ' + createMerticValueTextbox(((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2)), tri_cccareplangoalId,"_MetricOprVal2");
+                                         createMetricOperatorDropDown(vMtrcOprtr2txt, tri_cccareplangoalId, "_MetricOpr2") + ' ' + createMerticValueTextbox(((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2)), tri_cccareplangoalId, "_MetricOprVal2");
                       }
                       else {
                           // alert(vMtrcOprtr1txt);
@@ -434,7 +431,7 @@ function BuildTableRows(vContactId) {
 
               strMdfrDropdown =
               '<div class="btn-group" style="width: 90px;">' +
-              '<button type="button" class="btn btn-default dropdown-toggle blkupdtmodifierbutton" id="'+ strMdfrBtnId +'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >'+strMdfrName+' <span class="caret"></span></button>' +
+              '<button type="button" class="btn btn-default dropdown-toggle blkupdtmodifierbutton" id="' + strMdfrBtnId + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >' + strMdfrName + ' <span class="caret"></span></button>' +
               '<ul class="dropdown-menu personalizedropdownmenu ' + vULselector + '">'
               //'<li role="presentation" class="dropdown-header">18-25</li>' +
               //'<li role="presentation" class="dropdown-header">15-18</li>' +
@@ -485,7 +482,7 @@ function BuildTableRows(vContactId) {
                       break;
               }
 
-              strGoalStateDropdownQualQuant ="";
+              strGoalStateDropdownQualQuant = "";
 
               if (tri_typeofgoalcode === 100000000) {
                   strGoalStateDropdownQualQuant = '<button type="button" style="float:none;" class="btn btn-default dropdown-toggle blkupdtGoalStatebutton ' + strUniqueGoalStateButtonClass + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >' + strGoalStateTxt + ' <span class="caret"></span></button>' +
@@ -501,7 +498,7 @@ function BuildTableRows(vContactId) {
 
 
               strGoalStateDrpDown =
-              '<div class="btn-group" style="width: 90px;">' + strGoalStateDropdownQualQuant +              
+              '<div class="btn-group" style="width: 90px;">' + strGoalStateDropdownQualQuant +
               '</div>';
 
               if (tri_LastGoalDate !== null) {
@@ -511,15 +508,14 @@ function BuildTableRows(vContactId) {
               if (tri_NextDueDate !== null) {
                   strNextDueDt = $.datepicker.formatDate('mm/dd/yy', tri_NextDueDate);
               }
-                  
-              if (strLastTargetVal === null)
-              {
+
+              if (strLastTargetVal === null) {
                   strLastTargetVal = "";
               }
-             
+
               vAppendedRows = '<tr style="display: block;" class="' + strRowClass + " " + strUniqueRowClass + " " + vGoalColorclass + '">' +
                               '<td class="tg-blkupdt-typedetail" style=" border-bottom:none;">' + tri_name + '</td>' +
-                              '<td class="tg-blkupdt-modifier" style=" border-bottom:none;">' + strMdfrDropdown + '</td>' + GetModifierBasedOnValueType(vVitalId, vContactId, tri_cccareplangoalId)+
+                              '<td class="tg-blkupdt-modifier" style=" border-bottom:none;">' + strMdfrDropdown + '</td>' + GetModifierBasedOnValueType(vVitalId, vContactId, tri_cccareplangoalId) +
                               '<td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class=' + strRowClass + ' style="background-color: #FAFAFA;"><td class="tg-blkupdt-typedetail"></td><td class="tg-blkupdt-modifier"></td>' +
                               '<td class="tg-blkupdt-target" goalCode=' + tri_typeofgoalcode + '>' + strTargetVal + '</td>' +
                               '<td class="tg-blkupdt-observed">' + strSliderDiv + '</td>' +
@@ -533,14 +529,14 @@ function BuildTableRows(vContactId) {
 
               // '.blkupdt-symptoms-details, .blkupdt-testcare-details,.blkupdt-medications-details,.blkupdt-nutrition-details,.blkupdt-activity-details,.blkupdt-psychosocial-details,.blkupdt-wrap-details'
           }
-         // return vAppendedRows;00
+          // return vAppendedRows;00
 
       },
       function (error) {
           alert(error.message);
       },
       function () {
-         
+
           $('.txtfieldquantitative').spinner({ step: 1.00, numberFormat: "n" });
           //$('.tg-blkupdt-hdr').after(vAppendedRows);
           AddPatientInfoToForm(vContactId);
@@ -586,7 +582,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccar
     var vMdfrIdArray = [];
     var vMdfrIdGoalSelectedArray = [];
     //var vMdfrTagArray = [];
-    var vULselector = tri_vitalsvaluetypeid + "_ULBLKUPDT";
+    var vULselector = tri_vitalsvaluetypeid + "_ULBLKUPDT_" + tri_cccareplangoalId;
     var modifierValue = "";
 
     //get modifier ids and put them in an array
@@ -598,18 +594,25 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccar
                 for (var i = 0; i < results.length; i++) {
 
                     var tri_PatientModifierId = results[i].tri_PatientModifierId.Id;
-                    var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
-                    var tri_GoalSelected = results[i].tri_GoalSelected;
-                    var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
+                    if (tri_PatientModifierId !== null && tri_PatientModifierId !== 'undefined') {
+                        var tri_vitalsvaluetype = results[i].tri_vitalsvaluetype;
+                        var tri_GoalSelected = results[i].tri_GoalSelected;
+                        var tri_cccareplangoalId = results[i].tri_cccareplangoalId;
 
-                    modifierValue = results[i].tri_PatientModifierId.Name;
+                        modifierValue = results[i].tri_PatientModifierId.Name;
 
-                    var IndexOfMdfrId = vMdfrIdArray.indexOf(tri_PatientModifierId);
+                        //if (modifierValue.trim() == "Patients reporting sleep disturbance as a component of depression : : Sleep") {
+                        //    debugger;
+                        //}
 
-                    if (IndexOfMdfrId === -1 && IndexOfMdfrId !== null && IndexOfMdfrId !== undefined) {
+                        var IndexOfMdfrId = vMdfrIdArray.indexOf(tri_PatientModifierId);
 
-                        vMdfrIdArray.push(tri_PatientModifierId);
-                        vMdfrIdGoalSelectedArray.push({ 'ModifierId': tri_PatientModifierId, 'GoalSelecetd': tri_GoalSelected, 'CarePlanGoalId': tri_cccareplangoalId });
+                        if (IndexOfMdfrId === -1 && IndexOfMdfrId !== null && IndexOfMdfrId !== undefined) {
+
+                            vMdfrIdArray.push(tri_PatientModifierId);
+                            vMdfrIdGoalSelectedArray.push({ 'ModifierId': tri_PatientModifierId, 'GoalSelecetd': tri_GoalSelected, 'CarePlanGoalId': tri_cccareplangoalId });
+                        }
+
                     }
                 }
             }
@@ -663,7 +666,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccar
 
                 };// for clses here
 
-               
+
             };// array count if closes here
 
         }
@@ -677,21 +680,21 @@ function AddPatientInfoToForm(contactId) {
 
     SDK.JQuery.retrieveMultipleRecords(
     "Contact",
-    "?$select=BirthDate,EMailAddress1,FullName,MobilePhone,tri_MRN&$filter=ContactId eq guid'"+contactId+"'",
+    "?$select=BirthDate,EMailAddress1,FullName,MobilePhone,tri_MRN&$filter=ContactId eq guid'" + contactId + "'",
     function (results) {
         //for (var i = 0; i < results.length; i++) {
-            var BirthDate = results[0].BirthDate;
-            var EMailAddress1 = results[0].EMailAddress1;
-            var FullName = results[0].FullName;
-            var MobilePhone = results[0].MobilePhone;
-            var tri_MRN = results[0].tri_MRN;
+        var BirthDate = results[0].BirthDate;
+        var EMailAddress1 = results[0].EMailAddress1;
+        var FullName = results[0].FullName;
+        var MobilePhone = results[0].MobilePhone;
+        var tri_MRN = results[0].tri_MRN;
         //}
         //alert(FullName);
-            strBirthDay ="";
-            if (BirthDate !== null) {
-                strBirthDay = $.datepicker.formatDate('mm/dd/yy', BirthDate);
-            }
-            $('.transbox').append('<p> Name: ' + FullName + ', Birth Day: ' + strBirthDay + ', MRN: ' + tri_MRN + '</p>');
+        strBirthDay = "";
+        if (BirthDate !== null) {
+            strBirthDay = $.datepicker.formatDate('mm/dd/yy', BirthDate);
+        }
+        $('.transbox').append('<p> Name: ' + FullName + ', Birth Day: ' + strBirthDay + ', MRN: ' + tri_MRN + '</p>');
     },
     function (error) {
         alert(error.message);
@@ -769,7 +772,7 @@ function SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId
 
         //$("#slider").after('<div id="'+ sldrid +'" style="width:450px;"></div>');
         $('.' + vSldrClass).data("sldrdata", {
-       // $('.slider').data("sldrdata", {
+            // $('.slider').data("sldrdata", {
             v1: tri_Value1, v1txt: tri_Value1Text, v1color: tri_Value1Color, v1goal: tri_GoalState1,
             v2: tri_Value2, v2txt: tri_Value2Text, v2color: tri_Value2Color, v2goal: tri_GoalState2,
             v3: tri_Value3, v3txt: tri_Value3Text, v3color: tri_Value3Color, v3goal: tri_GoalState3,
@@ -896,6 +899,8 @@ function SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId
                     SliderSetGoalState(goal9, tri_cccareplangoalId);
                     //SliderSetBorder(goal9, tri_cccareplangoalId);
                 };
+
+                AddGoalIdToSave(tri_cccareplangoalId);
                 //$("#" + currTxbxId).val(strCurrval);
             },
 
@@ -918,7 +923,7 @@ function SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId
 function SliderSetGoalState(osetValue, tri_cccareplangoalId) {
 
     var vButtonClass = tri_cccareplangoalId + "_uniquegoalstatebutton";
-   
+
     //alert($('.'+vRowClass).next('tr').attr('class'));
 
     switch (osetValue) {
@@ -927,11 +932,11 @@ function SliderSetGoalState(osetValue, tri_cccareplangoalId) {
             $('.' + vButtonClass).val(167410000);
             //$('.' + vButtonClass).closest('tr').css('border-top', '3px solid orange');
             SliderSetBorder("100000000", tri_cccareplangoalId);
-           break;
+            break;
         case "100000001":
             $('.' + vButtonClass).text("Met");
             $('.' + vButtonClass).val(167410001);
-           // $('.' + vButtonClass).closest('tr').css('border-top', '3px solid green');
+            // $('.' + vButtonClass).closest('tr').css('border-top', '3px solid green');
             SliderSetBorder("100000001", tri_cccareplangoalId);
             break;
         case "100000002":
@@ -940,9 +945,9 @@ function SliderSetGoalState(osetValue, tri_cccareplangoalId) {
             //$('.' + vButtonClass).closest('tr').css('border-top', '3px solid red');
             SliderSetBorder("100000002", tri_cccareplangoalId);
             break;
-        case "100000003":                     
+        case "100000003":
             $('.' + vButtonClass).text("Closed, Cancelled");
-            $('.' + vButtonClass).val(167410003);           
+            $('.' + vButtonClass).val(167410003);
             //$('.' + vButtonClass).closest('tr').css('border-top', '3px solid orange');
             SliderSetBorder("100000003", tri_cccareplangoalId);
             break;
@@ -993,10 +998,12 @@ $(document).on('click', '.personalizedropdownmenu li', function () {
         var ulClass = $(this).parent()[0].className;
 
         if (ulClass.indexOf('_ULBLKUPDT') > -1) {
+            goalId = objbtn.id.replace("_BLKUPDTMDFRBTN", "");
+
             var modId = $(this)[0].id;
             var vitalTypeId = ulClass.replace("dropdown-menu personalizedropdownmenu ", "");
-            vitalTypeId = vitalTypeId.replace("_ULBLKUPDT", "").trim();
-            goalId = objbtn.id.replace("_BLKUPDTMDFRBTN", "");
+            vitalTypeId = vitalTypeId.replace("_ULBLKUPDT", "");
+            vitalTypeId = vitalTypeId.replace("_"+goalId, "").trim();
 
             GetGoalForCurrentModifier(modId, vitalTypeId, contactObjectId, $(this).text(), this);
         }
@@ -1027,7 +1034,7 @@ $(document).on('click', '.personalizedropdownmenu li', function () {
 
             // set data
             $("." + goalId + "_uniquerow").addClass(classToAdd);
-            $(objbtn).html(changedGoalState + " " +"<span class='caret'></span>");
+            $(objbtn).html(changedGoalState + " " + "<span class='caret'></span>");
         }
 
         AddGoalIdToSave(goalId);
@@ -1054,23 +1061,27 @@ function AddGoalIdToSave(goalId) {
 }
 
 $(document).on('click', '#progressbar li, input[class~="action-button"]', function () {
-    // #progressbar li,
+    // alert(carePlanGoalArray.length);
     for (i = 0; i < carePlanGoalArray.length; i++) {
         var goalId = carePlanGoalArray[i];
         debugger;
 
+        //alert(goalId);
         var modifierObj = $('#' + goalId + '_BLKUPDTMDFRBTN');
+        var vSliderTextValue = $('.' + goalId + '_sldrtxtbox').val();
+        // alert(vSliderTextValue);
         var vModfrName = modifierObj.text().trim();
 
         var ulModifier = modifierObj.next();
         var modifierId = ulModifier.find('li:contains("' + vModfrName + '")')[0].id;
 
-        if (modifierId.indexOf('_NAP') > -1){
+        if (modifierId.indexOf('_NAP') > -1) {
             modifierId = '';
         }
 
         var vVitalTypId = ulModifier[0].className.replace("dropdown-menu personalizedropdownmenu ", "");
         vVitalTypId = vVitalTypId.replace("_ULBLKUPDT", "");
+        vVitalTypId = vVitalTypId.replace("_"+goalId, "").trim();
 
         var goalStateObj = $('[class~="' + goalId + '_uniquegoalstatebutton"]');
         var vGoalStateTxt1 = goalStateObj.text().trim();
@@ -1084,7 +1095,7 @@ $(document).on('click', '#progressbar li, input[class~="action-button"]', functi
         var vTargetValue2Txt = '';
 
         if (targetDetails.attr('goalCode') === '100000000') { // Qualitative
-            vQualTxt = targetDetails.text(); // save observed value
+            vQualTxt = targetDetails.text();
         }
         else if (targetDetails.attr('goalCode') === '100000001') { // Quantitative
             vMetricOprtrTxt1 = $('#' + goalId + '_MetricOpr1').text();
@@ -1094,6 +1105,7 @@ $(document).on('click', '#progressbar li, input[class~="action-button"]', functi
         }
 
         var vobservedValue = nextrow.find('.tg-blkupdt-LastResult').text();
+
 
         var vLastResultDate = new Date();
 
@@ -1119,18 +1131,25 @@ $(document).on('click', '#progressbar li, input[class~="action-button"]', functi
             SDK.REST.updateRecord(goalId, obj, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
         }
         else {
-            UpdateCarePlanJoin(vVitalTypId, contactObjectId[0], modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator21, vOsetValGoalState, vobservedValue, vLastResultDate);
+            UpdateCarePlanJoin(vVitalTypId, contactObjectId[0], modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator21, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue, this.value);
         }
     }
-
-    if (this.value === 'Submit' && carePlanGoalArray.length > 0) {
-        alert('Goals are Submitted.');
-        return false;
-    }
-
     carePlanGoalArray.length = 0;
 
+    //if (this.value === 'Submit') {
+    //    alert('Goals are Submitted.');
+    //    //window.opener.reload();
+    //    self.opener.location.reload();
+    //    window.close();
+    //    //return false;
+    //}
+
 });
+
+
+function updateSuccessCallbackforMultiEdit() {
+    // alert("The record changes were saved");
+}
 
 function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, currText, currentObj) {
 
@@ -1155,9 +1174,11 @@ function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, cur
         lastResult.text('');
         lastresultdate.text('');
         duedate.text('');
-        goalstate.find('button').html("<span class='caret'></span>").attr('disabled',true); //"Met "<span class='caret'></span>")
+        goalstate.find('button').html("<span class='caret'></span>").attr('disabled', true); //"Met "<span class='caret'></span>")
         currentRow.removeClass('orangeborder redborder greenborder');
         //currentRow.css('border-top', '1pt solid #aabcfe');
+        currentRow.hide('slow');
+        nextRow.hide();
         return;
     }
 
@@ -1220,7 +1241,7 @@ function (results) {
                     if (tri_SliderControlId !== null && tri_SliderControlId !== "undefined") {
 
                         var vSldrClass = tri_cccareplangoalId + "_sldr";
-                        var vSldrtxtboxClass = tri_cccareplangoalId + "_sldrtxtbox txtfield";
+                        var vSldrtxtboxClass = tri_cccareplangoalId + "_sldrtxtbox txtfield tg-blkupdt-sldrtxtbox";
                         strSliderDiv = '<div class="' + vSldrClass + '"></div>' +
                             '<span><input type="text"  class=' + vSldrtxtboxClass + ' readonly style="text-align: left; padding-left: 10px;font-size:14px;border:none;background-color: #FAFAFA;"></span>';
                         SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId);
@@ -1235,7 +1256,7 @@ function (results) {
                         var vMtrcOprtr2txt = "";
                         vMtrcOprtr2txt = GetMetricOperatorTextBasedOnVal(tri_metricoperatortwo);
                         strTargetVal = createMetricOperatorDropDown(vMtrcOprtr1txt, tri_cccareplangoalId, "_MetricOpr1") + ' ' + createMerticValueTextbox(Number(tri_Metric).toFixed(2), tri_cccareplangoalId, "_MetricOprVal1") + ' and ' +
-                                       createMetricOperatorDropDown(vMtrcOprtr2txt, tri_cccareplangoalId, "_MetricOpr2") + ' ' + createMerticValueTextbox(((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2)), tri_cccareplangoalId,"_MetricOprVal2");
+                                       createMetricOperatorDropDown(vMtrcOprtr2txt, tri_cccareplangoalId, "_MetricOpr2") + ' ' + createMerticValueTextbox(((tri_targetvaluetwo === null || tri_targetvaluetwo === undefined) ? 0 : Number(tri_targetvaluetwo).toFixed(2)), tri_cccareplangoalId, "_MetricOprVal2");
                     }
                     else {
                         // alert(vMtrcOprtr1txt);
@@ -1294,7 +1315,7 @@ function (results) {
 
             currentRow.removeClass('orangeborder redborder greenborder');
             currentRow.addClass(vGoalColorclass);
-            goalstate.find('button').html(strGoalStateTxt + "<span class='caret'></span>").attr('disabled',false); //"Met "<span class='caret'></span>")
+            goalstate.find('button').html(strGoalStateTxt + "<span class='caret'></span>").attr('disabled', false); //"Met "<span class='caret'></span>")
             $('.txtfieldquantitative').spinner({ step: 1.00, numberFormat: "n" });
         }
     }
@@ -1314,8 +1335,9 @@ function () {
 
 }
 
-function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState, vobservedValue, vLastResultDate) {
+function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue,btnValue) {
     debugger;
+    // alert(vobservedValue);
     SDK.REST.retrieveMultipleRecords(
     "tri_cccareplangoal",
     "?$select=tri_actiontriggermetricoperator,tri_SliderControlId,tri_actiontriggervalue,tri_activityassignmentrole,tri_activitydescription,tri_activitydescriptionabnormal,tri_activitydueon,tri_activityrecurrence,tri_activityrecurrenceabnormal,tri_activityrecurrencemultiplierabnormal,tri_activityrecurrencemultipliernormal,tri_CarePlanGoalState,tri_cccareplangoalId,tri_GoalSection,tri_GoalSelected,tri_LastGoalDate,tri_LastResultDate,tri_LastTargetValue,tri_Metric,tri_MetricOperator,tri_metricoperatortwo,tri_name,tri_NextDueDate,tri_PatientID,tri_PatientModifierId,tri_qualitativeaction,tri_qualitativetarget,tri_range,tri_targetmetricoperator,tri_targetvaluetwo,tri_typeofgoalcode,tri_vitalsvaluetype&$filter=tri_PatientID/Id eq (guid'" + contactId + "')   and  tri_PatientModifierId/Id eq (guid'" + modifierId + "') and tri_vitalsvaluetype/Id eq (guid'" + vVitalTypId + "')",
@@ -1364,11 +1386,11 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
                     case 100000000:
                         //tri_careplanjoin.tri_qualitativetarget = vTargetValueTxt;
                         if (vQualTxt !== null && vQualTxt !== "") {
-                            tri_cccareplangoal.tri_qualitativetarget = vQualTxt; vobservedValue
-                          //  tri_cccareplangoal.tri_LastTargetValue = v
+                            tri_cccareplangoal.tri_qualitativetarget = vQualTxt;
                         }
-                        if (vobservedValue !== null && vobservedValue !== "" && vobservedValue !== undefined) {
-                            tri_cccareplangoal.tri_lastresult = vobservedValue;
+                        if (vSliderTextValue !== null && vSliderTextValue !== "" && vSliderTextValue !== undefined) {
+                            // tri_cccareplangoal.tri_lastresult = vobservedValue;
+                            tri_cccareplangoal.tri_lastresult = vSliderTextValue;
                             tri_cccareplangoal.tri_LastResultDate = vLastResultDate;
                         }
 
@@ -1398,7 +1420,19 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
                     tri_cccareplangoal.tri_CarePlanGoalState = { Value: parseInt(vOsetValGoalState, 10) };
                 };
 
-                SDK.REST.updateRecord(tri_cccareplangoalId, tri_cccareplangoal, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
+                SDK.REST.updateRecord(tri_cccareplangoalId,
+                                      tri_cccareplangoal,
+                                      "tri_cccareplangoal",
+                                     function () {
+                                         if (btnValue === 'Submit') {
+                                             //alert('Goals are Submitted.');
+                                             //window.opener.reload();
+                                             self.opener.location.reload();
+                                             window.close();
+                                             //return false;
+                                         }
+                                     },
+                                      errorHandler);
             }
         }
     },
@@ -1406,7 +1440,13 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
         alert(error.message);
     },
     function () {
-      
+        //if (btnValue === 'Submit') {
+        //    alert('Goals are Submitted.');
+        //    //window.opener.reload();
+        //    self.opener.location.reload();
+        //    window.close();
+        //    //return false;
+        //}
     }
 );
 }
