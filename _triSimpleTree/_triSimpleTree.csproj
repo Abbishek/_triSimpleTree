@@ -60,6 +60,7 @@
     <Content Include="assesment12122016\Assessment.css" />
     <Content Include="assesment12122016\Assessment.html" />
     <Content Include="assesment12122016\AssessmentWizard.js" />
+    <Content Include="assesment12122016\easingstylesheet.css" />
     <Content Include="BulkUpdateGoals\BulkUpdateHtml.html" />
     <Content Include="BulkUpdateGoals\BulkUpdateScript.js" />
     <Content Include="BulkUpdateGoals\Common.js" />

@@ -26,6 +26,15 @@
 
     <!-- <link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/personalize-style.css?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=PmoNAfufhLqIIYLgbIBlnaJXDk0jGntWuJfhPnUywrI%3D"  rel="stylesheet" type="text/css">
     -->
+    <script type="text/javascript" language="text/javascript">
+        function handleBrowserCloseButton(event) {
+            self.opener.location.reload();
+            //if (($(window).width() - window.event.clientX) < 35 && window.event.clientY < 0) {
+            //    //Call method by Ajax call
+            //    alert('Browser close button clicked');
+            //}
+        }
+    </script>
 
     <style type="text/css">
         .tg-blkupdt {
@@ -120,7 +129,7 @@
 
 </head>
 
-<body onunload="">
+<body onbeforeunload="handleBrowserCloseButton(event);">
 
     <form id="msform">
         <div class="transbox">
