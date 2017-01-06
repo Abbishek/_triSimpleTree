@@ -1,235 +1,418 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <script src="scripts/powerbi.min.js"></script>
+    <script src="scripts/jquery_1_12_1min.js"></script>
     <title></title>
 </head>
 <body>
 
-    <!-- html from monitor mode -->
-    <div class="window-wrapper">
-
-        <!-- X-CLOSE -->
-        <div style="width:100%; padding-left:660px; padding-top:20px;">
-            <div class="x-close">X</div>
-        </div>
-
-
-
-
-
-        <!-- FLAG + Title -->
-
-        <div class="indicator-wrapper">
-
-            <div class="flag-box-big red">
-                SET<br>
-                FLAG
-            </div>
-            <div class="sectiontitle_personalize"></div>
-
-            <div class="indicator-line red">
-            </div>
-
-
-
-            <!-- Section Content -->
-            <!-- LAST RESULT -->
-            <div class="tablecontent">
-                <table class="maintable" align="center">
-                    <tr>
-                        <td class="label-name">
-                            Last Result:
-                        </td>
-                        <td class="result-1 redtxt"></td>
-
-                    </tr>
-                </table>
-
-
-
-
-                <!-- RESULT SOURCE -->
-                <table class="maintable" align="center">
-                    <tr>
-                        <td class="label-name">Result Source:</td>
-                        <td class="result-1">User</td>
-                    </tr>
-                </table>
-
-
-
-
-
-                <!-- DATES -->
-                <table class="maintable" align="center">
-                    <tr>
-                        <td class="label-name"> Last Result Date:</td>
-                        <td class="result-1"></td>
-                        <td class="label-name"> Next Due Date:</td>
-                        <td class="result-1"><br></td>
-                    </tr>
-                </table>
-
-                <br><br>
-
-
-
-
-                <!-- FACTORS & VALUES -->
-                <table class="maintable" align="center">
-                    <tr>
-                        <td class="labelcenter" width="90px">Factor / Modifier:</td>
-                        <td class="labelcenter" width="200px"> Target Value:</td>
-                        <td class="labelcenter" width="120px"> In Range Frequency:</td>
-                        <td class="labelcenter" width="120px"> Out of Range Frequency:<br></td>
-                    </tr>
-                </table>
-
-                <table class="factors" align="center">
-                    <tr>
-                        <td class="labelcenter" style="width:90px; padding-right:20px;">
-
-
-
-
-
-                            <!-- FACTOR DROP-DOWN -->
-                            <div class="btn-group" style="width: 60px;">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation" class="dropdown-header">18-25</li>
-                                    <li role="presentation" class="dropdown-header">15-18</li>
-                                </ul>
-                            </div>
-
-                        </td>
-
-
-
-                        <td class="labelcenter" width="200px">
-
-                            <table align="center">
-                                <tr>
-                                    <td>
-
-                                        <!-- MODIFIER DROP-DOWN -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&lt; &nbsp; &nbsp;<span class="caret"></span></button>
-                                            <ul class="dropdown-menu">
-                                                <li role="presentation" class="dropdown-header">=</li>
-                                                <li role="presentation" class="dropdown-header">&gt;</li>
-                                            </ul>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="txtfield">
-                                    </td>
-
-
-
-                                    <td>
-
-                                        <!-- TYPE DROP-DOWN -->
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">item1 <span class="caret"></span></button>
-                                            <ul class="dropdown-menu">
-                                                <li role="presentation" class="dropdown-header"></li>
-                                                <li role="presentation" class="dropdown-header"></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-
-                        </td>
-                        <td class="labelcenter" width="120px" style="padding-right:30px;">
-
-                            <input type="text" class="txtfield" style="width:30px;">
-
-
-
-
-                            <!-- MODIFIER DROP-DOWN -->
-                            <div class="btn-group" style="width:60px;">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">months <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation" class="dropdown-header">days</li>
-                                    <li role="presentation" class="dropdown-header">weeks</li>
-                                    <li role="presentation" class="dropdown-header">years</li>
-                                </ul>
-                            </div>
-
-                        </td>
-                        <td class="labelcenter" width="120px" style="padding-right:30px;">
-                            <input type="text" class="txtfield" style="width:30px;">
-
-
-
-
-
-                            <!-- MODIFIER DROP-DOWN -->
-                            <div class="btn-group" style="width:60px;">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">months <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation" class="dropdown-header">days</li>
-                                    <li role="presentation" class="dropdown-header">weeks</li>
-                                    <li role="presentation" class="dropdown-header">years</li>
-                                </ul>
-                            </div>
-                            <br>
-                        </td>
-                    </tr>
-                </table>
-
-                <br>
-
-
-
-
-                <!-- DESCRIPTION & ASSIGNMENT ROLE -->
-                <table class="maintable" align="center">
-                    <tr>
-                        <td class="label-name" style="width:500px">Trigger Description:</td>
-                        <td class="label-name" style="width:150px">Assignment Role:</td>
-                    </tr>
-                </table>
-
-                <table class="factors" align="center">
-                    <tr>
-
-                        <td style="width:450px; padding-left:10px; padding-right: 0px;"><input type="text" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;"></td>
-
-
-                        <td class="label-name" style="width:150px; text-align:left;">
-
-
-
-
-
-
-                            <!-- ASSIGNMENT ROLE DROP-DOWN -->
-                            <div class="btn-group" style="width: 120px;">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Care Navigator <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation" class="dropdown-header">Nurse</li>
-                                    <li role="presentation" class="dropdown-header">Item 3</li>
-                                </ul>
-                            </div>
-
-                        </td>
-
-                    </tr>
-                </table>
-
-                <br>
-                <div class="center-wrapper" style="padding-left:200px;">
-
-                    <div class="bluebtn">SAVE CHANGES</div>
-
-                </div>
-
-            </div>
-        </div>
+    <div class="inputLine">
+        <h8>Embed App Token</h8>
+        <div><input type="text" id="txtAccessToken" onchange="UpdateSession(this, SessionKeys.AccessToken);" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2ZXIiOiIwLjIuMCIsIndjbiI6IlBvd2VyQmlBenVyZVNhbXBsZXMiLCJ3aWQiOiJmODFjMTk2Ni1lZGVlLTQxMWItOGY4YS1mODQ0NjAxOWIwNDQiLCJyaWQiOiJjNTJhZjhhYi0wNDY4LTQxNjUtOTJhZi1kYzM5ODU4ZDY2YWQiLCJpc3MiOiJQb3dlckJJU0RLIiwiYXVkIjoiaHR0cHM6Ly9hbmFseXNpcy53aW5kb3dzLm5ldC9wb3dlcmJpL2FwaSIsImV4cCI6MTQ4MjQzMzk1MywibmJmIjoxNDgyNDMwMzUzfQ.jAFH8fpsK3Urp74vvDhBojwasypjTqJu15cMKq6TF-I"></div>
+    </div>
+    <div class="inputLine">
+        <h8>Report Id</h8>
+        <div><input type="text" id="txtEmbedReportId" onchange="UpdateSession(this, SessionKeys.EmbedId);" value="c52af8ab-0468-4165-92af-dc39858d66ad"></div>
+    </div>
+    <div class="inputLine">
+        <h8>Embed URL</h8>
+        <div><input type="text" id="txtReportEmbed" onchange="UpdateSession(this, SessionKeys.EmbedUrl);" value="https://embedded.powerbi.com/appTokenReportEmbed"></div>
     </div>
 
+    <div id="reportContainer">
+
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            /*
+    This file contains the code samples which will appear live in the web-page.
+    Each sample method name starts with _Report_ or _Page or _Embed depends on which section it appears.
+    Please keep this.
+*/
+
+            // ---- Embed Code ----------------------------------------------------
+
+            function _Embed_BasicEmbed() {
+                // Read embed application token from textbox
+                var txtAccessToken = $('#txtAccessToken').val();
+
+                // Read embed URL from textbox
+                var txtEmbedUrl = $('#txtReportEmbed').val();
+
+                // Read report Id from textbox
+                var txtEmbedReportId = $('#txtEmbedReportId').val();
+
+                // Embed configuration used to describe the what and how to embed.
+                // This object is used when calling powerbi.embed.
+                // This also includes settings and options such as filters.
+                // You can find more information at https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details.
+                var config = {
+                    type: 'report',
+                    accessToken: txtAccessToken,
+                    embedUrl: txtEmbedUrl,
+                    id: txtEmbedReportId,
+                    settings: {
+                        filterPaneEnabled: true,
+                        navContentPaneEnabled: true
+                    }
+                };
+
+                // Grab the reference to the div HTML element that will host the report.
+                var reportContainer = $('#reportContainer')[0];
+
+                // Embed the report and display it within the div container.
+                var report = powerbi.embed(reportContainer, config);
+
+                // Report.off removes a given event handler if it exists.
+                report.off("loaded");
+
+                // Report.on will add an event handler which prints to Log window.
+                report.on("loaded", function () {
+                    Log.logText("Loaded");
+                });
+            }
+
+            function _Embed_EmbedWithDefaultFilter() {
+                var txtAccessToken = $('#txtAccessToken').val();
+                var txtEmbedUrl = $('#txtReportEmbed').val();
+                var txtEmbedReportId = $('#txtEmbedReportId').val();
+
+                const filter = {
+                    $schema: "http://powerbi.com/product/schema#basic",
+                    target: {
+                        table: "Store",
+                        column: "Chain"
+                    },
+                    operator: "In",
+                    values: ["Lindseys"]
+                };
+
+                var embedConfiguration = {
+                    type: 'report',
+                    accessToken: txtAccessToken,
+                    embedUrl: txtEmbedUrl,
+                    id: txtEmbedReportId,
+                    settings: {
+                        filterPaneEnabled: false,
+                        navContentPaneEnabled: false
+                    },
+                    filters: [filter]
+                };
+
+                var reportContainer = document.getElementById('reportContainer');
+                powerbi.embed(reportContainer, embedConfiguration);
+            }
+
+            // ---- Report Operations ----------------------------------------------------
+
+            function _Report_GetId() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Retrieve the report id.
+                var reportId = report.getId();
+
+                Log.logText(reportId);
+            }
+
+            function _Report_UpdateSettings() {
+                // The new settings that you want to apply to the report.
+                const newSettings = {
+                    navContentPaneEnabled: true,
+                    filterPaneEnabled: false
+                };
+
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Update the settings by passing in the new settings you have configured.
+                report.updateSettings(newSettings)
+                    .then(function (result) {
+                        $("#result").html(result);
+                    })
+                    .catch(function (error) {
+                        $("#result").html(error);
+                    });
+            }
+
+            function _Report_GetPages() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Retrieve the page collection and loop through to collect the 
+                // page name and display name of each page and display the value.
+                report.getPages()
+                    .then(function (pages) {
+                        pages.forEach(function (page) {
+                            var log = page.name + " - " + page.displayName;
+                            Log.logText(log);
+                        });
+                    })
+                    .catch(function (error) {
+                        Log.log(error);
+                    });
+            }
+
+            function _Report_SetPage() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // setPage will change the selected view to the page you indicate.
+                // This is the actual page name not the display name.
+                report.setPage("ReportSection2")
+                    .then(function (result) {
+                        Log.log(result);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+
+                // Report.off removes a given event handler if it exists.
+                report.off("pageChanged");
+
+                // Report.on will add an event handler which prints page 
+                // name and display name to Log window.
+                report.on("pageChanged", function (event) {
+                    var page = event.detail.newPage;
+                    Log.logText(page.name + " - " + page.displayName);
+                });
+            }
+
+            function _Report_GetFilters() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Get the filters applied to the report.
+                report.getFilters()
+                    .then(function (filters) {
+                        Log.log(filters);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Report_SetFilters() {
+                // Build the filter you want to use. For more information, See Constructing
+                // Filters in https://github.com/Microsoft/PowerBI-JavaScript/wiki/Filters.
+                const filter = {
+                    $schema: "http://powerbi.com/product/schema#basic",
+                    target: {
+                        table: "Store",
+                        column: "Chain"
+                    },
+                    operator: "In",
+                    values: ["Lindseys"]
+                };
+
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Set the filter for the report.
+                // Pay attention that setFilters receives an array.
+                report.setFilters([filter])
+                    .then(function (result) {
+                        Log.log(result);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Report_RemoveFilters() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Remove the filters currently applied to the report.
+                report.removeFilters()
+                    .then(function (result) {
+                        Log.log(result);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Report_PrintCurrentReport() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Trigger the print dialog for your browser.
+                report.print()
+                    .then(function (result) {
+                        Log.log(result);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Report_Reload() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Reload the displayed report
+                report.reload()
+                    .then(function (result) {
+                        Log.log(result);
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Report_FullScreen() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Displays the report in full screen mode.
+                report.fullscreen();
+            }
+
+            function _Report_ExitFullScreen() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Exits full screen mode.
+                report.exitFullscreen();
+            }
+
+            // ---- Page Operations ----------------------------------------------------
+
+            function _Page_SetActive() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Retrieve the page collection, and then set the second page to be active.
+                report.getPages()
+                    .then(function (pages) {
+                        pages[1].setActive().then(function (result) {
+                            Log.log(result);
+                        });
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Page_GetFilters() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Retrieve the page collection and get the filters for the first page.
+                report.getPages()
+                    .then(function (pages) {
+                        pages[0].getFilters()
+                            .then(function (filters) {
+                                Log.log(filters);
+                            })
+                            .catch(function (errors) {
+                                Log.log(errors);
+                            });
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Page_SetFilters() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Build the filter you want to use. For more information, see Constructing 
+                // Filters in https://github.com/Microsoft/PowerBI-JavaScript/wiki/Filters.
+                const filter = {
+                    $schema: "http://powerbi.com/product/schema#basic",
+                    target: {
+                        table: "Store",
+                        column: "Chain"
+                    },
+                    operator: "In",
+                    values: ["Lindseys"]
+                };
+
+                // Retrieve the page collection and then set the filters for the first page.
+                // Pay attention that setFilters receives an array.
+                report.getPages()
+                    .then(function (pages) {
+                        pages[0].setFilters([filter])
+                            .then(function (result) {
+                                Log.log(result);
+                            })
+                            .catch(function (errors) {
+                                Log.log(errors);
+                            });
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            function _Page_RemoveFilters() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Retrieve the page collection and remove the filters for the first page.
+                report.getPages()
+                    .then(function (pages) {
+                        pages[0].removeFilters()
+                            .then(function (result) {
+                                Log.log(result);
+                            })
+                            .catch(function (errors) {
+                                Log.log(errors);
+                            });
+                    })
+                    .catch(function (errors) {
+                        Log.log(errors);
+                    });
+            }
+
+            // ---- Event Listener ----------------------------------------------------
+
+            function _Events_PageChanged() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Report.off removes a given event listener if it exists.
+                report.off("pageChanged");
+
+                // Report.on will add an event listener.
+                report.on("pageChanged", function (event) {
+                    var page = event.detail.newPage;
+                    Log.logText("Page changed to: " + page.name + " - " + page.displayName);
+                });
+
+                // Select Run and change to a different page.
+                // You should see an entry in the Log window.
+
+                Log.logText("Select different page to see events in Log window.");
+            }
+
+            function _Events_DataSelected() {
+                // Get a reference to the embedded report.
+                report = powerbi.embeds[0];
+
+                // Report.off removes a given event listener if it exists.
+                report.off("dataSelected");
+
+                // Report.on will add an event listener.
+                report.on("dataSelected", function (event) {
+                    var data = event.detail;
+                    Log.log(data);
+                });
+
+                // Select Run and select an element of a visualization.
+                // For example, a bar in a bar chart. You should see an entry in the Log window.
+
+                Log.logText("Select data to see events in Log window.");
+            }
+        });
+
+    </script>
 </body>
 </html>

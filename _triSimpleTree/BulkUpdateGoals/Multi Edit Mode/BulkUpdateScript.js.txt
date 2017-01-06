@@ -300,9 +300,9 @@ function ConstructSectionDetails(contactid) {
     BuildTableRows(contactid);
 };
 
-function createMetricOperatorDropDown(operator, goalid, idAttribute) {
+function createMetricOperatorDropDown(operator, selectorid, idAttribute) {
 
-    var id = goalid + idAttribute;
+    var id = selectorid + idAttribute;
     var ddOperator = '<div class="btn-group">' +
                         '<button type="button" id="' + id + '" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                             operator + //'<span class="caret"></span>' +
@@ -312,9 +312,56 @@ function createMetricOperatorDropDown(operator, goalid, idAttribute) {
     return ddOperator;
 }
 
-function createMerticValueTextbox(metricValue, goalid, idAttribute) {
-    var id = goalid + idAttribute;
+function createMerticValueTextbox(metricValue, selectorid, idAttribute) {
+    var id = selectorid + idAttribute;
     return '<input type="text" id="' + id + '" value="' + metricValue + '" class="txtfieldquantitative" style="width:40px; padding: 6px; border-color:transparent;">';//text-align: left;display:inline;
+}
+
+function GetGoalSection(goalSection) {
+    var strRowClass = '';
+    switch (goalSection) {
+        case 100000000:
+            strRowClass = "personalgoalrowclass";
+            break;
+        case 100000001:
+            strRowClass = "testsvitalsrowclass";
+            break;
+        case 100000002:
+            strRowClass = "medicationsrowclass";
+            break;
+        case 100000003:
+            strRowClass = "supportservicesrowclass";
+            break;
+        case 100000004:
+            strRowClass = "activitynutritionrowclass";
+            break;
+        case 100000005:
+            strRowClass = "behavioralhealthrowclass";
+            break;
+        case 100000006:
+            strRowClass = "wrapuprowclass";
+            break;
+    }
+    return strRowClass;
+}
+
+function GetGoalStateButton(goalcode, strUniqueGoalStateButtonClass, strGoalStateTxt) {
+
+    var btnGoalState = '';
+
+    if (goalcode === 100000000) {
+        btnGoalState = '<button type="button" style="float:none;" class="btn btn-default dropdown-toggle blkupdtGoalStatebutton ' + strUniqueGoalStateButtonClass + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >' + strGoalStateTxt + ' <span class="caret"></span></button>' +
+        '<ul class="dropdown-menu personalizedropdownmenu">' +
+        '<li role="presentation" class="dropdown-header">Open</li>' +
+        '<li role="presentation" class="dropdown-header">Met</li>' +
+        '<li role="presentation" class="dropdown-header">Not Met</li>' +
+        '</ul>'
+    }
+    else {
+        btnGoalState = '<button type="button" style="float:none;" class="btn btn-default dropdown-toggle blkupdtGoalStatebutton ' + strUniqueGoalStateButtonClass + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="true" >' + strGoalStateTxt + ' </button>'
+    };
+
+    return btnGoalState;
 }
 
 function BuildTableRows(vContactId) {
@@ -380,7 +427,7 @@ function BuildTableRows(vContactId) {
               strGoalId = tri_cccareplangoalId;
               strSliderDiv = "";
               strMdfrBtnId = tri_cccareplangoalId + "_BLKUPDTMDFRBTN";
-              vULselector = vVitalId + "_ULBLKUPDT_" + tri_cccareplangoalId; //vital id
+              vULselector = vVitalId + "_ULBLKUPDT"; //vital id
               strUniqueRowClass = tri_cccareplangoalId + "_uniquerow";
               strUniqueGoalStateButtonClass = tri_cccareplangoalId + "_uniquegoalstatebutton";
               vGoalColorclass = "";
@@ -458,44 +505,8 @@ function BuildTableRows(vContactId) {
                       break;
               };
 
-              switch (tri_GoalSection) {
-                  case 100000000:
-                      strRowClass = "personalgoalrowclass";
-                      break;
-                  case 100000001:
-                      strRowClass = "testsvitalsrowclass";
-                      break;
-                  case 100000002:
-                      strRowClass = "medicationsrowclass";
-                      break;
-                  case 100000003:
-                      strRowClass = "supportservicesrowclass";
-                      break;
-                  case 100000004:
-                      strRowClass = "activitynutritionrowclass";
-                      break;
-                  case 100000005:
-                      strRowClass = "behavioralhealthrowclass";
-                      break;
-                  case 100000006:
-                      strRowClass = "wrapuprowclass";
-                      break;
-              }
-
-              strGoalStateDropdownQualQuant = "";
-
-              if (tri_typeofgoalcode === 100000000) {
-                  strGoalStateDropdownQualQuant = '<button type="button" style="float:none;" class="btn btn-default dropdown-toggle blkupdtGoalStatebutton ' + strUniqueGoalStateButtonClass + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >' + strGoalStateTxt + ' <span class="caret"></span></button>' +
-                  '<ul class="dropdown-menu personalizedropdownmenu">' +
-                  '<li role="presentation" class="dropdown-header">Open</li>' +
-                  '<li role="presentation" class="dropdown-header">Met</li>' +
-                  '<li role="presentation" class="dropdown-header">Not Met</li>' +
-                  '</ul>'
-              }
-              else {
-                  strGoalStateDropdownQualQuant = '<button type="button" style="float:none;" class="btn btn-default dropdown-toggle blkupdtGoalStatebutton ' + strUniqueGoalStateButtonClass + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="true" >' + strGoalStateTxt + ' </button>'
-              };
-
+              strRowClass = GetGoalSection(tri_GoalSection);
+              strGoalStateDropdownQualQuant = GetGoalStateButton(tri_typeofgoalcode, strUniqueGoalStateButtonClass, strGoalStateTxt);
 
               strGoalStateDrpDown =
               '<div class="btn-group" style="width: 90px;">' + strGoalStateDropdownQualQuant +
@@ -582,7 +593,7 @@ function GetModifierBasedOnValueType(tri_vitalsvaluetypeid, contactId, tri_cccar
     var vMdfrIdArray = [];
     var vMdfrIdGoalSelectedArray = [];
     //var vMdfrTagArray = [];
-    var vULselector = tri_vitalsvaluetypeid + "_ULBLKUPDT_" + tri_cccareplangoalId;
+    var vULselector = tri_vitalsvaluetypeid + "_ULBLKUPDT";
     var modifierValue = "";
 
     //get modifier ids and put them in an array
@@ -1003,9 +1014,9 @@ $(document).on('click', '.personalizedropdownmenu li', function () {
             var modId = $(this)[0].id;
             var vitalTypeId = ulClass.replace("dropdown-menu personalizedropdownmenu ", "");
             vitalTypeId = vitalTypeId.replace("_ULBLKUPDT", "");
-            vitalTypeId = vitalTypeId.replace("_"+goalId, "").trim();
+            //vitalTypeId = vitalTypeId.replace("_"+goalId, "").trim();
 
-            GetGoalForCurrentModifier(modId, vitalTypeId, contactObjectId, $(this).text(), this);
+            GetGoalForCurrentModifier(modId, vitalTypeId, contactObjectId, $(this).text(), this,goalId);
         }
         else {
             var classToAdd = '';
@@ -1035,22 +1046,25 @@ $(document).on('click', '.personalizedropdownmenu li', function () {
             // set data
             $("." + goalId + "_uniquerow").addClass(classToAdd);
             $(objbtn).html(changedGoalState + " " + "<span class='caret'></span>");
+            AddGoalIdToSave(goalId);
         }
-
-        AddGoalIdToSave(goalId);
     }
 });
 
 $(document).on('keyup click', 'input[type=text]', function () {
+    debugger;
     AddGoalIdToSave(this.id);
 });
 
 $(document).on('click', '.ui-spinner-button', function () {
+    debugger;
+
     var vSiblingId = $(this).siblings('input').attr('id')
     AddGoalIdToSave(vSiblingId);
 });
 
 function AddGoalIdToSave(goalId) {
+    debugger;
 
     goalId = goalId.replace("_MetricOprVal1", "");
     goalId = goalId.replace("_MetricOprVal2", "");
@@ -1062,66 +1076,13 @@ function AddGoalIdToSave(goalId) {
 
 $(document).on('click', '#progressbar li, input[class~="action-button"]', function () {
     // alert(carePlanGoalArray.length);
-    if (carePlanGoalArray.length > 0) {
+    //if (carePlanGoalArray.length > 0) {
         for (i = 0; i < carePlanGoalArray.length; i++) {
             var goalId = carePlanGoalArray[i];
             debugger;
 
-            //alert(goalId);
             var modifierObj = $('#' + goalId + '_BLKUPDTMDFRBTN');
-            var vSliderTextValue = $('.' + goalId + '_sldrtxtbox').val();
-            // alert(vSliderTextValue);
             var vModfrName = modifierObj.text().trim();
-
-            var ulModifier = modifierObj.next();
-            var modifierId = ulModifier.find('li:contains("' + vModfrName + '")')[0].id;
-
-            if (modifierId.indexOf('_NAP') > -1) {
-                modifierId = '';
-            }
-
-            var vVitalTypId = ulModifier[0].className.replace("dropdown-menu personalizedropdownmenu ", "");
-            vVitalTypId = vVitalTypId.replace("_ULBLKUPDT", "");
-            vVitalTypId = vVitalTypId.replace("_" + goalId, "").trim();
-
-            var goalStateObj = $('[class~="' + goalId + '_uniquegoalstatebutton"]');
-            var vGoalStateTxt1 = goalStateObj.text().trim();
-            var nextrow = goalStateObj.parent().parent().parent();
-            var targetDetails = nextrow.find('.tg-blkupdt-target');
-
-            var vQualTxt = '';
-            var vMetricOprtrTxt1 = '';
-            var vTargetValueTxt = '';
-            var vMetricOprtr2Txt1 = '';
-            var vTargetValue2Txt = '';
-
-            if (targetDetails.attr('goalCode') === '100000000') { // Qualitative
-                vQualTxt = targetDetails.text();
-            }
-            else if (targetDetails.attr('goalCode') === '100000001') { // Quantitative
-                vMetricOprtrTxt1 = $('#' + goalId + '_MetricOpr1').text();
-                vTargetValueTxt = $('#' + goalId + '_MetricOprVal1').val();
-                vMetricOprtr2Txt1 = $('#' + goalId + '_MetricOpr2').text();
-                vTargetValue2Txt = $('#' + goalId + '_MetricOprVal2').val();
-            }
-
-            var vobservedValue = nextrow.find('.tg-blkupdt-LastResult').text();
-            var vLastResultDate = new Date();
-
-            var vOsetValMetricOperator = "";
-            if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
-                vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
-            }
-
-            var vOsetValMetricOperator21 = "";
-            if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
-                vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr(vMetricOprtr2Txt1);
-            }
-
-            var vOsetValGoalState = "";
-            if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
-                vOsetValGoalState = GetOsetValFromTextGoalState(vGoalStateTxt1);
-            };
 
             if (vModfrName == "N/A") {
                 //Update GoalSelected = False for this careplanId
@@ -1130,12 +1091,59 @@ $(document).on('click', '#progressbar li, input[class~="action-button"]', functi
                 SDK.REST.updateRecord(goalId, obj, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
             }
             else {
+                var ulModifier = modifierObj.next();
+                var modifierId = ulModifier.find('li:contains("' + vModfrName + '")')[0].id;
+                var vSliderTextValue = $('.' + goalId + '_sldrtxtbox').val();
+                var vVitalTypId = ulModifier[0].className.replace("dropdown-menu personalizedropdownmenu ", "");
+                vVitalTypId = vVitalTypId.replace("_ULBLKUPDT", "");
+                //vVitalTypId = vVitalTypId.replace("_" + goalId, "").trim();
+
+                var goalStateObj = $('[class~="' + goalId + '_uniquegoalstatebutton"]');
+                var vGoalStateTxt1 = goalStateObj.text().trim();
+                var nextrow = goalStateObj.parent().parent().parent();
+                var targetDetails = nextrow.find('.tg-blkupdt-target');
+
+                var vQualTxt = '';
+                var vMetricOprtrTxt1 = '';
+                var vTargetValueTxt = '';
+                var vMetricOprtr2Txt1 = '';
+                var vTargetValue2Txt = '';
+
+                if (targetDetails.attr('goalCode') === '100000000') { // Qualitative
+                    vQualTxt = targetDetails.text();
+                }
+                else if (targetDetails.attr('goalCode') === '100000001') { // Quantitative
+                    vMetricOprtrTxt1 = $('#' + goalId + '_MetricOpr1').text();
+                    vTargetValueTxt = $('#' + goalId + '_MetricOprVal1').val();
+                    vMetricOprtr2Txt1 = $('#' + goalId + '_MetricOpr2').text();
+                    vTargetValue2Txt = $('#' + goalId + '_MetricOprVal2').val();
+                }
+
+                var vobservedValue = nextrow.find('.tg-blkupdt-LastResult').text();
+                var vLastResultDate = new Date();
+
+                var vOsetValMetricOperator = "";
+                if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
+                    vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
+                }
+
+                var vOsetValMetricOperator21 = "";
+                if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
+                    vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr(vMetricOprtr2Txt1);
+                }
+
+                var vOsetValGoalState = "";
+                if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
+                    vOsetValGoalState = GetOsetValFromTextGoalState(vGoalStateTxt1);
+                };
+
                 UpdateCarePlanJoin(vVitalTypId, contactObjectId[0], modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator21, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue, this.value);
             }
         }
         carePlanGoalArray.length = 0;
-    }
-    else if (this.value === 'Submit') {
+        //} else 
+        
+        if (this.value === 'Submit') {
         // alert('Goals are Submitted.');
         //window.opener.reload();
         self.opener.location.reload();
@@ -1149,8 +1157,8 @@ function updateSuccessCallbackforMultiEdit() {
     // alert("The record changes were saved");
 }
 
-function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, currText, currentObj) {
-
+function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, currText, currentObj,currentGoalId) {
+    debugger;
     var currentRow = $(currentObj).parent().parent().parent().parent();
     var nextRow = $(currentObj).parent().parent().parent().parent().next();
 
@@ -1173,10 +1181,9 @@ function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, cur
         lastresultdate.text('');
         duedate.text('');
         goalstate.find('button').html("<span class='caret'></span>").attr('disabled', true); //"Met "<span class='caret'></span>")
-        currentRow.removeClass('orangeborder redborder greenborder');
-        //currentRow.css('border-top', '1pt solid #aabcfe');
         currentRow.hide('slow');
         nextRow.hide();
+        AddGoalIdToSave(currentGoalId);
         return;
     }
 
@@ -1236,7 +1243,7 @@ function (results) {
                     strTargetVal = results[i].tri_qualitativetarget;
                     strLastTargetVal = tri_lastresult;
                     //build slider control if slider lookup has data
-                    if (tri_SliderControlId !== null && tri_SliderControlId !== "undefined") {
+                    if (tri_SliderControlId !== null && typeof tri_SliderControlId !== "undefined") {
 
                         var vSldrClass = tri_cccareplangoalId + "_sldr";
                         var vSldrtxtboxClass = tri_cccareplangoalId + "_sldrtxtbox txtfield tg-blkupdt-sldrtxtbox";
@@ -1284,8 +1291,15 @@ function (results) {
                 strLastTargetVal = "";
             }
 
+
+            //  these can be changed 
             typedetail.html(tri_name);
-            $(modifier).find('button').html($(currentObj).text() + " <span class='caret'></span>");
+
+            debugger;
+            var btnModifier = $(modifier).find('button');
+            btnModifier.html($(currentObj).text() + " <span class='caret'></span>"); //d7109c82-87c0-e611-80fa-5065f38a7be1_BLKUPDTMDFRBTN
+            btnModifier[0].id = tri_cccareplangoalId + '_BLKUPDTMDFRBTN';
+
             target.html(strTargetVal);
             observed.html(strSliderDiv);
             lastResult.html(strLastTargetVal);
@@ -1310,11 +1324,17 @@ function (results) {
                     vGoalColorclass = "orangeborder";
                     break;
             };
+            
+            var sectionGoalState = goalstate.find('.btn-group');
+            sectionGoalState.html('');
+            sectionGoalState.html(GetGoalStateButton(tri_typeofgoalcode,tri_cccareplangoalId +'_uniquegoalstatebutton',strGoalStateTxt));
 
+            debugger;
             currentRow.removeClass('orangeborder redborder greenborder');
-            currentRow.addClass(vGoalColorclass);
-            goalstate.find('button').html(strGoalStateTxt + "<span class='caret'></span>").attr('disabled', false); //"Met "<span class='caret'></span>")
+            currentRow[0].className = GetGoalSection(tri_GoalSection) + ' ' + tri_cccareplangoalId + '_uniquerow ' + vGoalColorclass;
+                                    
             $('.txtfieldquantitative').spinner({ step: 1.00, numberFormat: "n" });
+            AddGoalIdToSave(tri_cccareplangoalId);
         }
     }
     else {

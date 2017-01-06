@@ -1150,6 +1150,19 @@ function GetAssesmentDetails(assesmentId) {
     req.send();
 }
 
+function retrievePatient(PatientId) {
+    SDK.JQuery.retrieveRecord(
+        PatientId,
+        "Contact",
+        null, null,
+        function (contact) {
+            alert("Retrieved the contact named \"" + contact.FullName + "\". This contact was created on : \"" + contact.CreatedOn + "\".");
+            //updateAccount(AccountId);
+        },
+        errorHandler
+      );
+}
+
 function getAssessment(assesmentId) {
     var req = new XMLHttpRequest();
     var jsonQuery = getBaseWebUri() + assessmentEntitySetName + "(" + assesmentId + ")";
