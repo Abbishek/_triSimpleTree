@@ -8,7 +8,6 @@ var firstView = false;
 var isLastCategory = false;
 var getanswers = "";
 var lstAssesmentDetails = [];
-//var assesmentDetailId = "";
 var lstAnswerSelected = [];
 var assesmentDetailsToSave = [];
 var sections = [];
@@ -22,7 +21,6 @@ var inputDisabled = false;
 var assessmenttypeid_value;
 var assessmenttypeid_value_formatted;
 var Xrm;
-//
 var currentQuestionCategoryId;
 
 function questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, answerType, answerText, weightedScore, sectionName, quesCatId, comments) {
@@ -30,7 +28,7 @@ function questionWithAnswerSelected(questionid, answerid, answervalue, assessmen
     var entity = {};
     entity.tri_questionnumber = questionnumber;
 
-    if (typeof (answervalue) !== "undefined" && answervalue !== "" && answervalue !== null) {
+    if (typeof (answervalue) !== "undefined" && answervalue != null && answervalue !== "") {
         entity.tri_answervalue = answervalue;
     }
 
@@ -40,11 +38,11 @@ function questionWithAnswerSelected(questionid, answerid, answervalue, assessmen
     entity["tri_QuestionId@odata.bind"] = "/tri_assessmentquestions(" + questionid + ")";
     entity["tri_AssessmentQuestionCategoryId@odata.bind"] = "/tri_assessmentquestioncategories(" + quesCatId + ")";
 
-    if (assessmentdetailid !== "" && assessmentdetailid !== undefined && assessmentdetailid !== null) {
+    if (typeof assessmentdetailid !== "undefined" && assessmentdetailid != null && assessmentdetailid !== "") {
         entity["tri_assessmentdetailId@odata.bind"] = "/tri_assessmentdetails(" + assessmentdetailid + ")";
     }
 
-    if (answerid !== "" && typeof answerid !== "undefined" && answerid !== null) {
+    if (typeof answerid !== "undefined" && answerid !== null && answerid !== "") {
         entity["tri_AnswerId@odata.bind"] = "/tri_assessmentanswers(" + answerid + ")";
     }
 
@@ -73,7 +71,7 @@ function checkIfSaveObjectAlreayAnswered(Object, questionNum) {
 
     if (Object.length > 0) {
         $.each(Object, function (index, valueObj) {
-            if (valueObj !== null && typeof (valueObj) !== 'undefined' && valueObj.tri_questionnumber == questionNum) {
+            if (typeof (valueObj) !== 'undefined' && valueObj != null && valueObj.tri_questionnumber == questionNum) {
                 questionFoundAtIndex = index;
                 return false;
             }
@@ -117,29 +115,27 @@ function bindRadioClickEvent() {
             assesmentDetailsToSave.push(lstAnswerSelected[index]);
 
         } else {
-            //var questionid = $(this).context.attributes.questionid.value;
             var assessmentid = vAssessmentIdFormatted;
             var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
             var assessmentdetailid = "";
             var comments = "";
             var assessmentdetailid = "";
-            //var question = $("#"+questionid+"_question");
             var sectionName = $(question).attr('sectionName');
             var quesCatId = $(question).attr('questionCat');
             var weightedScore = $(question).attr('weightedScore');
 
             var questionObj = new questionWithAnswerSelected(questionid, answerid, answervalue, assessmentid, assessmenttypeid, assessmentdetailid, questionnumber, "Optionset",
                                                                 answerText, weightedScore, sectionName, quesCatId, comments);
-            //var questionObj = new questionWithAnswerSelected(questionid, null, answervalue, null, null, null, null);
             lstAnswerSelected.push(questionObj);
             assesmentDetailsToSave.push(questionObj);
         }
+
+        MarkQuestionAnswered($(this));
     });
 };
 
 function bindTextAreaClickEvent() {
     $("textarea").bind('blur', function () {
-        //debugger;
         var errorSpan = $(this).siblings('.errorSpan');
         if (typeof errorSpan !== "undefined") {
             $(errorSpan).remove();
@@ -160,17 +156,12 @@ function bindTextAreaClickEvent() {
             }
             assesmentDetailsToSave.push(lstAnswerSelected[index]);
         } else {
-            var answervalue = ""; //$(this).val();
-            //  var questionid = $(this).context.attributes.id.value;
-
-            //var questionid = $(this).context.attributes.questionid.value;
-            //var answervalue = $(this).context.attributes.value.value;
-            var answerid = ""; //$(this).context.attributes.answerid.value;
+            var answervalue = "";
+            var answerid = "";
             var assessmentid = vAssessmentIdFormatted;
             var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
             var assessmentdetailid = "";
-            var answerText = "";//$(this).text();
-            //var question = $("#" + questionid + "_question");
+            var answerText = "";
 
             var sectionName = $(question).attr('sectionName');
             var quesCatId = $(question).attr('questionCat');
@@ -182,26 +173,29 @@ function bindTextAreaClickEvent() {
             assesmentDetailsToSave.push(questionObj);
 
         }
+        if (comments !== null && comments.length > 0) {
+            MarkQuestionAnswered($(this));
+        }
+        else {
+            MarkQuestionUnAnswered($(this));
+        }
     });
 }
 
 function bindTextBoxClickEvent() {
     $("input[type=text]:not([class~=datepicker])").bind('blur', function () {
-        // debugger;
         var errorSpan = $(this).parent().siblings('.errorSpan');
         if (typeof errorSpan !== "undefined") {
             $(errorSpan).remove();
         }
         var controlName = $(this)[0].name;
-        // if (controlName.indexOf("_date") !== -1) {
         var answerText = $(this).val();
         if (controlName.indexOf("_date") > -1) {
-            if (answerText !== null && answerText !== undefined && answerText !== "") {
+            if (typeof answerText !== "undefined" && answerText != null && answerText !== "") {
                 var date = new Date(answerText);
                 answerText = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
             }
         }
-
 
         var questionid = $(this).context.attributes.questionid.value;
         var question = $("#" + questionid + "_question");
@@ -219,14 +213,11 @@ function bindTextBoxClickEvent() {
             assesmentDetailsToSave.push(lstAnswerSelected[index]);
 
         } else {
-
             var answervalue = ""; //$(this).val();
-            // var questionid = $(this).context.attributes.questionid.value;
             var answerid = $(this).context.attributes.answerid.value;
             var assessmentid = vAssessmentIdFormatted;
             var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
             var assessmentdetailid = "";
-            //var question = $("#" + questionid + "_question");
 
             var sectionName = $(question).attr('sectionName');
             var quesCatId = $(question).attr('questionCat');
@@ -239,8 +230,11 @@ function bindTextBoxClickEvent() {
             assesmentDetailsToSave.push(questionObj);
 
         }
-        //}
-        // }
+        if (answerText.length > 0) {
+            MarkQuestionAnswered($(this));
+        } else {
+            MarkQuestionUnAnswered($(this));
+        }
     });
 }
 
@@ -249,7 +243,6 @@ function bindDateChangeClickEvent(dateText) {
 
 function bindCheckBoxClickEvent() {
     $("input[type=checkbox]").bind('click', function () {
-        //debugger;
         var questionid = $(this).context.attributes.questionid.value;
         var question = $("#" + questionid + "_question");
 
@@ -259,8 +252,8 @@ function bindCheckBoxClickEvent() {
         var answerid = $(this).context.attributes.answerid.value;
         var answervalue = "";
 
-        if ($(this).prop('checked') == true) {
-            if (index == -1) {
+        if ($(this).prop('checked') === true) {
+            if (index === -1) {
                 var assessmentid = vAssessmentIdFormatted;
                 var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
                 var assessmentdetailid = "";
@@ -281,40 +274,31 @@ function bindCheckBoxClickEvent() {
                 } else {
                     lstAnswerSelected[index].tri_answertext = answerText;
                 }
-                //delete lstAnswerSelected[index]["tri_AnswerId@odata.bind"];
-                //lstAnswerSelected[index]["tri_AnswerId@odata.bind"] = "/tri_assessmentanswers(" + lstAnswerSelected[index]["tri_AnswerId@odata.bind"]
-                //    .substr(lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf('(') + 1, lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf(')') - lstAnswerSelected[index]["tri_AnswerId@odata.bind"].indexOf('(')) + ',' + answerid + ")";
-
                 var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
                 if (objectIndex > -1) {
                     assesmentDetailsToSave.splice(objectIndex, 1); /////////// check
                 }
                 assesmentDetailsToSave.push(lstAnswerSelected[index]);
             }
-        } else if ($(this).prop('checked') == false) {
+        } else if ($(this).prop('checked') === false) {
             if (lstAnswerSelected[index].tri_answertext.indexOf(',') > -1) {
-                //lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext.substr(lstAnswerSelected[index].tri_answertext.indexOf(answerText), answerText.length); ////
-
                 lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext.replace(answerText, ''); /////////// check
                 lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext.replace(',,', ''); /////////// check
-                //lstAnswerSelected[index]["tri_AnswerId@odata.bind"] = lstAnswerSelected[index]["tri_AnswerId@odata.bind"].replace(answerid + ',', '');
-            }
-            else {
-                // lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext.substr(lstAnswerSelected[index].tri_answertext.indexOf(answerText), answerText.length + 1);
+            } else {
                 lstAnswerSelected[index].tri_answertext = lstAnswerSelected[index].tri_answertext.replace(answerText, '');
-                //lstAnswerSelected[index]["tri_AnswerId@odata.bind"] = ""; //lstAnswerSelected[index]["tri_AnswerId@odata.bind"].replace(answerid, '');
             }
-            // check this one
-            //if (lstAnswerSelected[index].tri_answertext.length == 0) {
-            //    //remove object from list
-            //    lstAnswerSelected.splice(index, 1);
-            //}
             var objectIndex = checkIfSaveObjectAlreayAnswered(assesmentDetailsToSave, questionnumber);
             if (objectIndex > -1) {
                 assesmentDetailsToSave.splice(objectIndex, 1);
             }
             assesmentDetailsToSave.push(lstAnswerSelected[index]);
         }
+        if (CheckifAnyCheckBoxChecked($(this))) {
+            MarkQuestionAnswered($(this));
+        } else {
+            MarkQuestionUnAnswered($(this));
+        }
+
     });
 }
 
@@ -328,11 +312,9 @@ function isMandatoryQuestionAnswered(questionObj, questType) {
 
     //Option set radion button
     if (questType === "100000000") {
-        //var optionSet = $(questionObj).children("input[type=radio]")[0];
-        //var radioGroupName = $(optionSet).attr('name');
-        var questionDiv = $(questionObj).children('div');
-        var questionid = $(questionDiv).attr('questionid');
-        //var answerSelected = $('input[name=' + radioGroupName + ']:checked').val();
+        var questionTextDiv = $(questionObj).children('div.question-text');
+        var questionid = $(questionTextDiv).attr('questionid');
+
         // Find the inputs for the question and see if one is checked
         var answerSelected = $('input[questionid=' + questionid + ']:checked').val();
         if (typeof answerSelected === "undefined") {
@@ -342,12 +324,11 @@ function isMandatoryQuestionAnswered(questionObj, questType) {
 
     //commemts
     if (questType === "100000001" || questType === "100000003") {
-        //alert("Text area is mandatory question");
-        var content = $(questionObj).children("textarea").val();
+        var content = $(questionObj).children("div.answer").children('textarea').val();
         if (typeof content === "undefined") {
             isAnswerSelected = false;
         } else {
-            if (content.trim() == "") {
+            if (content.trim() === "") {
                 isAnswerSelected = false;
             }
         }
@@ -355,11 +336,11 @@ function isMandatoryQuestionAnswered(questionObj, questType) {
 
     //input numeric
     if (questType === "100000004") {
-        var input = $(questionObj).children("span").children("input[type=text]").val();
+        var input = $(questionObj).children("div.answer").children('span').children("input[type=text]").val();
         if (typeof input === "undefined") {
             isAnswerSelected = false;
         } else {
-            if (input.trim() == "") {
+            if (input.trim() === "") {
                 isAnswerSelected = false;
             }
         }
@@ -367,7 +348,7 @@ function isMandatoryQuestionAnswered(questionObj, questType) {
 
     //CheckBox
     if (questType === "100000005") {
-        var input = $(valueObj).children('input[type=checkbox]:checked');
+        var input = $(questionObj).children('div.answer').children('input[type=checkbox]:checked');
         if (typeof input === "undefined") {
             isAnswerSelected = false;
         } else {
@@ -379,22 +360,24 @@ function isMandatoryQuestionAnswered(questionObj, questType) {
 
     //Date
     if (questType === "100000002") {
-        var input = $(questionObj).children("input[type=text]").val();
+        var input = $(questionObj).children('div.answer').children("input[type=text]").val();
         if (typeof input === "undefined") {
             isAnswerSelected = false;
         } else {
-            if (input.trim() == "") {
+            if (input.trim() === "") {
                 isAnswerSelected = false;
             }
         }
     }
 
     var errorSpanId = questionid + "_errorSpan";
-    var errorSpan = '<span style = "color:red;" class = "errorSpan" id="' + errorSpanId + '"><img src="/_imgs/imagestrips/transparent_spacer.gif" class="ms-crm-ImageStrip-inlineedit_warning" alt="Error"><span>This question requires an answer !</span></br></span>';
+    var errorSpan = '<span style = "color:red;" class = "errorSpan" id="' + errorSpanId + '"><img src="/_imgs/imagestrips/transparent_spacer.gif" class="ms-crm-ImageStrip-inlineedit_warning" alt="Error"><span>&nbsp;This question requires an answer !</span></span>';
     if (isAnswerSelected === false) {
-        var span = $(questionObj).children().siblings('.errorSpan');
+        var span = $(questionObj).children('div.question-text').children('.errorSpan');
         if (span.length === 0) {
-            $(questionObj).prepend(errorSpan);
+            var questionTextDiv = $(questionObj).children('div.question-text');
+            var reqSpan = $(questionTextDiv).children('span.required');
+            $(errorSpan).insertAfter(reqSpan);
         }
     }
 
@@ -407,14 +390,15 @@ function validateSection(sectionObject) {
         return false;
     }
 
-    var questions = $(sectionObject).children('div');
+    // var questions = $(sectionObject).children('div');
+    var questions = $(sectionObject).children('div.question');
 
     $.each(questions, function (index, valueObj) {
-        if (index > 0) {
-            var questionDiv = $(valueObj).children('div');
-            var questType = $(questionDiv).attr('questiontype');
-            var isQuestionMandatory = $(questionDiv).attr('isrequired');
-            if (isQuestionMandatory == "true") {
+        if (index >= 0) {
+            var questionTextDiv = $(valueObj).children('div.question-text');
+            var questType = $(questionTextDiv).attr('questiontype');
+            var isQuestionMandatory = $(questionTextDiv).attr('isrequired');
+            if (isQuestionMandatory === "true") {
                 if (!isMandatoryQuestionAnswered(valueObj, questType)) {
                     result = false;
                 }
@@ -427,19 +411,20 @@ function validateSection(sectionObject) {
 
 $(document).ready(function () {
     //jQuery time
-    //debugger;
     var current_fs, next_fs, previous_fs; //fieldsets
     var left, opacity, scale; //fieldset properties which we will animate
     var animating; //flag to prevent quick multi-click glitches
 
-    //var vAssessmentId = window.opener.Xrm.Page.data.entity.getId();//get the AssementId from the windowopener
-    //var vEntityName = window.opener.Xrm.Page.data.entity.getEntityName();//get the AssementId from the windowopener
-
-    Xrm = window.opener.Xrm;
+    // Check to see if the web resource is opened in a new window or embedded in the form (tablet)
+    if (typeof window.opener !== "undefined") {
+        Xrm = window.opener.Xrm;
+    } else {
+        Xrm = window.parent.Xrm;
+    }
     var vAssessmentId = Xrm.Page.data.entity.getId();//get the AssementId from the windowopener
     var vEntityName = Xrm.Page.data.entity.getEntityName();//get the AssementId from the windowopener
-
-    // if we are not on the Assessment Form then lets get the id 
+    var asessmentTitle = Xrm.Page.data.entity.getPrimaryAttributeValue();
+    // if we are not on the Assessment Form then lets get the id from the parameters
     if (vEntityName !== assessmentEntityName) {
         //parse the querystring to get the objectid in the data parameter
         parseDataParams();
@@ -455,11 +440,13 @@ $(document).ready(function () {
     GetAssesmentDetails(vAssessmentIdFormatted);
     GetQuestionCategories(assessmenttypeid_value);
     SetCurrentQuestionCategoryId();
+    SetAssessmentTitle(currentQuestionCategoryId, asessmentTitle);
+
     // Disable all the Inputs
     if (inputDisabled === true) {
-        $("#msform input").prop("disabled", true);
+        $("input").prop("disabled", true);
         // Enabled the buttons
-        $("#msform input[type=button]").prop("disabled", false);
+        $("input[type=button]").prop("disabled", false);
     }
 
     $(".next").click(function () {
@@ -467,34 +454,40 @@ $(document).ready(function () {
         if (animating) return false;
         animating = true;
 
-        current_fs = $(this).parent();
-        next_fs = $(this).parent().next();
+        //current_fs = $(this).parent();
+        //next_fs = $(this).parent().next();
+
+        current_fs = $(this).parent().parent();
+        next_fs = current_fs.next();
 
         if (!validateSection(current_fs)) {
-            //alert("Some Mandatory Questions are not Answered.")
             animating = false;
             return;
         }
 
         if (typeof (next_fs[0]) === "undefined") {
-            //alert("No Section Found");
             isLastCategory = true;
             animating = false;
-            //  return;
         }
         else {
+            /*
             var current_fs_section = current_fs[0].childNodes[0].firstChild.data;
             var next_fs_section = next_fs[0].childNodes[0].firstChild.data;
             currentQuestionCategoryId = next_fs.attr('sectionid');
-            if (current_fs_section !== next_fs_section) {
+            if (current_fs_section != next_fs_section) {
                 document.getElementById('questionCategory').innerHTML = next_fs_section;
                 //activate next step on progressbar using the index of next_fs
-                progressIndex = progressIndex + 1;
-                //$("#progressbar li").eq($("#fieldsets").index(next_fs)).addClass("active");
-                //$("#progressbar li").eq(progressIndex).addClass("active");
+                //progressIndex = progressIndex + 1;
                 var liElement = document.getElementById(currentQuestionCategoryId);
                 liElement.className = "active";
-            }
+            }*/
+
+            currentQuestionCategoryId = next_fs.attr('sectionid');
+            var liElement = document.getElementById(currentQuestionCategoryId);
+            liElement.className = "active";
+
+            var assessmentTitle = Xrm.Page.data.entity.getPrimaryAttributeValue();
+            SetAssessmentTitle(currentQuestionCategoryId, assessmentTitle);
 
             //show the next fieldset
             next_fs.show();
@@ -529,19 +522,30 @@ $(document).ready(function () {
         if (animating) return false;
         animating = true;
 
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
+        //current_fs = $(this).parent(); --s
+        current_fs = $(this).parent().parent(); //  div questions > div buttons > input type button
+
+        if (!validateSection(current_fs)) {
+            animating = false;
+            return;
+        }
+
+        //previous_fs = $(this).parent().prev(); --s
+        previous_fs = current_fs.prev();
 
         currentQuestionCategoryId = previous_fs.attr('sectionid');
-        //de-activate current step on progressbar
-        //$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-        //$("#progressbar li").eq($("#fieldsets").index(current_fs)).removeClass("active");
         var idToDeActivate = current_fs.attr('sectionid');
         var liElement = document.getElementById(idToDeActivate);
         liElement.className = "";
+        updateClassForLIElementActiveTill(currentQuestionCategoryId);
+
+        var assessmentTitle = Xrm.Page.data.entity.getPrimaryAttributeValue();
+        SetAssessmentTitle(currentQuestionCategoryId, assessmentTitle);
 
         //show the previous fieldset
         previous_fs.show();
+        //document.getElementById('questionCategory').innerHTML = previous_fs.children()[0].innerHTML; --s
+
         //hide the current fieldset with style
         current_fs.animate({ opacity: 0 }, {
             step: function (now, mx) {
@@ -563,17 +567,43 @@ $(document).ready(function () {
             //this comes from the custom easing plugin
             easing: 'easeInOutBack'
         });
+        saveAnswers();
     });
 
     $(".save").click(function () {
+        // Make Sure all required questions are answered
+        //current_fs = $(this).parent();
+        current_fs = $(this).parent().parent();
+
+        if (!validateSection(current_fs)) {
+            animating = false;
+            return;
+        }
         saveAnswers();
-        // Enable Submit
     })
 
     $(".submit").click(function () {
+        // Make Sure all required questions are answered
+        //current_fs = $(this).parent();
+
+        /*current_fs = $(this).parent().parent();
+
+        if (!validateSection(current_fs)) {
+            animating = false;
+            return;
+        }*/
+
+        var result = CheckAllMandatoryQuestionsAnswered();
+        if (!result[0]) {
+
+            animatinng = false;
+            Xrm.Utility.alertDialog(result[1]);
+            return;
+        }
+
         var saveCount = assesmentDetailsToSave.length;
         if (saveCount > 0) {
-            saveAnswers();
+            saveAnswers(false);
         }
         var updateObject = new Object();
         updateObject.statuscode = assessmentIsComplete;
@@ -592,17 +622,23 @@ $(document).ready(function () {
 
     $("#progressbar li").on('click', function () {
         try {
-            if (animating) return false;
+            if (animating) {
+                return false;
+            }
             animating = true;
             var nextQuestionCategoryId;
             var vClickedLIid;
             var currentSection;
             var bHideCurrentIfFound = true;
 
-            if (currentQuestionCategoryId !== null && currentQuestionCategoryId !== "") {
+            if (currentQuestionCategoryId != null && currentQuestionCategoryId !== "") {
                 currentSection = $("div[sectionid=" + currentQuestionCategoryId + "]");
-                if (currentSection !== null && typeof currentSection !== "undefined" && currentSection.length > 0) {
+                if (currentSection != null && typeof currentSection !== "undefined" && currentSection.length > 0) {
                     current_fs = $("div[sectionid=" + currentQuestionCategoryId + "]").eq(0);
+                    if (!validateSection(current_fs)) {
+                        animating = false;
+                        return;
+                    }
                 }
                 else {
                     bHideCurrentIfFound = false;
@@ -621,12 +657,14 @@ $(document).ready(function () {
 
             currentQuestionCategoryId = nextQuestionCategoryId;
 
-            //$("#progressbar li").eq($("#fieldsets").index(next_fs)).addClass("active");
-            //$(this).addClass('active');
-            MakeLiElementActiveTill($(this));
+            makeLiElementActiveTill($(this));
+
+            var assessmentTitle = Xrm.Page.data.entity.getPrimaryAttributeValue();
+            SetAssessmentTitle(currentQuestionCategoryId, assessmentTitle);
+
             //show the next fieldset
             next_fs.show();
-            document.getElementById('questionCategory').innerHTML = next_fs.children()[0].innerHTML;
+            //document.getElementById('questionCategory').innerHTML = next_fs.children()[0].innerHTML; --s
 
             // currentQuestionCategory div not found..nothing to hide..return
             if (!bHideCurrentIfFound) {
@@ -676,7 +714,6 @@ $(document).ready(function () {
             var questionnumber = $(question).attr('questionnumber');
 
             var index = checkIfQuestionAlreayAnswered(questionnumber);
-            //alert(questionnumber);
             if (index !== -1) {
                 lstAnswerSelected[index].tri_answertext = $(this).val();
 
@@ -689,14 +726,11 @@ $(document).ready(function () {
             } else {
 
                 var answervalue = ""; //$(this).val();
-                // var questionid = $(this).context.attributes.questionid.value;
                 var answerid = $(this).context.attributes.answerid.value;
                 var assessmentid = vAssessmentIdFormatted;
                 var assessmenttypeid = $(this).context.attributes.assessmenttypeid.value;
                 var assessmentdetailid = "";
                 var answerText2 = $(this).val();;
-                //var question = $("#" + questionid + "_question");
-                //alert(answerText2);
                 var sectionName = $(question).attr('sectionName');
                 var quesCatId = $(question).attr('questionCat');
                 var weightedScore = $(question).attr('weightedScore');
@@ -729,7 +763,10 @@ function SetCurrentQuestionCategoryId() {
     currentQuestionCategoryId = vCurrentLi[0].getAttribute('id');
 }
 
-function saveAnswers() {
+function saveAnswers(execAsync) {
+    if (typeof execAsync === "undefined") {
+        execAsync = true;
+    }
     if (assesmentDetailsToSave.length > 0) {
         // Save on next click
         for (var i = 0; i < assesmentDetailsToSave.length; i++) {
@@ -738,17 +775,16 @@ function saveAnswers() {
             if (typeof (assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"]) !== "undefined"
                 && assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"] != null
                 && assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"] !== "") {
-                url = "/api/data/v8.0" + assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"];
+                url = webApiUri + assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"];
                 method = "PATCH";
                 delete assesmentDetailsToSave[i]["tri_assessmentdetailId@odata.bind"];
-            }
-            else {
-                url = "/api/data/v8.0/tri_assessmentdetails";
+            } else {
+                url = webApiUri + assessmentDetailEntitySetName;
                 method = "POST";
             }
 
             var req = new XMLHttpRequest();
-            req.open(method, Xrm.Page.context.getClientUrl() + url, false);
+            req.open(method, Xrm.Page.context.getClientUrl() + url, execAsync);
             req.setRequestHeader("OData-MaxVersion", "4.0");
             req.setRequestHeader("OData-Version", "4.0");
             req.setRequestHeader("Accept", "application/json");
@@ -763,14 +799,9 @@ function saveAnswers() {
                             var matches = regExp.exec(uri);
                             var newEntityId = matches[1];
                         }
-                        //if (i + 1 === assesmentDetailsToSave.length) {
-                        //    if (isLastCategory) {
-                        //        alert("Assesment Saved Successfully.");
-                        //    }                            
-                        //}
                     }
                     else {
-                        alert(this.statusText);
+                        Xrm.Utility.alertDialog(this.statusText);
                     }
                 }
             };
@@ -799,25 +830,35 @@ function GetQuestionCategories(_tri_assessmenttypeid_value) {
                 var fieldsets = "";
                 // Clear the array
                 sections = [];
+
+                var categories = []; 
+                for (var i = 0; i < results.value.length; i++) {
+                    if (categories.indexOf(results.value[i]["tri_assessmentquestioncategoryid"]) == -1) {
+                        categories.push(results.value[i]["tri_assessmentquestioncategoryid"]);
+                    }
+                }
+                
                 for (var i = 0; i < results.value.length; i++) {
                     var tri_name = results.value[i]["tri_name"];
                     var tri_assessmentquestioncategoryid = results.value[i]["tri_assessmentquestioncategoryid"];
 
+                    var rowObject = {}
+                    rowObject.name = tri_name;
+                    rowObject.id = tri_assessmentquestioncategoryid;
+                    sections.push(rowObject);
+
                     if (i === 0) {
-                        $("#progressbar").append('<li class="active" id="' + tri_assessmentquestioncategoryid + '">' + tri_name + '</li>');
+                        $("#progressbar").append('<li class="active" id="' + tri_assessmentquestioncategoryid + '" sectionNo="' + (i + 1) + '" sectionName="' + tri_name + '">' + '<div class="liElement">' + tri_name + '</div></li>');
                     }
                     else {
-                        $("#progressbar").append('<li id="' + tri_assessmentquestioncategoryid + '">' + tri_name + '</li>');
+                        //$("#progressbar").append('<li id="' + tri_assessmentquestioncategoryid + '">' + tri_name + '</li>');
+                        $("#progressbar").append('<li id="' + tri_assessmentquestioncategoryid + '" sectionno="' + (i + 1) + '" sectionName="' + tri_name + '">' + '<div class="liElement">' + tri_name + '</div></li>');
                     }
 
                     if (i == results.value.length - 1) {
                         isLastCategory = true;
                     }
-                    GetAssesmentQuestions(tri_name, _tri_assessmenttypeid_value, tri_assessmentquestioncategoryid);
-                    var rowObject = {}
-                    rowObject.name = tri_name;
-                    rowObject.id = tri_assessmentquestioncategoryid;
-                    sections.push(rowObject);
+                    GetAssesmentQuestions(tri_name, _tri_assessmenttypeid_value, tri_assessmentquestioncategoryid, categories.length);
                 }
             }
             else {
@@ -828,7 +869,7 @@ function GetQuestionCategories(_tri_assessmenttypeid_value) {
     req.send();
 }
 
-function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId) {
+function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId, categoryLength) {
 
     var req = new XMLHttpRequest();
     var jsonQuery = getBaseWebUri() + questionsEntitySetName + "?$select=tri_answertype,tri_answertypetext,_tri_assessmentquestioncategoryid_value,tri_assessmentquestionid,_tri_assessmenttypeid_value,tri_includecomments,tri_isrequired,tri_name,tri_questionnumber&$filter=_tri_assessmenttypeid_value eq " + assessmenttypeid + " and  _tri_assessmentquestioncategoryid_value eq " + questionCategoryId;
@@ -874,92 +915,128 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
                         isRequiredError = '<span sectionName="' + sectionname + '" id="' + tri_assessmentquestionid + '_errorSpan" class="error">This Question needs to be answered.</span><br/>';
                     }
 
-                    // display questions
-                    //questionsset = isRequiredError + '<span>' + tri_questionnumber + '.</span><div questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
-                    //questionsset = '<span>' + tri_questionnumber + '.</span><div questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px;">' + tri_name + '</div><br/>';
-                    //questionsset = '<span style="vertical-align:top;">' + tri_questionnumber + '.&nbsp;</span><div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom: 10px; text-align:left;">' + tri_name + '</div>';
-                    var quesText = tri_questionnumber + ".&nbsp" + tri_name;
-                    //questionsset = '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:inline-block;margin-bottom:10px;text-align:left;">' + quesText + '</div>';
-                    //questionsset = '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:table-row;margin-bottom:10px;text-align:left;">' + quesText + '</div>';
-                    //questionsset = '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + questionCategoryId + '" style="display:table-row;margin-bottom:10px;text-align:left;">' + quesText;
-                    questionsset = '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + _tri_assessmentquestioncategoryid_value + '" style="display:table-row;margin-bottom:10px;text-align:left;">' + quesText;
-
                     //var getanswers = "";
                     window.getanswers = "";
-                    GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype, tri_isrequired, tri_memofieldsize);
+                    var answerAlreadyGiven = GetAssesmentAnswers(sectionname, _tri_assessmenttypeid_value, questionsset, tri_assessmentquestionid, tri_answertype, tri_isrequired, tri_memofieldsize);
+                    // display questions
+
+                    var quesText = tri_questionnumber + ".&nbsp" + tri_name;
+                    var doneSpan = '<span class="done">&#x2714; &nbsp; </span>';
+                    if (tri_isrequired) {
+
+                        questionsset = '<div class="question required">';
+                        questionsset += '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + _tri_assessmentquestioncategoryid_value + '" class="question-text">' +
+						'<span class="required">' + 'Required' + '</span>' +
+						'<br />' +
+						((answerAlreadyGiven) ? doneSpan : "") +
+						quesText;
+                    }
+                    else {
+                        questionsset = '<div class="question">';
+                        questionsset += '<div questionid="' + tri_assessmentquestionid + '" isrequired = "' + tri_isrequired + '" questionType="' + tri_answertype + '" questionnumber="' + tri_questionnumber + '" sectionName="' + sectionname + '" weightedScore="" id="' + tri_assessmentquestionid + '_question" questionCat="' + _tri_assessmentquestioncategoryid_value + '" class="question-text">' +
+						((answerAlreadyGiven) ? doneSpan : "") +
+						quesText;
+                    }
                     //var questionWithAns = '<div><div style="display:inline-block; text-align:left;">';
                     //var questionWithAns = '<div style="display:inline-block; text-align:left;">';
-                    var questionWithAns = '<div style="text-align:left;">';
-
-                    //questionWithAns = '<div>' + questionsset + window.getanswers + '</div>';
+                    // var questionWithAns = '<div style="text-align:left;">'; --s
 
                     // Add the Question
-                    questionWithAns += questionsset;
+                    // questionWithAns += questionsset; --s
+                    var questionWithAns = questionsset;
 
                     // Is the question required
-                    if (tri_isrequired) {
+                    /*if (tri_isrequired) { --s
                         questionWithAns += '<div class="questionRequired">&nbsp*</div>';
-                    }
+                    }*/
 
 
                     // Add the Answers
                     //questionWithAns += '<br/>' + window.getanswers + '</div>';
                     //questionWithAns += '</div><div style="text-align:center;">' + window.getanswers + '</div>';
-                    questionWithAns += '</div><div style="text-align:left;">' + window.getanswers + '</div>';
+                    questionWithAns += '</div>' + window.getanswers + '</div>';
                     //questionWithAns += '<div style="text-align:center;">' + window.getanswers + '</div>';
 
                     if (j < results.value.length) {
                         if (j === 0) {
                             if (firstView === false) {
-                                //quesAnsHtm = '<div style= "display:block;background: white;border: 0 none;border-radius: 3px;box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);padding: 20px 30px;box-sizing: border-box;width: 80%;margin: 0 10%;position: absolute;">' + '<div>' + sectionname + '</div>' + questionWithAns;
-                                quesAnsHtm = '<div style= "display:block;background: white;border: 0 none;border-radius: 3px;box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);padding: 20px 30px;box-sizing: border-box;width: 80%;margin: 0 10%;position: absolute;"' +
+
+                                quesAnsHtm = '<div style= "display:block;" class="questions"' +
 								' sectionid="' + _tri_assessmentquestioncategoryid_value + '"' +
 								' id="' + _tri_assessmentquestioncategoryid_value + '_' + j + '"' +
 								'>' +
-								'<div style="visibility:hidden;">' + sectionname + '</div>' + questionWithAns + "</div>";
-                                document.getElementById('questionCategory').innerHTML = sectionname;
+								//'<div style="visibility:hidden;">' + sectionname + '</div>' +
+								//'<div class="main-section-title">' + sectionname + '</div>' +
+								questionWithAns + "";
+                                //document.getElementById('questionCategory').innerHTML = sectionname; --s
                             } else {
-                                //quesAnsHtm = '<div style ="display:none;background: white;border: 0 none;border-radius: 3px;box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);padding: 20px 30px;box-sizing: border-box;width: 80%;margin: 0 10%;position: absolute;">' + '<div>' + sectionname + '</div>' + questionWithAns;
-                                quesAnsHtm = '<div style ="display:none;background: white;border: 0 none;border-radius: 3px;box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);padding: 20px 30px;box-sizing: border-box;width: 80%;margin: 0 10%;position: absolute;"' +
+
+                                quesAnsHtm = '<div style ="display:none;" class="questions"' +
 								' sectionid="' + _tri_assessmentquestioncategoryid_value + '"' +
 								' id="' + _tri_assessmentquestioncategoryid_value + '_' + j + '"' +
 								'>' +
-								'<div style="visibility:hidden;">' + sectionname + '</div>' + questionWithAns + "</div>";
+								//'<div style="visibility:hidden;">' + sectionname + '</div>' +
+								//'<div class="main-section-title">' + sectionname + '</div>' +
+								questionWithAns + "";
                             }
                         }
                         else {
-                            //quesAnsHtm = quesAnsHtm + '<br />' + questionWithAns;
-                            quesAnsHtm += '<br />' + questionWithAns + "</div>";
+                            quesAnsHtm += '' + questionWithAns + "";
                         }
 
                         j++;
 
-                        if (j === results.value.length || i === results.value.length) {
+                        if (j == results.value.length || i == results.value.length) {
                             j = 0;
-                            quesAnsHtm += '<br/>';
-                            if (firstView === false) {
-                                quesAnsHtm += '<input type="button" name="next" class="next action-button" value="Next" />' + divClose;
+                            quesAnsHtm += '';
+                            quesAnsHtm += '<div class="buttons">';
+
+                            if (firstView === false && categoryLength == 1) {
+
+                                submitButton = '<div name="submit" class="submit button default-size navy-bg">Submit</div>&nbsp;';
+                                closeButton = '<div name="close" class="close button default-size navy-bg">Close</div>&nbsp;';
+                                quesAnsHtm += submitButton + closeButton + divClose;
+                                firstView = true;
+
+                            } else if (firstView === false) {
+                                //quesAnsHtm += '<input type="button" name="next" class="next action-button" value="Next" />' + divClose;
+                                quesAnsHtm += '<div name="next" class="next button default-size navy-bg">Next</div>&nbsp;' + divClose;
+
                                 firstView = true;
                             } else {
                                 var nextButton = '';
-                                quesAnsHtm += '<input type="button" name="previous" class="previous action-button" value="Previous" />';
-                                if (isLastCategory == true) {
+                                //quesAnsHtm += '<input type="button" name="previous" class="previous action-button" value="Previous" />';
+                                quesAnsHtm += '<div name="previous" class="previous button default-size navy-bg">Previous</div>&nbsp;';
+
+                                if (isLastCategory === true) {
+
                                     isLastCategory = false;
-                                    nextButton = '<input type="button" name="next" class="save action-button" value="Save" />';
-                                    submitButton = '<input type="button" name="submit" class="submit action-button" value="Submit" />';
-                                    closeButton = '<input type="button" name="close" class="close action-button" value="Close" />';
-                                    if (inputDisabled == true) {
+
+                                    //nextButton = '<input type="button" name="next" class="save action-button" value="Save" />';
+
+                                    //submitButton = '<input type="button" name="submit" class="submit action-button" value="Submit" />';
+
+                                    //closeButton = '<input type="button" name="close" class="close action-button" value="Close" />';
+
+                                    nextButton = '<div name="next" class="save button default-size navy-bg">Save</div>&nbsp;';
+
+                                    submitButton = '<div name="submit" class="submit button default-size navy-bg">Submit</div>&nbsp;';
+
+                                    closeButton = '<div name="close" class="close button default-size navy-bg">Close</div>&nbsp;';
+
+                                    if (inputDisabled === true) {
                                         // Do not Need Save Buttons at this point
                                         quesAnsHtm += closeButton + divClose;
                                     } else {
                                         quesAnsHtm += nextButton + submitButton + closeButton + divClose;
                                     }
                                 } else {
-                                    nextButton = '<input type="button" name="next" class="next action-button" value="Next" />';
+                                    //nextButton = '<input type="button" name="next" class="next action-button" value="Next" />';
+                                    nextButton = '<div name="next" class="next button default-size navy-bg">Next</div>&nbsp;';
                                     quesAnsHtm += nextButton + divClose;
                                 }
                             }
-
+                            quesAnsHtm += divClose;
                             $('#fieldsets').append(quesAnsHtm);
                             quesAnsHtm = '';
                         }
@@ -976,6 +1053,7 @@ function GetAssesmentQuestions(sectionname, assessmenttypeid, questionCategoryId
 
 function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questionid, answertype, isrequired, memoFieldSize) {
 
+    var answerAlreadyGiven = false;
     var requiredClass = "";
     if (isrequired) {
         requiredClass = "required ";
@@ -983,20 +1061,20 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
     var answerType = answertype;
 
     var textRows = 4;
-    if (memoFieldSize !== null && memoFieldSize !== undefined && $.isNumeric(memoFieldSize) && (answerType === 100000001 || answerType === 100000003)) {
+    if (typeof memoFieldSize !== "undefined" && memoFieldSize != null && $.isNumeric(memoFieldSize) && (answerType === 100000001 || answerType === 100000003)) {
         textRows = Number(memoFieldSize);
     }
 
     var answerValueToMatch = $.map(lstAnswerSelected, function (val) {
         if (val["tri_QuestionId@odata.bind"].indexOf(questionid) > -1) {
             if (answerType === 100000000) {
-                return val.tri_answervalue !== null && val.tri_answervalue !== "undefined" ? val.tri_answervalue : "";
+                return typeof (val.tri_answervalue) !== "undefined" && val.tri_answervalue != null ? val.tri_answervalue : "";
             }
             else if (answerType === 100000001 || answerType === 100000003) {
-                return val.tri_comments !== null && val.tri_comments !== "undefined" ? val.tri_comments : "";
+                return typeof val.tri_comments !== "undefined" && val.tri_comments != null ? val.tri_comments : "";
             }
             else {
-                return val.tri_answertext !== null && val.tri_answertext !== "undefined" ? val.tri_answertext : "";
+                return typeof val.tri_answertext !== "undefined" && val.tri_answertext != null ? val.tri_answertext : "";
             }
         }
     });
@@ -1014,7 +1092,6 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
             if (this.readyState === 4) {
                 req.onreadystatechange = null;
                 if (this.status === 200) {
-                    //var questionToMatch = lstAssesmentDetails.find(function (x) { return x.QuestionId == questionid; });
 
                     var results = JSON.parse(this.response);
                     if (results.value.length > 0) {
@@ -1028,19 +1105,20 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                             var _tri_assessmenttypeid_value_formatted = results.value[i]["_tri_assessmenttypeid_value@OData.Community.Display.V1.FormattedValue"];
                             var tri_name = results.value[i]["tri_name"];
 
-                            // check if answe matches to existing then introduce checked
+                            // check if answer matches to existing then introduce checked
                             var checked = "";
-                            if (answerValueToMatch.length > 0 && answerValueToMatch !== null) {
+                            if (answerValueToMatch.length > 0 && answerValueToMatch != null) {
                                 if (answerType === 100000005) {
-                                    //var rgxp = new RegExp(tri_name, "g");
                                     var chkBoxtxtArray = answerValueToMatch[0].split(",");
                                     if (chkBoxtxtArray.indexOf(tri_name) > -1) {
                                         checked = 'checked="checked"';
+                                        answerAlreadyGiven = true;
                                     }
                                 }
                                 else {
-                                    if (answerValueToMatch[0] === tri_answervalue && answerValueToMatch !== null) {
+                                    if (answerValueToMatch[0] == tri_answervalue && answerValueToMatch != null) {
                                         checked = 'checked="checked"';
+                                        answerAlreadyGiven = true;
                                     }
                                 }
                             }
@@ -1053,20 +1131,16 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
                             var answercontrols = "";
                             if (answerType === 100000000) {
                                 //answercontrols = '<input type="radio" class="' + requiredClass + '" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' text="' + tri_name + '" value="' + tri_answervalue + '"> ' + tri_name; // checked="checked" 
-                                answercontrols = '<input type="radio" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' text="' + tri_name + '" value="' + tri_answervalue + '"/> ' + tri_name; // checked="checked" 
+                                answercontrols = '<div class="answer"><input type="radio" questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '"  name="' + questionid + '_radiobtn_answerValue" ' + checked + ' text="' + tri_name + '" value="' + tri_answervalue + '"/> ' + tri_name + '</div>'; // checked="checked" 
                             }
 
                             else if (answerType === 100000005) {
                                 //answercontrols = '<input type="checkbox"  questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_name + '" class="' + requiredClass + '">' + tri_name;// + '<br/>';
-                                answercontrols = '<input type="checkbox"  questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_name + '"/>' + tri_name;
+                                answercontrols = '<div class="answer"><input type="checkbox"  questionid = "' + questionid + '" answerid= "' + tri_assessmentanswerid + '" assessmenttypeid= "' + _tri_assessmenttypeid_value + '" name="' + questionid + '_chkbox_answerValue" ' + checked + ' value="' + tri_name + '"/>' + tri_name + '</div>';
                             }
 
                             window.getanswers += answercontrols; //CreateAnswers(tri_answervalue, tri_name, answertype, questionid); //'<span>' + tri_answervalue + '</span><div style="display:inline-block;">' + tri_name + '</div><br/>';
                         } // End for loop
-                        // Add Required Symbol
-                        //if (isrequired) {
-                        //    window.getanswers += '<div class="questionRequired">&nbsp*</div>';
-                        //}
                     }
                 }
                 else {
@@ -1082,22 +1156,28 @@ function GetAssesmentAnswers(sectionname, assessmenttypeid, questionsset, questi
             text = answerValueToMatch[0];
         }
 
+        if (text.length > 0) {
+            answerAlreadyGiven = true;
+        }
+
         if (answerType === 100000001 || answerType === 100000003) {
-            answercontrols = '<textarea rows="' + textRows + '" class="' + requiredClass + '"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" id="' + questionid + '_textarea" maxlength="4000" cols="100"' + '>' + text + '</textarea><br/>'
+            answercontrols = '<div class="answer"><textarea rows="' + textRows + '" class="' + requiredClass + '"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" id="' + questionid + '_textarea" maxlength="4000" cols="100"' + '>' + text + '</textarea></div><br/>'
         }
         else if (answerType === 100000002) {
             requiredClass = requiredClass + "datepicker";
             // answercontrols = '<input type="date" name="' + questionid + '_date" value="' + tri_answervalue + '" max="1979-12-31"><br>'; // we can show this with jquery date picker even
             //answercontrols = '<input type="text" name="' + questionid + '_date"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" value="' + text + '" class="' + requiredClass + '"><br>'; // we can show this with jquery date picker even
-            answercontrols = '<input type="text" name="' + questionid + '_date"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" value="' + text + '" class="' + requiredClass + '"/><br/>'; // we can show this with jquery date picker even
+            answercontrols = '<div class="answer"><input type="text" name="' + questionid + '_date"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" value="' + text + '" class="' + requiredClass + '"/></div><br/>'; // we can show this with jquery date picker even
         }
         else if (answerType === 100000004) {
             requiredClass = requiredClass + "numeric";
             //answercontrols = '<input style="border-color: transparent;" type="text"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" name="' + questionid + '_numeric" value="' + text + '" class="' + requiredClass + '"><br>';  // , you can use the spinner control.
-            answercontrols = '<input style="border-color: transparent;" type="text"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" name="' + questionid + '_numeric" value="' + text + '" class="' + requiredClass + '"/><br/>';  // , you can use the spinner control.
+            answercontrols = '<div class="answer"><input style="border-color: transparent;" type="text"  questionid = "' + questionid + '" answerid= "" assessmenttypeid= "' + assessmenttypeid + '" name="' + questionid + '_numeric" value="' + text + '" class="' + requiredClass + '"/></div><br/>';  // , you can use the spinner control.
         }
         window.getanswers = window.getanswers + answercontrols;
     }
+
+    return answerAlreadyGiven;
 }
 
 
@@ -1141,32 +1221,18 @@ function GetAssesmentDetails(assesmentId) {
                                                                       tri_answertext, tri_weightedscore, tri_name, _tri_assessmentquestioncategoryid_value, tri_comments);
                     lstAnswerSelected.push(questionObj);
                 }
-            }
-            else {
-                alert(this.statusText);
+            } else {
+                Xrm.Utility.alertDialog(this.statusText);
             }
         }
     };
     req.send();
 }
 
-function retrievePatient(PatientId) {
-    SDK.JQuery.retrieveRecord(
-        PatientId,
-        "Contact",
-        null, null,
-        function (contact) {
-            alert("Retrieved the contact named \"" + contact.FullName + "\". This contact was created on : \"" + contact.CreatedOn + "\".");
-            //updateAccount(AccountId);
-        },
-        errorHandler
-      );
-}
-
 function getAssessment(assesmentId) {
     var req = new XMLHttpRequest();
     var jsonQuery = getBaseWebUri() + assessmentEntitySetName + "(" + assesmentId + ")";
-    jsonQuery += "?$select=tri_name,tri_overallscore,tri_weightedscore,statuscode,_tri_overallrisklevelid_value,_tri_riskleveloverrideid_value,_tri_assessmenttypeid_value,_tri_patientid_value";
+    jsonQuery += "?$select=tri_name,tri_overallscore,tri_weightedscore,statuscode,_tri_overallrisklevelid_value,_tri_riskleveloverrideid_value,_tri_assessmenttypeid_value&$expand=tri_patientid($select=contactid,birthdate,fullname,tri_mrn)";
     req.open("GET", jsonQuery, false);
     req.setRequestHeader("OData-MaxVersion", "4.0");
     req.setRequestHeader("OData-Version", "4.0");
@@ -1188,7 +1254,7 @@ function getAssessment(assesmentId) {
                     scoreWindowTitle += results["_tri_patientid_value@OData.Community.Display.V1.FormattedValue"];
                 }
                 var statusCode = results.statuscode;
-                if (statusCode === assessmentIsComplete) {
+                if (statusCode == assessmentIsComplete) {
                     inputDisabled = true;
 
                     // Show Score
@@ -1204,12 +1270,30 @@ function getAssessment(assesmentId) {
                     }
                     $('#h1Score').text(overallScore);
                     $('#divScore').show();
-
-
-
                 } else {
                     $('#divScore').hide();
                 }
+
+                var asessmentTitle = results['_tri_assessmenttypeid_value@OData.Community.Display.V1.FormattedValue'];
+                // tri_Provider.middlename
+                //var vPatientId = results['_tri_patientid_value'];
+                var vPatientId = results['tri_patientid']['contactid'];
+                var index = asessmentTitle.indexOf(':');
+                if (index > -1) {
+                    asessmentTitle = asessmentTitle.substring(index, -1);
+                }
+                var patientName = results['tri_patientid']['fullname'];
+                var patientDOB = "";
+                var patientMRN = "";
+                if (typeof (results['tri_patientid']['birthdate']) !== "undefined" && results['tri_patientid']['birthdate'] != null) {
+                    var DOB = results['tri_patientid']['birthdate'];
+                    patientDOB = getDateString(DOB);
+                }
+                if (typeof (results['tri_patientid']['tri_mrn']) !== "undefined" && results['tri_patientid']['tri_mrn'] != null) {
+                    patientMRN = results['tri_patientid']['tri_mrn'];
+                }
+
+                SetTopBarText(patientName, patientDOB, patientMRN, asessmentTitle);
             }
             else {
                 Xrm.Utility.alertDialog(this.statusText);
@@ -1298,7 +1382,7 @@ function GetCategoryDetails(assesmentId) {
                 buildScoreWindow(results);
             }
             else {
-                window.opener.Utility.alertDialog(this.statusText);
+                Xrm.Utility.alertDialog(this.statusText);
             }
         }
     };
@@ -1331,32 +1415,216 @@ function patchRecord(id, updateObject, type, successCallback, errorCallback) {
     req.send(JSON.stringify(updateObject));
 }
 
-function MakeLiElementActiveTill(liElement) {
+function makeLiElementActiveTill(liElement) {
+
 
     var bAddActiveClass = true;
     var curElementId, clickedElementId;
 
-    if (typeof liElement !== "undefined" && liElement !== null) {
-
-        var elements = $("#progressbar li");
+    if (typeof liElement !== "undefined" && liElement != null) {
         clickedElementId = liElement.attr('id');
-        for (var i = 0 ; i < elements.length; i++) {
-            curElementId = elements[i].id;
-            if (bAddActiveClass) {
-                if (elements[i].className !== "active") {
-                    elements[i].className = "active";
-                }
-            }
-            else {
-                if (elements[i].className == "active") {
-                    elements[i].className = "";
-                }
-            }
+        updateClassForLIElementActiveTill(clickedElementId);
+    }
+}
 
-            if (curElementId == clickedElementId) {
-                bAddActiveClass = false;
-            }
+function updateClassForLIElementActiveTill(clickedElementId) {
 
+    var bAddActiveClass = true;
+    var curElementId;
+
+    var elements = $("#progressbar li");
+    for (var i = 0 ; i < elements.length; i++) {
+        curElementId = elements[i].id;
+        if (bAddActiveClass) {
+            if (elements[i].className !== "active") {
+                elements[i].className = "active";
+            }
+        } else {
+            if (elements[i].className === "active") {
+                elements[i].className = "";
+            }
+        }
+
+        if (curElementId == clickedElementId) {
+            bAddActiveClass = false;
         }
     }
+}
+
+function MarkQuestionAnswered(answeredElement) {
+
+    if (answeredElement == null || typeof answeredElement === "undefined") {
+
+        return; // do nothing
+    }
+
+    var doneSpan = '<span class="done">&#x2714; &nbsp; </span>';
+    var questionId = answeredElement.attr('questionId');
+    var questionTextDivId = questionId + '_' + 'question';
+    var questionTextDivElement = $('#' + questionTextDivId);
+
+    if (typeof questionTextDivElement.attr('id') === "undefined") {
+        return;
+    }
+
+    // check if alreadyMarked done
+    var doneDiv = questionTextDivElement.children('span.done');
+    if (doneDiv.length > 0) {
+
+        return;
+    }
+
+    var requireSpan = questionTextDivElement.children('span.required');
+    if (requireSpan.length > 0) {
+
+        var questionTextDivElementChildBR = questionTextDivElement.children('br');
+        $(doneSpan).insertAfter(questionTextDivElementChildBR);
+    }
+    else {
+
+        var questionText = questionTextDivElement.text();
+        $(doneSpan + questionText).prependTo(questionTextDivElement);
+    }
+}
+
+function MarkQuestionUnAnswered(unansweredElement) {
+
+    if (unansweredElement == null || typeof unansweredElement === "undefined") {
+
+        return; // do nothing
+    }
+
+    var doneSpan = unansweredElement.parent().siblings('div.question-text').children('span.done');
+    $(doneSpan).remove();
+}
+
+//function SetTopBarText(patientId, assessmentTypeName) {
+
+//    RetrievePatientName(patientId,
+//	function (contact) {
+//	    var topBar = document.getElementById('top-bar-title');
+//	    topBar.innerHTML = "Assessment Tool" + " | " + contact.FullName + " | " + assessmentTypeName;
+//	},
+//	function (err) {
+//	    console.log(err);
+//	});
+
+//}
+
+function SetTopBarText(patientName, patientDOB, patientMRN, assessmentTypeName) {
+    var topBar = document.getElementById('top-bar-title');
+    var message = patientName;
+    if (typeof patientDOB !== "undefined" && patientDOB !== "") {
+        message += ", " + patientDOB;
+    }
+    if (typeof patientMRN !== "undefined" && patientMRN !== "") {
+        message += ", MRN: " + patientMRN;
+    }
+
+    topBar.innerHTML = message;
+}
+
+function SetAssessmentTitle(questionCategoryId, assessmentTypeName) {
+
+    // questionCategoryId defines a section >  this is also id of li element(progress bar)
+    if (typeof questionCategoryId === "undefined" || questionCategoryId === "") {
+        console.log('questionCategoryId not found to SetAssessmentTitle.');
+        return;
+    }
+    var currentLiEle, sectionNumber, sectionName;
+    var index = assessmentTypeName.indexOf(':');
+    if (index > -1) {
+        assessmentTypeName = assessmentTypeName.substring(index, -1);
+    }
+    currentLiEle = $("#" + questionCategoryId);
+    if (typeof currentLiEle.attr('sectionNo') !== "undefined") {
+        sectionNumber = currentLiEle.attr('sectionNo');
+        sectionName = currentLiEle.attr('sectionName');
+
+        SetTitle(assessmentTypeName, sectionNumber, sectionName);
+    }
+
+}
+function SetTitle(assessmentTypeName, sectionPartNo, sectionName) {
+
+    var assessmentTitleDivEle = document.getElementById('assessmentTitle');
+    var message = assessmentTypeName + " - " + "Part " + sectionPartNo + ":" + " " + sectionName;
+    assessmentTitleDivEle.innerHTML = message;
+}
+
+function RetrievePatientName(PatientId, SuccessCallback, ErrorCallback) {
+    SDK.JQuery.retrieveRecord(
+        PatientId,
+        "Contact",
+        null,
+        null,
+        function (contact) {
+            if (typeof SuccessCallback === "function") {
+                SuccessCallback(contact);
+            }
+            //alert("Retrieved the contact named \"" + contact.FullName + "\". This contact was created on : \"" + contact.CreatedOn + "\".");console.log(contact);
+            //updateAccount(AccountId);
+        },
+        function (err) {
+            if (typeof ErrorCallback === "function") {
+                ErrorCallback(err);
+            }
+        }
+      );
+}
+
+function CheckAllMandatoryQuestionsAnswered() {
+
+    var isSectionValid = true;
+    var allSectionsValid = true;
+    var questionSections = $('.questions');
+    var unAnsweredSection = "";
+
+    $(questionSections).each(function (index, questionsSection) {
+        if (index >= 0) {
+            isSectionValid = validateSection(questionsSection);
+            if (!isSectionValid) {
+                allSectionsValid = false;
+                if (unAnsweredSection == "") {
+                    unAnsweredSection = "" + ++index;
+                }
+                else {
+                    if (index < questionSections.length - 1) {
+                        unAnsweredSection += ", " + ++index;
+                    }
+                    else {
+                        unAnsweredSection += "and " + ++index;
+                    }
+                }
+            }
+        }
+    });
+
+    var userPromptMessage = 'You have unanswered required questions in Sections ' + unAnsweredSection + '.';
+    return [allSectionsValid, userPromptMessage];
+}
+
+function CheckifAnyCheckBoxChecked(answerChkBoxElement) {
+    if (answerChkBoxElement == null || typeof answerChkBoxElement === "undefined") {
+
+        return false;
+    }
+    var isAnyCheckBoxChecked = false;
+
+    if ($(answerChkBoxElement).prop('checked') === true) {
+
+        isAnyCheckBoxChecked = true;
+        return isAnyCheckBoxChecked;
+    }
+
+    var checkBoxesParent = answerChkBoxElement.parent().siblings('div.answer');
+
+    $(checkBoxesParent).each(function (index, checkBoxParent) {
+        var checkBox = $(checkBoxParent).children('input[type=checkbox]');
+        if ($(checkBox).prop('checked') === true) {
+            isAnyCheckBoxChecked = true;
+        }
+    });
+
+    return isAnyCheckBoxChecked;
 }
