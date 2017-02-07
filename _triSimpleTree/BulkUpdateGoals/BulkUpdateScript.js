@@ -1016,7 +1016,7 @@ $(document).on('click', '.personalizedropdownmenu li', function () {
             vitalTypeId = vitalTypeId.replace("_ULBLKUPDT", "");
             //vitalTypeId = vitalTypeId.replace("_"+goalId, "").trim();
 
-            GetGoalForCurrentModifier(modId, vitalTypeId, contactObjectId, $(this).text(), this,goalId);
+            GetGoalForCurrentModifier(modId, vitalTypeId, contactObjectId, $(this).text(), this, goalId);
         }
         else {
             var classToAdd = '';
@@ -1077,76 +1077,81 @@ function AddGoalIdToSave(goalId) {
 $(document).on('click', '#progressbar li, input[class~="action-button"]', function () {
     // alert(carePlanGoalArray.length);
     //if (carePlanGoalArray.length > 0) {
-        for (i = 0; i < carePlanGoalArray.length; i++) {
-            var goalId = carePlanGoalArray[i];
-            debugger;
+    for (i = 0; i < carePlanGoalArray.length; i++) {
+        var goalId = carePlanGoalArray[i];
+        debugger;
 
-            var modifierObj = $('#' + goalId + '_BLKUPDTMDFRBTN');
-            var vModfrName = modifierObj.text().trim();
+        var modifierObj = $('#' + goalId + '_BLKUPDTMDFRBTN');
+        var vModfrName = modifierObj.text().trim();
 
-            if (vModfrName == "N/A") {
-                //Update GoalSelected = False for this careplanId
-                var obj = {};
-                obj.tri_GoalSelected = false;
-                SDK.REST.updateRecord(goalId, obj, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
-            }
-            else {
-                var ulModifier = modifierObj.next();
-                var modifierId = ulModifier.find('li:contains("' + vModfrName + '")')[0].id;
-                var vSliderTextValue = $('.' + goalId + '_sldrtxtbox').val();
-                var vVitalTypId = ulModifier[0].className.replace("dropdown-menu personalizedropdownmenu ", "");
-                vVitalTypId = vVitalTypId.replace("_ULBLKUPDT", "");
-                //vVitalTypId = vVitalTypId.replace("_" + goalId, "").trim();
-
-                var goalStateObj = $('[class~="' + goalId + '_uniquegoalstatebutton"]');
-                var vGoalStateTxt1 = goalStateObj.text().trim();
-                var nextrow = goalStateObj.parent().parent().parent();
-                var targetDetails = nextrow.find('.tg-blkupdt-target');
-
-                var vQualTxt = '';
-                var vMetricOprtrTxt1 = '';
-                var vTargetValueTxt = '';
-                var vMetricOprtr2Txt1 = '';
-                var vTargetValue2Txt = '';
-
-                if (targetDetails.attr('goalCode') === '100000000') { // Qualitative
-                    vQualTxt = targetDetails.text();
-                }
-                else if (targetDetails.attr('goalCode') === '100000001') { // Quantitative
-                    vMetricOprtrTxt1 = $('#' + goalId + '_MetricOpr1').text();
-                    vTargetValueTxt = $('#' + goalId + '_MetricOprVal1').val();
-                    vMetricOprtr2Txt1 = $('#' + goalId + '_MetricOpr2').text();
-                    vTargetValue2Txt = $('#' + goalId + '_MetricOprVal2').val();
-                }
-
-                var vobservedValue = nextrow.find('.tg-blkupdt-LastResult').text();
-                var vLastResultDate = new Date();
-
-                var vOsetValMetricOperator = "";
-                if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
-                    vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
-                }
-
-                var vOsetValMetricOperator21 = "";
-                if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
-                    vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr(vMetricOprtr2Txt1);
-                }
-
-                var vOsetValGoalState = "";
-                if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
-                    vOsetValGoalState = GetOsetValFromTextGoalState(vGoalStateTxt1);
-                };
-
-                UpdateCarePlanJoin(vVitalTypId, contactObjectId[0], modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator21, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue, this.value);
-            }
+        if (vModfrName == "N/A") {
+            //Update GoalSelected = False for this careplanId
+            var obj = {};
+            obj.tri_GoalSelected = false;
+            SDK.REST.updateRecord(goalId, obj, "tri_cccareplangoal", updateSuccessCallback, errorHandler);
         }
-        carePlanGoalArray.length = 0;
-        //} else 
-        
-        if (this.value === 'Submit') {
+        else {
+            var ulModifier = modifierObj.next();
+            var modifierId = ulModifier.find('li:contains("' + vModfrName + '")')[0].id;
+            var vSliderTextValue = $('.' + goalId + '_sldrtxtbox').val();
+            var vVitalTypId = ulModifier[0].className.replace("dropdown-menu personalizedropdownmenu ", "");
+            vVitalTypId = vVitalTypId.replace("_ULBLKUPDT", "");
+            //vVitalTypId = vVitalTypId.replace("_" + goalId, "").trim();
+
+            var goalStateObj = $('[class~="' + goalId + '_uniquegoalstatebutton"]');
+            var vGoalStateTxt1 = goalStateObj.text().trim();
+            var nextrow = goalStateObj.parent().parent().parent();
+            var targetDetails = nextrow.find('.tg-blkupdt-target');
+
+            var vQualTxt = '';
+            var vMetricOprtrTxt1 = '';
+            var vTargetValueTxt = '';
+            var vMetricOprtr2Txt1 = '';
+            var vTargetValue2Txt = '';
+
+            if (targetDetails.attr('goalCode') === '100000000') { // Qualitative
+                vQualTxt = targetDetails.text();
+            }
+            else if (targetDetails.attr('goalCode') === '100000001') { // Quantitative
+                vMetricOprtrTxt1 = $('#' + goalId + '_MetricOpr1').text();
+                vTargetValueTxt = $('#' + goalId + '_MetricOprVal1').val();
+                vMetricOprtr2Txt1 = $('#' + goalId + '_MetricOpr2').text();
+                vTargetValue2Txt = $('#' + goalId + '_MetricOprVal2').val();
+            }
+
+            var vobservedValue = nextrow.find('.tg-blkupdt-LastResult').text();
+            var vLastResultDate = new Date();
+
+            var vOsetValMetricOperator = "";
+            if (vMetricOprtrTxt1 !== null && vMetricOprtrTxt1 !== "") {
+                vOsetValMetricOperator = GetOsetValFromTextMtrcOprtr(vMetricOprtrTxt1);
+            }
+
+            var vOsetValMetricOperator21 = "";
+            if (vMetricOprtr2Txt1 !== null && vMetricOprtr2Txt1 !== "") {
+                vOsetValMetricOperator21 = GetOsetValFromTextMtrcOprtr(vMetricOprtr2Txt1);
+            }
+
+            var vOsetValGoalState = "";
+            if (vGoalStateTxt1 !== null && vGoalStateTxt1 !== "") {
+                vOsetValGoalState = GetOsetValFromTextGoalState(vGoalStateTxt1);
+            };
+
+            UpdateCarePlanJoin(vVitalTypId, contactObjectId[0], modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator21, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue, this.value);
+        }
+    }
+    carePlanGoalArray.length = 0;
+    //} else 
+
+    if (this.value === 'Submit') {
         // alert('Goals are Submitted.');
         //window.opener.reload();
+        
         self.opener.location.reload();
+
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + 1000);
+
         window.close();
         //return false;
     }
@@ -1157,7 +1162,7 @@ function updateSuccessCallbackforMultiEdit() {
     // alert("The record changes were saved");
 }
 
-function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, currText, currentObj,currentGoalId) {
+function GetGoalForCurrentModifier(vModId, tri_vitalsvaluetypeid, contactId, currText, currentObj, currentGoalId) {
     debugger;
     var currentRow = $(currentObj).parent().parent().parent().parent();
     var nextRow = $(currentObj).parent().parent().parent().parent().next();
@@ -1294,8 +1299,6 @@ function (results) {
 
             //  these can be changed 
             typedetail.html(tri_name);
-
-            debugger;
             var btnModifier = $(modifier).find('button');
             btnModifier.html($(currentObj).text() + " <span class='caret'></span>"); //d7109c82-87c0-e611-80fa-5065f38a7be1_BLKUPDTMDFRBTN
             btnModifier[0].id = tri_cccareplangoalId + '_BLKUPDTMDFRBTN';
@@ -1324,15 +1327,14 @@ function (results) {
                     vGoalColorclass = "orangeborder";
                     break;
             };
-            
+
             var sectionGoalState = goalstate.find('.btn-group');
             sectionGoalState.html('');
-            sectionGoalState.html(GetGoalStateButton(tri_typeofgoalcode,tri_cccareplangoalId +'_uniquegoalstatebutton',strGoalStateTxt));
+            sectionGoalState.html(GetGoalStateButton(tri_typeofgoalcode, tri_cccareplangoalId + '_uniquegoalstatebutton', strGoalStateTxt));
 
-            debugger;
             currentRow.removeClass('orangeborder redborder greenborder');
             currentRow[0].className = GetGoalSection(tri_GoalSection) + ' ' + tri_cccareplangoalId + '_uniquerow ' + vGoalColorclass;
-                                    
+
             $('.txtfieldquantitative').spinner({ step: 1.00, numberFormat: "n" });
             AddGoalIdToSave(tri_cccareplangoalId);
         }
@@ -1353,7 +1355,7 @@ function () {
 
 }
 
-function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue,btnValue) {
+function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOsetValMetricOperator, vTargetValueTxt, vTargetValue2Txt, vQualTxt, vOsetValMetricOperator2, vOsetValGoalState, vobservedValue, vLastResultDate, vSliderTextValue, btnValue) {
     debugger;
     // alert(vobservedValue);
     SDK.REST.retrieveMultipleRecords(
@@ -1419,7 +1421,7 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
                         if (vTargetValueTxt !== null && vTargetValueTxt !== "" && typeof vTargetValueTxt !== "undefined") {
                             tri_cccareplangoal.tri_Metric = parseFloat(vTargetValueTxt).toFixed(2);
                         }
-                       
+
                         if (vOsetValMetricOperator !== null && vOsetValMetricOperator !== "" && typeof vOsetValMetricOperator !== "undefined") {
                             tri_cccareplangoal.tri_MetricOperator = { Value: parseInt(vOsetValMetricOperator, 10) };
                         }
@@ -1451,6 +1453,9 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
                                              //alert('Goals are Submitted.');
                                              //window.opener.reload();
                                              self.opener.location.reload();
+                                             var start = new Date().getTime();
+                                             while (new Date().getTime() < start + 1000);
+
                                              window.close();
                                              //return false;
                                          }
@@ -1473,4 +1478,3 @@ function UpdateCarePlanJoin(vVitalTypId, contactId, modifierId, vModfrName, vOse
     }
 );
 }
-
