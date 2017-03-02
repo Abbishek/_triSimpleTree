@@ -59,11 +59,21 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="23rd Feb KM\BulkUpdateGoalsGridScript.js" />
+    <Content Include="23rd Feb KM\KM.monitormode.js" />
+    <Content Include="23rd Feb KM\monitormode.html" />
+    <Content Include="23rd Feb KM\PatientMonitorModeVersion2.js" />
+    <Content Include="AIR Env 10th Feb\AIRmonitormode.html" />
+    <Content Include="AIR Env 10th Feb\Tbmonitormode.html" />
     <Content Include="assesment12122016\Assessment.css" />
     <Content Include="assesment12122016\Assessment.html" />
     <Content Include="assesment12122016\AssessmentWizardProd.js" />
     <Content Include="assesment12122016\AssessmentWizard.js" />
     <Content Include="assesment12122016\easingstylesheet.css" />
+    <Content Include="Assessment\Assessment.html" />
+    <Content Include="Assessment\AssessmentStyle.css" />
+    <Content Include="Assessment\AssessmentWizard.js" />
+    <Content Include="Assessment\easingstylesheet.css" />
     <Content Include="BulkUpdateGoals\BulkUpdateHtml.html" />
     <Content Include="BulkUpdateGoals\BulkUpdateScript.js" />
     <Content Include="BulkUpdateGoals\Common.js" />
@@ -79,7 +89,7 @@
     <Content Include="Demo\PersonalizeHTMLCSS\js\jquery-1.11.3.min.js" />
     <Content Include="Demo\PersonalizeHTMLCSS\personalizepopup.html" />
     <Content Include="Demo\PersonalizeHTMLCSS\personalize.html" />
-    <Content Include="Feb 7th updated care plan\backup.html" />
+    <Content Include="Feb 7th updated care plan\BulkUpdateGoalsGridScript.js" />
     <Content Include="Feb 7th updated care plan\KM.monitormode.js" />
     <Content Include="Feb 7th updated care plan\monitormode.html" />
     <Content Include="June28Update\bootstrap.css" />
@@ -131,11 +141,19 @@
     <Content Include="Offender Assessment\SDK.WEBAPI.js" />
     <Content Include="Offender Assessment\ui-icons_777777_256x240.png" />
     <Content Include="SAAS Webresource files\bootstrap.css" />
+    <Content Include="SAAS Webresource files\kendo.js" />
+    <Content Include="SAAS Webresource files\KM.bootstrap.js" />
+    <Content Include="SAAS Webresource files\jquery_1_12_1min.js" />
+    <Content Include="SAAS Webresource files\jquery_ui.custom.js" />
     <Content Include="SAAS Webresource files\KM.monitormode.js" />
+    <Content Include="SAAS Webresource files\linq.js" />
+    <Content Include="SAAS Webresource files\monitormode - Copy.html" />
     <Content Include="SAAS Webresource files\monitormode-style.css" />
     <Content Include="SAAS Webresource files\monitormode.html" />
-    <Content Include="SAAS Webresource files\PatientMonitorMode.js" />
+    <Content Include="SAAS Webresource files\PatientMonitorModeVersion2.js" />
     <Content Include="SAAS Webresource files\personalize-style.css" />
+    <Content Include="SAAS Webresource files\SDK.JQuery.js" />
+    <Content Include="SAAS Webresource files\SDK.REST.js" />
     <Content Include="scripts\jquery_1_12_1min.js" />
     <Content Include="scripts\powerbi.js" />
     <Content Include="scripts\powerbi.min.js" />
@@ -168,6 +186,8 @@
     <Content Include="_imgs\logo-dh-small.png" />
     <Content Include="scripts\powerbi.js.map" />
     <Content Include="packages.config" />
+    <Content Include="AIR Env 10th Feb\AIR.Monitormode.js" />
+    <Content Include="Default.chm" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

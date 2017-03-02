@@ -50,10 +50,10 @@ function GetAllCarePath() {
             "<attribute name='tri_name' />" +
             "<attribute name='createdon' />" +
             "<order attribute='tri_name' descending='false' />" +
-            "<filter type='and'>"+
-            "<condition attribute='statecode' operator='eq' value='0' />"+
-            "</filter>"+
-          "</entity>"+
+            "<filter type='and'>" +
+            "<condition attribute='statecode' operator='eq' value='0' />" +
+            "</filter>" +
+          "</entity>" +
         "</fetch>";
     // alert(FetchXmlplan);
     retrievedPlanRecords = XrmServiceToolkit.Soap.Fetch(FetchXmlplan);
@@ -148,7 +148,7 @@ function GetCarePlanfromPatitentId(PatientId) {
 "</fetch>";
 
     retrievedPlanRecords = XrmServiceToolkit.Soap.Fetch(FetchXmlplan);
-   return retrievedPlanRecords;
+    return retrievedPlanRecords;
 }
 
 function GetSnoozeDatesfromPatitentId(PatientId) {

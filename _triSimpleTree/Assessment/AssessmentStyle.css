@@ -1,0 +1,424 @@
+﻿/*basic reset*/
+ {margin: 0; padding: 0;}
+
+html {
+    height: 100%;
+    background: url(../../tri_images/TBHealth360.Assessment/cicrle_bg.jpg); 
+    background-repeat: no-repeat;
+	background-position: left top;
+	background-color: #fafafa!important;
+    background-attachment: fixed;
+    font-family: "Segoe UI", "Helvetica Neue", "Helvetica", sans-serif;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active .navbar-default .navbar-nav>.active>a {
+  display: none;
+}
+body {
+    /*font-family: montserrat, arial, verdana;
+	text-align: center;
+	padding: 0px 0px 0px 0px!important;
+	margin: 0px!important;*/
+	font-family: "Segoe UI", "Helvetica Neue", "Helvetica", sans-serif;
+}
+.button {
+	font-family: Segoe UI;
+	font-weight: 600;
+	font-size: 14px;
+	text-transform: capitalize;
+	text-align: center;
+	padding: 10px;
+	color: #FFF;
+	line-height: 40px;
+	float: left;
+	margin: 10px;
+	flex-basis: auto;
+}
+.navbar-default {
+  background-color: #013e74!important;
+  background-image: url(../../tri_images/TBHealth360.Assessment/logo.png);
+  background-repeat: no-repeat;
+  background-position: top left;
+  color: #FFF!important;
+}
+.navbar-collapse .collapse .in {
+  background-color: white!important;
+}
+.navbar-default .navbar-nav>li>a {
+  color: #FFF!important;
+  padding-top: 10px!important;
+  padding-bottom: 10px!important;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #013e74!important;
+  color: #FFF!important;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF!important;
+}
+
+.container {
+	/*margin-right: auto; --s*/ 
+	/*margin-left: auto;  --s*/
+	/* vertical-align: middle; */
+	/*width: 100%;
+    overflow: hidden; --s*/
+}
+.top-bar {
+	background-color: #013e74;
+	z-index: 16;
+	background-repeat: no-repeat;
+	background-position: left top;
+	text-align: left;
+	color: #FFF;
+	font-size: 14px;
+	font-family: "Segoe UI";
+	font-weight: 600;
+	width: 100%;
+	margin: 0px;
+    vertical-align:top;
+}
+.top-bar-text {
+	overflow: visible;
+	float: left;
+	background-color: #013e74;
+	width: 100%;
+}
+.align {
+	padding: 15px 25px 15px 15px;
+	float: right;
+}
+.logo {
+	float: left;
+}
+@media (max-width: 600px) {
+	.top-bar {
+		display: none;
+	}
+}
+.easingprogress{
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 1200px;
+	min-width: 320px;
+	min-height: 50px;
+	/*margin-bottom: 20px;*/
+	display: flex; 
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	padding: 35px 10px 10px 10px;
+}
+.questions {
+	margin: 0 auto;
+	max-width: 1200px;
+	min-width: 320px;
+	background-color: #FFF;
+}
+.buttons {
+	padding: 10px 5% 15px 5%;
+	float: left;
+	width: 90%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #fafafa;
+	flex-wrap: wrap;
+}
+.box {
+	width: 41px;
+	height: 21px;
+	padding: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	font-family: "Segoe UI";
+	color: #FFF;
+	line-height: 21px;
+	margin-top: 4px;
+	margin-bottom: 5px;
+	display: flex;
+	flex-direction: column;
+	z-index: 1000;
+}
+.box-wrapper {
+	font-size: 12px;
+	width: 100px;
+	font-family: "Segoe UI";
+	text-align: center;
+	white-space: pre-wrap;
+	/* CSS3 */
+	white-space: -moz-pre-wrap;
+	/* Firefox */
+	white-space: -pre-wrap;
+	/* Opera <7 */
+	white-space: -o-pre-wrap;
+	/* Opera 7 */
+	word-wrap: break-word;
+	/* IE */
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	padding-bottom: 40px;
+}
+.green-border {
+	border-width: 3px;
+	border-color: rgb(160, 208, 46);
+	border-style: solid;
+}
+.yellow-border {
+	border-width: 3px;
+	border-color: rgb(255, 180, 0);
+	border-style: solid;
+}
+.red-border {
+	border-width: 3px;
+	border-color: rgb(221, 59, 49);
+	border-style: solid;
+}
+.default-size {
+	width: 200px;
+	height: 40px;
+}
+
+.navy-border {
+	border: #00477f 1px solid;
+	width: 198px!important;
+	height: 38px!important;
+	color:  #00477f!important;
+}
+.green-bg {
+	background-color: rgb(160, 208, 46);
+}
+
+.gray-bg {
+	background-color: #EEE;
+}
+.yellow-bg {
+	background-color: rgb(255, 180, 0);
+}
+.red-bg {
+	background-color: rgb(221, 59, 49)!important;
+}
+.navy-bg {
+	background-color: #00477f;
+}
+.gray {
+	background-color: rgb(179, 184, 182);
+}
+.required {
+	background-color: #EEE!important;
+	z-index: 2!important;
+	color: rgb(221, 59, 49);
+}
+.done {
+	font-weight:bold;
+	z-index: 2!important;
+	color: rgb(160, 208, 46);
+}
+.connector {
+	flex-direction: row;
+	min-width: 40px;
+	height: 3px;
+	margin-top: 18px;
+	margin-right: -24px;
+	margin-left: -24px;
+	flex-grow: 1;
+	z-index: 1;
+}
+.box-gray {
+	border-width: 3px;
+	border-color: rgb(179, 184, 182);
+	border-style: solid;
+	width: 41px;
+	height: 21px;
+	padding: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	font-family: "Segoe UI";
+	color: #150a08;
+	line-height: 21px;
+	margin-top: 4px;
+	margin-bottom: 5px;
+	display: flex;
+	flex-direction: column;
+}
+.caption {
+	position: relative;
+	top: 35px;
+	width: 100px;
+	margin-left: -30px;
+	line-height: 13px;
+	font-size: 11px;
+	color: #150a08;
+}
+.fill-status {
+	position: relative;
+	top: 0px;
+	margin-bottom: -20px;
+}
+.box-selected {
+	border-width: 3px;
+	border-color: #150a08;
+	border-style: solid;
+	width: 41px;
+	height: 21px;
+	padding: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	font-family: "Segoe UI";
+	color: #150a08;
+	line-height: 21px;
+	margin-top: 4px;
+	margin-bottom: 5px;
+	display: flex;
+	flex-direction: column;
+	z-index: 1000;
+}
+.progress-text {
+	font-size: 12px;
+	font-family: "Segoe UI";
+	color: rgb(16, 16, 16);
+	font-weight: bold;
+	line-height: 1.333;
+	text-align: center;
+}
+.main-section-title {
+	font-size: 18px;
+	font-family: "Segoe UI";
+	color: rgb(16, 16, 16);
+	text-decoration: underline;
+	line-height: 2.667;
+	text-align: center;
+	/* padding-top: 20px; */
+}
+.question {
+	text-align: left;
+	padding: 10px 5% 10px 5%;
+	float: left;
+	background-color: #FFF;
+	width: 90%;
+}
+.question-text {
+	font-size: 14px;
+	font-family: "Segoe UI";
+	color: rgb(16, 16, 16);
+	font-weight: bold;
+	line-height: 1.2;
+	text-align: left;
+	padding-bottom: 15px;
+	padding-top: 25px;
+}
+.answers {
+	padding-left: 10px;
+	text-align: left;
+	float: left;
+	padding: 10px 5% 15px 5%;
+}
+.answer {
+	font-size: 12px;
+	font-family: "Segoe UI";
+	color: rgb(16, 16, 16);
+	font-weight: normal;
+	line-height: 1.2;
+	text-align: left;
+	padding-left: 10px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.liElement {
+    display: inline;
+    color: blue;
+}
+
+.clsBar {
+    vertical-align: top;
+    width: 80%;
+    float: left;
+}
+
+.clsScore {
+    vertical-align: top;
+    width: 17%; 
+    color: blue;
+    float: right; 
+    cursor: pointer;
+}
+
+.clsH1 {
+    margin: 0px;
+}
+
+#progressbar li {
+    color: black;
+}
+
+.selected-item {
+  font-weight: bold;
+  background-color: #0084C4;
+}
+
+.assessment-title {
+  background-color: #f8f8f8;
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 8px;
+  color: #000;
+}
+
+@media screen and (min-width: 768px) {
+  .menu {
+    display: none
+  }
+  .hidden-on-desktop {
+    display: none;
+  }
+}
+@media screen and (max-width: 767px) {
+  .top-bar {
+    display: none;
+  }
+  .progress-block {
+    display: none;
+  }
+}
+@media screen and (min-resolution: 280dpi) {
+  .top-bar {
+    display: none;
+  }
+  .progress-block {
+    display: none;
+  }
+  .progress2 {
+    display: none;
+  }
+  .container2 {
+    display: none;
+  }
+}
+@media screen and (max-width: 767px) {
+  .top-bar {
+    display: none;
+  }
+  .progress-block {
+    display: none;
+  }
+  .progress2 {
+    display: none;
+  }
+  .container2 {
+    display: none;
+  }
+}
+.text-center{
+	text-align:center;
+}
+.progress-wrapper {
+  text-align: center;
+  margin: 0 auto;
+  display: inline-block;
+  padding-bottom: 15px;
+}

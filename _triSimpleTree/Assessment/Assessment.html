@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html><head><meta><meta charset="utf-8">
+	
+    <title>Update Assesment</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- For AppSource
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery.min.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=qWoBkQaDHW0tpZnubPF4RmgdXZH7TYuSTwNSJez8OLo%3D" type="text/javascript"> </script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery_ui.custom.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=9ilWoPpcHOZonsxhnMavzh7Zz0GAFd%2Bn30H2By4V83w%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/SDK.REST.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=HTMdDkLivKv6QRkBKfbZJW0c2BM9w4fuOqIhjZeJm9U%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/XrmServiceToolkit.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=mF1De1YXkiTPuz%2BIddU3UtR%2FO3KEbKG4d5rMI7x%2BLHk%3D" type="text/javascript"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/SDK.JQuery.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=chRsxtX6ZgV4ZqHBQN8rpSILikyzrNLxGUe76Y%2BPby4%3D" type="text/javascript"> </script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/scripts/jquery.easing.js?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=AyNZ2HHArAoTncNsHlhP8y%2B1IAb3t6gcPxZ5DpTLDIc%3D" type="text/javascript"></script>
+    -->
+
+    <!-- For Non AppSource -->
+    <script src="../../tri_scripts/TBHealth360.Common/jquery.min.js" type="text/javascript"> </script>
+    <script src="../../tri_scripts/TBHealth360.Common/jquery_ui.custom.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/SDK.REST.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/xrmservicetoolkit.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/SDK.JQuery.js" type="text/javascript"> </script>
+    <script src="../../tri_scripts/TBHealth360.Common/jquery.easing.js" type="text/javascript"></script>
+	<script src="../../tri_scripts/TBHealth360.Common/bootstrap.js" type="text/javascript"></script>
+
+    <script src="../../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Common/HTMLSharedUtilities.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Assessment/AssessmentCommon.js" type="text/javascript"></script>
+    <script src="../../tri_scripts/TBHealth360.Assessment/AssessmentWizard.js" type="text/javascript"></script>
+
+    <link href="../../tri_css/TBHealth360.Common/easingstylesheet.css" rel="stylesheet">
+    <link href="../../tri_css/TBHealth360.Assessment/jquery.assessment.css" rel="stylesheet">
+	<link href="../../tri_css/TBHealth360.Common/font_awesome.min.css" rel="stylesheet">
+	<link href="../../tri_css/TBHealth360.Assessment/AssessmentStyle.css" rel="stylesheet">
+	<link href="../../tri_css/TBHealth360.Common/bootstrap.css" rel="stylesheet">
+
+    
+    <style>
+        .questionRequired {
+            color:red; 
+            display: inline-block; 
+            font-size:larger; 
+            font-weight:bold;
+        }
+
+
+    </style>
+    <!--<link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Common/css/jquery.assessment.css?st=2016-11-22T13%3A25%3A00Z&se=2016-11-23T13%3A25%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=zIK9YiAW4xz26iRkinu%2BKJHELaNKCDbkqp4oRxF8an0%3D" rel="stylesheet"> -->
+
+<meta></head>
+<!--<body style="word-wrap: break-word;">-->
+<body style="padding-top: 70px">﻿
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div id="fluidcontainer" class="container-fluid" style="height:50px">
+			<div class="navbar-header">
+				<button id="hamburger" aria-expanded="false" class="navbar-toggle collapsed" data-target="#topFixedNavbar1" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#"></a>
+			</div>
+			<div class="collapse navbar-collapse" id="topFixedNavbar1">
+				<ul class="nav navbar-nav navbar-right">
+				  <li>
+					<a id="top-bar-title" style="display:block; font-size: 1.1em; font-family: Segoe UI; font-weight: 200;"> Patient Name, DOB, MRN</a>
+				  </li>
+				</ul>  
+			</div>
+		</div>
+		<div id="assessmentTitle" class="assessment-title">Assessment Title - Part : Part Title
+		</div>
+	</nav>
+    <!--<div class="top-bar" style="left: 0%; top: 0%; position: absolute;">
+	    <div class="top-bar-text">
+            <img height="50" class="logo" style="vertical-align: middle;" src="../../tri_images/tbhealth360.common/tbhealth360_logo.jpg">
+            <div class="align" id="top-bar-title">Assessment Tool | Patient Name | Assessment Title</div>
+	    </div>
+		<br>
+		<div id ="assessmentTitle" class="assessment-title">Assessment Title - Section no.: Section Title</div>
+    </div>-->
+    <br>
+	<!--<div class="container">
+	   <div class="easingprogress">
+		  <div class="clsBar">
+			 <ul id="easingprogressbar"></ul>
+		  </div>
+		  <div class="clsScore" id="divScore">
+			 <span id="scoreTitle">Score:</span>
+			 <h1 class="clsH1" id="h1Score"><span id="spanScore"></span></h1>
+		  </div>
+	   </div>
+	   <div id="fieldsets" style="clear: both;">
+	   </div>
+	</div>-->
+
+	<div class="container" style="padding-top: 2%">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="container2">					
+						<div class="text-center">
+							<div class="easingprogress">
+							  <div class="clsBar">
+								 <ul id="easingprogressbar" ></ul>
+							  </div>
+							  <div class="clsScore" id="divScore">
+								 <span id="scoreTitle">Score:</span>
+								 <h1 class="clsH1" id="h1Score"><span id="spanScore"></span></h1>
+							  </div>
+							</div>						
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="fieldsets" style="clear: both;">
+				</div>
+			</div>
+		</div>
+	</div>
+</body></html>

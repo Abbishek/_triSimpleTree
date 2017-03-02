@@ -1,27 +1,43 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
     <title>Monitor Mode HTML / CSS</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">
-    <link href="../tri_css/jquery_ui_1_11_4.custom.css" rel="stylesheet">
-    <link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">
-    <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">
+    <!-- <link href="../tri_css/KMmonitormode_style.css" rel="stylesheet" type="text/css">-->
+    <link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/monitormode-style.css?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=o1y3CpIP4O69Uh9mI5IdtAg3QudPdMn2Cdo2xFIBmaE%3D" rel="stylesheet" type="text/css">
+    <!--<link href="../tri_css/jquery_ui_1_11_4.custom.css" rel="stylesheet">-->
+    <link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/jquery-ui.css?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=GFK57eOscp631VWUPDIpKBAFgmeuCFlJRibNqBRIk%2Fw%3D" rel="stylesheet">
 
-    <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>
-    <script src="../tri_scripts/jquery_ui_1_11_4.custom.js" type="text/javascript"></script>
-    <script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>
-    <script src="../tri_scripts/SDK.REST.js" type="text/javascript"></script>
+    <!--<link href="../tri_css/KMpersonalize_style.css" rel="stylesheet" type="text/css">-->
+    <link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/personalize-style.css?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=PmoNAfufhLqIIYLgbIBlnaJXDk0jGntWuJfhPnUywrI%3D" rel="stylesheet" type="text/css">
+    <!-- <link href="../tri_css/KMbootstrap.css" rel="stylesheet" type="text/css">-->
+    <link href="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/bootstrap.css?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=KoHmQGkv1xiWCJnfHRq0t903PU%2FMAeCoCQ9tO7KULG0%3D" rel="stylesheet" type="text/css">
 
+    <!--  <script src="../tri_scripts/jquery_1_12_1min.js" type="text/javascript"> </script>-->
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/jquery-1.12.1.min.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=nRLwXWhPL%2FtTfI3hOlasv%2BPTmKIkiZh%2FxKccOXQ32ns%3D" type="text/javascript"> </script>
+
+    <!--<script src="../tri_scripts/jquery_ui_1_11_4.custom.js" type="text/javascript"></script>-->
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/jquery-ui.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=nvLhmiYVxz6aB4zB%2FS2Yp%2BL8J0b6W33S0pTeBMFz1Mc%3D" type="text/javascript"></script>
+
+    <!-- <script src="../tri_scripts/KM.bootstrap.js" type="text/javascript"> </script>-->
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/bootstrap.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=1p4xDGvIJtfJLF%2Fs0KdpvNhtPzlKblSAu6wxS3QHZQA%3D" type="text/javascript"> </script>
+
+    <!--   <script src="../tri_scripts/SDK.REST.js" type="text/javascript"></script>-->
+
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/SDK.REST.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=seGdqoDeXhxvhZQlKbiabT116mja4iqKKjovM85ps2w%3D" type="text/javascript"></script>
     <!--<script src="../tri_scripts/xrmservicetoolkit.js" type="text/javascript"></script>-->
-
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/XrmServiceToolkit.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=ooYzZTM0nMhSOu1LsvIngtXdC7v3tr5x2UQSsDc4B8s%3D" type="text/javascript"></script>
     <!--<script src="../tri_scripts/SDK.JQuery.js" type="text/javascript"> </script>-->
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/SDK.JQuery.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=kJzXegywXgKSsz6Ay7QH06VBZAqffpWBbywhVkMK5bE%3D" type="text/javascript"> </script>
+
     <script src="../tri_scripts/KM.monitormode.js" type="text/javascript"> </script>
 
-    <!--<script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>-->
+    <script src="../ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <!--<script src="../tri_scripts/kendo.js"></script>
+    <script src="../tri_scripts/linq.js"></script>-->
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/kendo.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=IZQnzX%2FTMf5C%2Bgp8elUGP3e6BMZYapVfVsBTFdoJ34M%3D" type="text/javascript"></script>
 
-    <script src="../tri_scripts/kendo.js"></script>
-    <script src="../tri_scripts/linq.js"></script>
+    <script src="https://tbhealth30storageaccount.blob.core.windows.net/health360crmwebresourcefiles/Knowledge%20Map%20Resources/linq.js?st=2016-10-20T15%3A05%3A00Z&se=2050-01-01T16%3A05%3A00Z&sp=rl&sv=2015-04-05&sr=b&sig=TnXoyNO71l%2FhvLUhR4dELV%2FGNs1Wub%2F4wpqZ%2FperaEE%3D" type="text/javascript"></script>
     <script src="../tri_scripts/PatientMonitorModeVersion2.js"></script>
 
     <!-- styling just for the table header-->
@@ -92,7 +108,7 @@
 
 </head>
 <body>
-   <!-- <div style="float: left;margin-bottom:20px;"><img src="../tri_imgs/logo_dh_small.png" /></div>-->
+    <!-- <div style="float: left;margin-bottom:20px;"><img src="../tri_imgs/logo_dh_small.png" /></div>-->
     <div class="main-wrapper" style="clear:both;">
         <div id="planFilter" class="btn-group" style="width: 70%;">
             <div style="min-width: 100px; width: auto; padding: 3px; max-width: 90%; min-width: 50px; min-height: 35px" type="button" class="btn btn-default dropdown-toggle planFilterbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
@@ -100,9 +116,9 @@
             <button class="btn btn-primary" type="button" id="btnFilterRefresh" style="margin-left:5px;">Refresh</button>
         </div>
         <div class="monitor-wrapper">
-            
+
             <div style="display: inline;">
-            <button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button>
+                <button class="btn btn-primary" type="button" onclick="return gotoAddCarePlan();" style="float:right;"><img src="../tri_imgs/KM.addcareplan.png"> Add Plans / Personalize </button>
             </div>
             <br /><br />
 
@@ -184,20 +200,18 @@
 
             <br>
             <!-- end testcare -->
-           <!-- <div class="indicator-wrapper_vitals">
+            <!-- <div class="indicator-wrapper_vitals">
 
-                <div class="indicator-box-big_vitals_all blue allactive"></div>
-                <div class="indicator-box-small_vitals_red red"></div>
-                <div class="indicator-box-small_vitals_orange orange"></div>
-                <div class="indicator-box-small_vitals_green green"></div>
-                <div class="indicator-box-small_vitals_grey grey"></div>
-                <div class="sectiontitle_monitor bluetxt">Home Vitals</div>
+                 <div class="indicator-box-big_vitals_all blue allactive"></div>
+                 <div class="indicator-box-small_vitals_red red"></div>
+                 <div class="indicator-box-small_vitals_orange orange"></div>
+                 <div class="indicator-box-small_vitals_green green"></div>
+                 <div class="indicator-box-small_vitals_grey grey"></div>
+                 <div class="sectiontitle_monitor bluetxt">Home Vitals</div>
 
-                <div class="indicator-line_vitals blue"></div>
-            </div>-->
-
+                 <div class="indicator-line_vitals blue"></div>
+             </div>-->
             <!-- Section Content -->
-
             <!--<div class="tablecontent_vitals_all">
                 <table class="maintable_vitals_all" align="center"></table>
             </div>
@@ -247,9 +261,9 @@
             </div>
 
             <br>
-            
+
             <!-- Activity / Nutrition -->
-          
+
             <div class="indicator-wrapper_nutrition">
 
                 <div class="indicator-box-big_nutrition_all blue allactive"></div>
@@ -314,7 +328,7 @@
             </div>
 
             <br>
-            
+
             <div class="indicator-wrapper_psychosocial">
 
                 <div class="indicator-box-big_psychosocial_all blue allactive"></div>
@@ -566,7 +580,7 @@
                 <button class="btn btn-primary savebtn" style="margin-right:5px;" type="button">Save Changes</button>
                 <button type="button" class="btn btn-primary" id="closepersonalizewindow" style="float:right;">Cancel</button><br />
             </div>
-            </div><br />
+        </div><br />
 
         <div class="Personalize-details">
 

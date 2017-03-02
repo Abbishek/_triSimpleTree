@@ -290,8 +290,8 @@ function ConstructSectionDetails(contactid) {
                          '<th class="tg-blkupdt-LastResult">Last Result</th>' +
                          '<th class="tg-blkupdt-lastresultdate">Last Result Date</th>' +
                          '<th class="tg-blkupdt-duedate">Next Due Date</th>' +
-                         '<th class="tg-blkupdt-duedate">In Range Encounter Date</th>' +
-                         '<th class="tg-blkupdt-duedate">Out Range Encounter Date</th>' +
+                         //'<th class="tg-blkupdt-duedate">In Range Encounter Date</th>' +
+                         //'<th class="tg-blkupdt-duedate">Out Range Encounter Date</th>' +
                          '<th class="tg-blkupdt-goalstate">Goal State</th>' +
                          //'<th class="tg-more">More</th>' +
                      '</tr>' +
@@ -449,6 +449,9 @@ function BuildTableRows(vContactId) {
                               '<span><input type="text"  class=' + vSldrtxtboxClass + ' readonly style="text-align: left; padding-left: 10px;font-size:14px;border:none;background-color: #FAFAFA;"></span>';
                           SliderControlActivateandSetup(tri_SliderControlId, tri_cccareplangoalId);
                       }
+                      //else {
+                      //    strSliderDiv = '<input type="text" id="observedValue" class="txtfield" style="width:450px;text-align: left; padding-left: 10px;">'
+                      //}
                       break;
                   case 100000001: // Quantitative
 
